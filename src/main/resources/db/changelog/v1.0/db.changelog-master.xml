@@ -1,0 +1,24 @@
+<databaseChangeLog
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="
+       http://www.liquibase.org/xml/ns/dbchangelog
+       http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.8.xsd">
+
+
+    <!-- Inclure les fichiers de la version 1.0 -->
+    <!-- Pour l'instant, on travaille uniquement sur client_expediteur -->
+    <include file="classpath:db/changelog/v1.0/db.changelog-01-create-client-expediteur.xml"/>
+
+    <!-- Les autres seront ajoutés plus tard -->
+    <!--
+    <include file="classpath:db/changelog/v1.0/db.changelog-02-create-destinataire.xml"/>
+    <include file="classpath:db/changelog/v1.0/db.changelog-03-create-livreur.xml"/>
+    <include file="classpath:db/changelog/v1.0/db.changelog-04-create-zone.xml"/>
+    <include file="classpath:db/changelog/v1.0/db.changelog-05-create-colis.xml"/>
+    <include file="classpath:db/changelog/v1.0/db.changelog-06-create-produit.xml"/>
+    <include file="classpath:db/changelog/v1.0/db.changelog-07-create-colis-produit.xml"/>
+    <include file="classpath:db/changelog/v1.0/db.changelog-08-create-historique-livraison.xml"/>
+    -->
+
+</databaseChangeLog>
