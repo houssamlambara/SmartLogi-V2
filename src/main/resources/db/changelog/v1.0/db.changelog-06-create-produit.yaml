@@ -1,0 +1,30 @@
+databaseChangeLog:
+  - changeSet:
+      id: 6
+      author: houssam
+      changes:
+        - createTable:
+            tableName: produit
+            columns:
+              - column:
+                  name: id
+                  type: BIGINT
+                  autoIncrement: true
+                  constraints:
+                    primaryKey: true
+                    nullable: false
+              - column:
+                  name: nom
+                  type: VARCHAR(255)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: categorie
+                  type: VARCHAR(100)
+              - column:
+                  name: poids
+                  type: DOUBLE
+              - column:
+                  name: prix
+                  type: DOUBLE
+

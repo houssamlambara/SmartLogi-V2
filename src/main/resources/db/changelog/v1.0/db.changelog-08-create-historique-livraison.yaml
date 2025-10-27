@@ -1,0 +1,43 @@
+databaseChangeLog:
+  - changeSet:
+      id: 8
+      author: houssam
+      changes:
+        - createTable:
+            tableName: historique_livraison
+            columns:
+              - column:
+                  name: id
+                  type: BIGINT
+                  autoIncrement: true
+                  constraints:
+                    primaryKey: true
+                    nullable: false
+              - column:
+                  name: statut
+                  type: VARCHAR(50)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: date_changement
+                  type: TIMESTAMP
+                  constraints:
+                    nullable: false
+              - column:
+                  name: commentaire
+                  type: VARCHAR(500)
+              - column:
+                  name: colis_id
+                  type: BIGINT
+                  constraints:
+                    nullable: false
+
+        # Ajouter la clé étrangère
+        - addForeignKeyConstraint:
+            baseTableName: historique_livraison
+            baseColumnNames: colis_id
+            constraintName: fk_historique_livraison_colis
+            referencedTableName: colis
+            referencedColumnNames: id
+            onDelete: CASCADE
+

@@ -1,0 +1,54 @@
+databaseChangeLog:
+  - changeSet:
+      id: 7
+      author: houssam
+      changes:
+        - createTable:
+            tableName: colis_produit
+            columns:
+              - column:
+                  name: id
+                  type: BIGINT
+                  autoIncrement: true
+                  constraints:
+                    primaryKey: true
+                    nullable: false
+              - column:
+                  name: quantite
+                  type: INT
+                  constraints:
+                    nullable: false
+              - column:
+                  name: prix
+                  type: DOUBLE
+              - column:
+                  name: date_ajout
+                  type: TIMESTAMP
+              - column:
+                  name: colis_id
+                  type: BIGINT
+                  constraints:
+                    nullable: false
+              - column:
+                  name: produit_id
+                  type: BIGINT
+                  constraints:
+                    nullable: false
+
+        # Ajouter les clés étrangères
+        - addForeignKeyConstraint:
+            baseTableName: colis_produit
+            baseColumnNames: colis_id
+            constraintName: fk_colis_produit_colis
+            referencedTableName: colis
+            referencedColumnNames: id
+            onDelete: CASCADE
+
+        - addForeignKeyConstraint:
+            baseTableName: colis_produit
+            baseColumnNames: produit_id
+            constraintName: fk_colis_produit_produit
+            referencedTableName: produit
+            referencedColumnNames: id
+            onDelete: CASCADE
+
