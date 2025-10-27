@@ -1,5 +1,7 @@
 package com.houssam.SmartLogi.model;
 
+import com.houssam.SmartLogi.enums.Prioriter;
+import com.houssam.SmartLogi.enums.Statut;
 import jakarta.persistence.*;
 import java.util.List;
 
@@ -12,8 +14,13 @@ public class Colis {
 
     private String description;
     private double poids;
-    private String statut;
-    private String priorite;
+
+    @Enumerated(EnumType.STRING)
+    private Statut statut;
+
+    @Enumerated(EnumType.STRING)
+
+    private Prioriter priorite;
     private String villeDestination;
 
     @ManyToOne
@@ -62,19 +69,19 @@ public class Colis {
         this.poids = poids;
     }
 
-    public String getStatut() {
+    public Statut getStatut() {
         return statut;
     }
 
-    public void setStatut(String statut) {
+    public void setStatut(Statut statut) {
         this.statut = statut;
     }
 
-    public String getPriorite() {
+    public Prioriter getPriorite() {
         return priorite;
     }
 
-    public void setPriorite(String priorite) {
+    public void setPriorite(Prioriter priorite) {
         this.priorite = priorite;
     }
 
