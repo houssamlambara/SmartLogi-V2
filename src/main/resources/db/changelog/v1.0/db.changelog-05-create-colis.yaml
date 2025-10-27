@@ -1,0 +1,96 @@
+databaseChangeLog:
+  - changeSet:
+      id: 5
+      author: houssam
+      changes:
+        - createTable:
+            tableName: colis
+            columns:
+              - column:
+                  name: id
+                  type: BIGINT
+                  autoIncrement: true
+                  constraints:
+                    primaryKey: true
+                    nullable: false
+              - column:
+                  name: description
+                  type: VARCHAR(500)
+              - column:
+                  name: poids
+                  type: DOUBLE
+                  constraints:
+                    nullable: false
+              - column:
+                  name: statut
+                  type: VARCHAR(50)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: priorite
+                  type: VARCHAR(50)
+              - column:
+                  name: ville_destination
+                  type: VARCHAR(255)
+              - column:
+                  name: livreur_id
+                  type: BIGINT
+              - column:
+                  name: client_expediteur_id
+                  type: BIGINT
+              - column:
+                  name: destinataire_id
+                  type: BIGINT
+              - column:
+                  name: zone_id
+                  type: BIGINT
+
+        # Ajouter les clés étrangères
+        - addForeignKeyConstraint:
+            baseTableName: colis
+            baseColumnNames: livreur_id
+            constraintName: fk_colis_livreur
+            referencedTableName: livreur
+            referencedColumnNames: id
+            onDelete: SET NULL
+
+        - addForeignKeyConstraint:
+            baseTableName: colis
+            baseColumnNames: client_expediteur_id
+            constraintName: fk_colis_client_expediteur
+            referencedTableName: client_expediteur
+            referencedColumnNames: id
+            onDelete: CASCADE
+
+        - addForeignKeyConstraint:
+            baseTableName: colis
+            baseColumnNames: destinataire_id
+            constraintName: fk_colis_destinataire
+            referencedTableName: destinataire
+            referencedColumnNames: id
+            onDelete: CASCADE
+
+        - addForeignKeyConstraint:
+            baseTableName: colis
+            baseColumnNames: zone_id
+            constraintName: fk_colis_zone
+            referencedTableName: zone
+            referencedColumnNames: id
+            onDelete: SET NULL
+
+  # Ajouter des contraintes CHECK pour les enums
+  - changeSet:
+      id: 5-add-enum-constraints
+      author: houssam
+      changes:
+        - sql:
+            sql: >
+              ALTER TABLE colis
+              ADD CONSTRAINT check_statut
+              CHECK (statut IN ('Creer', 'Collecter', 'En_Stock', 'En_Transit', 'Livrer'));
+        - sql:
+            sql: >
+              ALTER TABLE colis
+              ADD CONSTRAINT check_priorite
+              CHECK (priorite IN ('Basse', 'Normale', 'Haute'));
+

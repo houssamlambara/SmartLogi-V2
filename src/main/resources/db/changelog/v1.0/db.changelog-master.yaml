@@ -1,17 +1,22 @@
 databaseChangeLog:
-  # Pour l'instant, on travaille uniquement sur client_expediteur
+  # Tables indépendantes (sans relations)
   - include:
       file: db/changelog/v1.0/db.changelog-01-create-client-expediteur.yaml
 
+  - include:
+      file: db/changelog/v1.0/db.changelog-02-create-destinataire.yaml
+
+  - include:
+      file: db/changelog/v1.0/db.changelog-03-create-livreur.yaml
+
+  - include:
+      file: db/changelog/v1.0/db.changelog-04-create-zone.yaml
+
+  # Table colis (dépend de client_expediteur, destinataire, livreur, zone)
+  - include:
+      file: db/changelog/v1.0/db.changelog-05-create-colis.yaml
+
   # Les autres seront ajoutés plus tard
-  # - include:
-  #     file: db/changelog/v1.0/db.changelog-02-create-destinataire.yaml
-  # - include:
-  #     file: db/changelog/v1.0/db.changelog-03-create-livreur.yaml
-  # - include:
-  #     file: db/changelog/v1.0/db.changelog-04-create-zone.yaml
-  # - include:
-  #     file: db/changelog/v1.0/db.changelog-05-create-colis.yaml
   # - include:
   #     file: db/changelog/v1.0/db.changelog-06-create-produit.yaml
   # - include:

@@ -1,0 +1,41 @@
+databaseChangeLog:
+  - changeSet:
+      id: 2
+      author: houssam
+      changes:
+        - createTable:
+            tableName: destinataire
+            columns:
+              - column:
+                  name: id
+                  type: BIGINT
+                  autoIncrement: true
+                  constraints:
+                    primaryKey: true
+                    nullable: false
+              - column:
+                  name: nom
+                  type: VARCHAR(255)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: prenom
+                  type: VARCHAR(255)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: email
+                  type: VARCHAR(255)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: telephone
+                  type: VARCHAR(20)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: adresse
+                  type: VARCHAR(500)
+                  constraints:
+                    nullable: false
+
