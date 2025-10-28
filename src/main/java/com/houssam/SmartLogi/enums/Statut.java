@@ -4,7 +4,6 @@ public enum Statut {
     Creer,
     Collecter,
     En_Stock,
-    En_Transit,
     Livrer
 }
 
