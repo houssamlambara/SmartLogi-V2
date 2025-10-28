@@ -2,19 +2,42 @@ package com.houssam.SmartLogi.dto;
 
 import com.houssam.SmartLogi.enums.Prioriter;
 import com.houssam.SmartLogi.enums.Statut;
+import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Positive;
+import jakarta.validation.constraints.Size;
 
 public class ColisDTO {
 
     private long id;
+
+    @NotNull(message = "La description est obligatoire")
+    @Size(min = 2, max = 300, message = "La description doit contenir entre 2 et 300 caractères")
     private String description;
+
+    @NotNull(message = "Le poids est obligatoire")
+    @Positive(message = "Le poids doit être positif")
     private double poids;
+
+    @NotNull(message = "Le statut est obligatoire")
     private Statut statut;
+
+    @NotNull(message = "La priorité est obligatoire")
     private Prioriter priorite;
+
+    @NotNull(message = "La ville de destination est obligatoire")
+    @Size(min = 2, max = 50)
     private String villeDestination;
 
+    @NotNull(message = "L'ID du livreur est obligatoire")
     private Long livreurId;
+
+    @NotNull(message = "L'ID du client expéditeur est obligatoire")
     private Long clientExpediteurId;
+
+    @NotNull(message = "L'ID du destinataire est obligatoire")
     private Long destinataireId;
+
+    @NotNull(message = "L'ID de la zone est obligatoire")
     private Long zoneId;
 
     public long getId() {
