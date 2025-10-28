@@ -1,12 +1,26 @@
 package com.houssam.SmartLogi.dto;
 
+import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Positive;
+
 import java.time.LocalDate;
 
 public class ColisProduitDTO {
+
+    @NotNull(message = "L'ID du colis est obligatoire")
     private Long colisId;
+
+    @NotNull(message = "L'ID du produit est obligatoire")
     private Long produitId;
+
+    @NotNull(message = "La quantité est obligatoire")
+    @Positive(message = "La quantité doit être positive")
     private int quantite;
+
+    @NotNull(message = "Le prix est obligatoire")
+    @Positive(message = "Le prix doit être positif")
     private double prix;
+
     private LocalDate dateAjout;
 
     public Long getColisId() {
