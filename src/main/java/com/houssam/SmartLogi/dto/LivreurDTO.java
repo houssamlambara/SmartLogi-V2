@@ -1,11 +1,28 @@
 package com.houssam.SmartLogi.dto;
 
+import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Size;
+
 public class LivreurDTO {
     private Long id;
+
+    @NotNull(message = "Le nom est obligatoire")
+    @Size(min = 2, max = 50)
     private String nom;
+
+    @NotNull(message = "Le prénom est obligatoire")
+    @Size(min = 2, max = 50)
     private String prenom;
+
+    @NotNull(message = "Le téléphone est obligatoire")
+    @Size(min = 8, max = 20)
     private String telephone;
+
+    @NotNull(message = "Le véhicule est obligatoire")
+    @Size(min = 2, max = 50)
     private String vehicule;
+
+    @NotNull(message = "La zone assignée est obligatoire")
     private String zoneAssignee;
 
     public Long getId() {
