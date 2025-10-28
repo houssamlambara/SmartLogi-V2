@@ -15,6 +15,8 @@ public class Livreur {
     private String prenom;
     private String telephone;
     private String vehicule;
+
+    @Column(name = "zone_assignee")
     private String zoneAssignee;
 
     @OneToMany(mappedBy = "livreur")

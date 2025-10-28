@@ -4,11 +4,9 @@ import com.houssam.SmartLogi.dto.ColisDTO;
 import com.houssam.SmartLogi.model.Colis;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
-import org.mapstruct.factory.Mappers;
 
 @Mapper(componentModel = "spring")
 public interface ColisMapper {
-    ColisMapper INSTANCE = Mappers.getMapper(ColisMapper.class);
 
     @Mapping(source = "livreur.id", target = "livreurId")
     @Mapping(source = "clientExpediteur.id", target = "clientExpediteurId")
