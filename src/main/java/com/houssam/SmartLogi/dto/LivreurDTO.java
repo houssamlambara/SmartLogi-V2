@@ -4,7 +4,6 @@ import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
 
 public class LivreurDTO {
-    private Long id;
 
     @NotNull(message = "Le nom est obligatoire")
     @Size(min = 2, max = 50)
@@ -24,14 +23,6 @@ public class LivreurDTO {
 
     @NotNull(message = "La zone assignée est obligatoire")
     private String zoneAssignee;
-
-    public Long getId() {
-        return id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
-    }
 
     public String getNom() {
         return nom;

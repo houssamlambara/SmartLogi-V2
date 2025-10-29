@@ -1,9 +1,11 @@
 package com.houssam.SmartLogi.dto;
 
-import jakarta.validation.constraints.*;
+
+import jakarta.validation.constraints.Email;
+import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Size;
 
 public class DestinataireDTO {
-    private Long id;
 
     @NotNull(message = "Le nom est obligatoire")
     @Size(min = 2, max = 50, message = "Le nom doit contenir entre 2 et 50 caractères")
@@ -24,14 +26,6 @@ public class DestinataireDTO {
     @NotNull(message = "L'adresse est obligatoire")
     @Size(min = 5, max = 100, message = "L'adresse doit contenir entre 5 et 100 caractères")
     private String adresse;
-
-    public Long getId() {
-        return id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
-    }
 
     public String getNom() {
         return nom;

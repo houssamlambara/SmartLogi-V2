@@ -8,8 +8,6 @@ import jakarta.validation.constraints.Size;
 
 public class ColisDTO {
 
-    private long id;
-
     @NotNull(message = "La description est obligatoire")
     @Size(min = 2, max = 300, message = "La description doit contenir entre 2 et 300 caractères")
     private String description;
@@ -40,13 +38,6 @@ public class ColisDTO {
     @NotNull(message = "L'ID de la zone est obligatoire")
     private Long zoneId;
 
-    public long getId() {
-        return id;
-    }
-
-    public void setId(long id) {
-        this.id = id;
-    }
 
     public String getDescription() {
         return description;

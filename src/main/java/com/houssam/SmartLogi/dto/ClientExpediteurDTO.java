@@ -1,9 +1,11 @@
 package com.houssam.SmartLogi.dto;
 
-import jakarta.validation.constraints.*;
+
+import jakarta.validation.constraints.Email;
+import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Size;
 
 public class ClientExpediteurDTO {
-    private Long id;
 
     @NotNull(message = "Le nom est obligatoire")
     @Size(min = 2, max = 50, message = "Le nom doit contenir entre 2 et 50 caractères")
@@ -28,14 +30,6 @@ public class ClientExpediteurDTO {
     @NotNull(message = "La zone assignée est obligatoire")
     @Size(min = 2, max = 50, message = "La zone assignée doit contenir entre 2 et 50 caractères")
     private String zoneAssigner;
-
-    public Long getId() {
-        return id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
-    }
 
     public String getNom() {
         return nom;
