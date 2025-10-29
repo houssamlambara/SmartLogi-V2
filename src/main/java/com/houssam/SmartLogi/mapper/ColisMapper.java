@@ -8,15 +8,11 @@ import org.mapstruct.Mapping;
 @Mapper(componentModel = "spring")
 public interface ColisMapper {
 
-    @Mapping(source = "livreur.id", target = "livreurId")
-    @Mapping(source = "clientExpediteur.id", target = "clientExpediteurId")
-    @Mapping(source = "destinataire.id", target = "destinataireId")
-    @Mapping(source = "zone.id", target = "zoneId")
     ColisDTO toDTO(Colis colis);
 
-    @Mapping(source = "livreurId", target = "livreur.id")
-    @Mapping(source = "clientExpediteurId", target = "clientExpediteur.id")
-    @Mapping(source = "destinataireId", target = "destinataire.id")
-    @Mapping(source = "zoneId", target = "zone.id")
+    @Mapping(target = "livreur", ignore = true)
+    @Mapping(target = "clientExpediteur", ignore = true)
+    @Mapping(target = "destinataire", ignore = true)
+    @Mapping(target = "zone", ignore = true)
     Colis toEntity(ColisDTO dto);
 }

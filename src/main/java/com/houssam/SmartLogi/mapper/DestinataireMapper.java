@@ -7,6 +7,6 @@ import org.mapstruct.Mapper;
 @Mapper(componentModel = "spring")
 public interface DestinataireMapper {
 
-    DestinataireDTO toDTO(Destinataire entity);
     Destinataire toEntity(DestinataireDTO dto);
+    DestinataireDTO toDTO(Destinataire entity);
 }
