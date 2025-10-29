@@ -5,6 +5,7 @@ import com.houssam.SmartLogi.service.LivreurService;
 import jakarta.validation.Valid;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import com.houssam.SmartLogi.response.ApiResponse;
 
 import java.util.List;
 
@@ -19,25 +20,29 @@ public class LivreurController {
     }
 
     @PostMapping
-    public ResponseEntity<LivreurDTO> createLivreur(@Valid @RequestBody LivreurDTO dto) {
+    public ResponseEntity<ApiResponse<LivreurDTO>> createLivreur(@Valid @RequestBody LivreurDTO dto) {
         LivreurDTO created = service.createLivreur(dto);
-        return ResponseEntity.ok(created);
+        return ResponseEntity.ok(new ApiResponse<>("Livreur créé avec succès", created));
     }
 
     @GetMapping
-    public ResponseEntity<List<LivreurDTO>> getAllLivreurs() {
-        return ResponseEntity.ok(service.getAllLivreurs());
+    public ResponseEntity<ApiResponse<List<LivreurDTO>>> getAllLivreurs() {
+        List<LivreurDTO> liste = service.getAllLivreurs();
+        return ResponseEntity.ok(new ApiResponse<>("Liste des livreurs récupérée avec succès", liste));
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<LivreurDTO> getLivreurById(@PathVariable Long id) {
+    public ResponseEntity<ApiResponse<LivreurDTO>> getLivreurById(@PathVariable Long id) {
         LivreurDTO livreur = service.getLivreurById(id);
-        return (livreur != null) ? ResponseEntity.ok(livreur) : ResponseEntity.notFound().build();
-    }
+        if (livreur != null) {
+            return ResponseEntity.ok(new ApiResponse<>("Livreur trouvé", livreur));
+        } else {
+            return ResponseEntity.status(404).body(new ApiResponse<>("Livreur non trouvé", null));
+        }    }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<Void> deleteLivreur(@PathVariable Long id) {
+    public ResponseEntity<ApiResponse<Void>> deleteLivreur(@PathVariable Long id) {
         service.deleteLivreur(id);
-        return ResponseEntity.noContent().build();
+        return ResponseEntity.ok(new ApiResponse<>("Livreur supprimé avec succès", null));
     }
 }

@@ -1,0 +1,19 @@
+### Test POST Create Livreur avec ApiResponse
+
+POST http://localhost:8080/api/livreurs
+Content-Type: application/json
+
+{
+  "nom": "Alami",
+  "prenom": "Ahmed",
+  "telephone": "0612345678",
+  "vehicule": "Moto",
+  "zoneAssignee": "Casablanca Centre"
+}
+
+### Test GET All Livreurs
+GET http://localhost:8080/api/livreurs
+
+### Test GET Livreur by ID
+GET http://localhost:8080/api/livreurs/1
+
