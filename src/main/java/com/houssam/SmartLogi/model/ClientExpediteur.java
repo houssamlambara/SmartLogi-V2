@@ -17,6 +17,9 @@ public class ClientExpediteur {
     private String telephone;
     private String adresse;
 
+    @Column(name = "zone_assigner")
+    private String zoneAssigner;
+
     @OneToMany(mappedBy = "clientExpediteur")
     private List<Colis> colis;
 
@@ -66,6 +69,14 @@ public class ClientExpediteur {
 
     public void setAdresse(String adresse) {
         this.adresse = adresse;
+    }
+
+    public String getZoneAssigner() {
+        return zoneAssigner;
+    }
+
+    public void setZoneAssigner(String zoneAssigner) {
+        this.zoneAssigner = zoneAssigner;
     }
 
     public List<Colis> getColis() {
