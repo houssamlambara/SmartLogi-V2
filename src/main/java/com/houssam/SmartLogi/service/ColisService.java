@@ -63,6 +63,19 @@ public class ColisService {
                 .collect(Collectors.toList());
     }
 
+    public List<ColisDTO> getColisByDestinataireId(Long destinataireId) {
+        // 1. Vérifier que le destinataire existe
+        destinataireRepository.findById(destinataireId)
+                .orElseThrow(() -> new ResourceNotFoundException(
+                        "Destinataire introuvable avec l'ID " + destinataireId));
+
+        // 2. Récupérer et mapper les colis
+        return colisRepository.findByDestinataireId(destinataireId)
+                .stream()
+                .map(colisMapper::toDTO)
+                .collect(Collectors.toList());
+    }
+
     public ColisDTO getColisById(Long id) {
         return colisRepository.findById(id)
                 .map(colisMapper::toDTO)

@@ -1,7 +1,9 @@
 package com.houssam.SmartLogi.controller;
 
+import com.houssam.SmartLogi.dto.ColisDTO;
 import com.houssam.SmartLogi.dto.DestinataireDTO;
 import com.houssam.SmartLogi.response.ApiResponse;
+import com.houssam.SmartLogi.service.ColisService;
 import com.houssam.SmartLogi.service.DestinataireService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -13,9 +15,11 @@ import java.util.List;
 public class DestinationController {
 
     private final DestinataireService service;
+    private final ColisService colisService;
 
-    public DestinationController(DestinataireService service){
+    public DestinationController(DestinataireService service, ColisService colisService){
         this.service=service;
+        this.colisService = colisService;
     }
 
     @PostMapping
@@ -28,6 +32,15 @@ public class DestinationController {
     public ResponseEntity<ApiResponse<List<DestinataireDTO>>> getAll() {
         List<DestinataireDTO> liste = service.getAllDestinataires();
         return ResponseEntity.ok(new ApiResponse<>("Liste des Destinataire récupérée avec succès" ,liste));
+    }
+
+    @GetMapping("/{id}/colis")
+    public ResponseEntity<ApiResponse<List<ColisDTO>>> getColisByDestinataire(
+            @PathVariable Long id) {
+        List<ColisDTO> colis = colisService.getColisByDestinataireId(id);
+        return ResponseEntity.ok(
+                new ApiResponse<>("Colis du destinataire récupérés avec succès", colis)
+        );
     }
 
     @GetMapping("/{id}")
