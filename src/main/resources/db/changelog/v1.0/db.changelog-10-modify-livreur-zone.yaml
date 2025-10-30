@@ -1,0 +1,30 @@
+databaseChangeLog:
+  - changeSet:
+      id: 10-modify-livreur-zone-relation
+      author: smartlogi
+      changes:
+        # Supprimer l'ancienne colonne zone_assignee (VARCHAR)
+        - dropColumn:
+            tableName: livreur
+            columnName: zone_assignee
+
+        # Ajouter la nouvelle colonne zone_assignee_id (BIGINT - Foreign Key)
+        - addColumn:
+            tableName: livreur
+            columns:
+              - column:
+                  name: zone_assignee_id
+                  type: BIGINT
+                  constraints:
+                    nullable: true
+
+        # Créer la contrainte de clé étrangère vers la table zone
+        - addForeignKeyConstraint:
+            baseTableName: livreur
+            baseColumnNames: zone_assignee_id
+            constraintName: fk_livreur_zone
+            referencedTableName: zone
+            referencedColumnNames: id
+            onDelete: SET NULL
+            onUpdate: CASCADE
+
