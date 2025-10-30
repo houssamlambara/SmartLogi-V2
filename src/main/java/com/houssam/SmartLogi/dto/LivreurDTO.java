@@ -21,8 +21,8 @@ public class LivreurDTO {
     @Size(min = 2, max = 50)
     private String vehicule;
 
-    @NotNull(message = "La zone assignée est obligatoire")
-    private String zoneAssignee;
+    @NotNull(message = "L'ID de la zone assignée est obligatoire")
+    private Long zoneAssigneeId;
 
     public String getNom() {
         return nom;
@@ -56,11 +56,11 @@ public class LivreurDTO {
         this.vehicule = vehicule;
     }
 
-    public String getZoneAssignee() {
-        return zoneAssignee;
+    public Long getZoneAssigneeId() {
+        return zoneAssigneeId;
     }
 
-    public void setZoneAssignee(String zoneAssignee) {
-        this.zoneAssignee = zoneAssignee;
+    public void setZoneAssigneeId(Long zoneAssigneeId) {
+        this.zoneAssigneeId = zoneAssigneeId;
     }
 }

@@ -6,7 +6,14 @@ import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Positive;
 import jakarta.validation.constraints.Size;
 
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+
 public class ColisDTO {
+
+    private String trackingNumber;
+    private LocalDateTime dateCreation;
+    private LocalDate dateLivraisonPrevue;
 
     @NotNull(message = "La description est obligatoire")
     @Size(min = 2, max = 300, message = "La description doit contenir entre 2 et 300 caractères")
@@ -38,7 +45,7 @@ public class ColisDTO {
     @NotNull(message = "L'ID de la zone est obligatoire")
     private Long zoneId;
 
-
+    // Getters et Setters
     public String getDescription() {
         return description;
     }
@@ -110,4 +117,29 @@ public class ColisDTO {
     public void setZoneId(Long zoneId) {
         this.zoneId = zoneId;
     }
+
+    public String getTrackingNumber() {
+        return trackingNumber;
+    }
+
+    public void setTrackingNumber(String trackingNumber) {
+        this.trackingNumber = trackingNumber;
+    }
+
+    public LocalDateTime getDateCreation() {
+        return dateCreation;
+    }
+
+    public void setDateCreation(LocalDateTime dateCreation) {
+        this.dateCreation = dateCreation;
+    }
+
+    public LocalDate getDateLivraisonPrevue() {
+        return dateLivraisonPrevue;
+    }
+
+    public void setDateLivraisonPrevue(LocalDate dateLivraisonPrevue) {
+        this.dateLivraisonPrevue = dateLivraisonPrevue;
+    }
 }
+

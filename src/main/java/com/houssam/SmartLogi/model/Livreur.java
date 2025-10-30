@@ -16,8 +16,9 @@ public class Livreur {
     private String telephone;
     private String vehicule;
 
-    @Column(name = "zone_assignee")
-    private String zoneAssignee;
+    @ManyToOne
+    @JoinColumn(name = "zone_assignee_id")
+    private Zone zoneAssignee;
 
     @OneToMany(mappedBy = "livreur")
     private List<Colis> colis;
@@ -62,11 +63,11 @@ public class Livreur {
         this.vehicule = vehicule;
     }
 
-    public String getZoneAssignee() {
+    public Zone getZoneAssignee() {
         return zoneAssignee;
     }
 
-    public void setZoneAssignee(String zoneAssignee) {
+    public void setZoneAssignee(Zone zoneAssignee) {
         this.zoneAssignee = zoneAssignee;
     }
 
