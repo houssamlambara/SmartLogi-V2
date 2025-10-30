@@ -16,27 +16,27 @@ import java.util.List;
 @RequestMapping("/api/colis")
 public class ColisController {
 
-    private final ColisService service;
+    private final ColisService colisService;
 
-    public ColisController (ColisService service) {
-        this.service = service;
+    public ColisController (ColisService colisService) {
+        this.colisService = colisService;
     }
 
     @PostMapping
     public ResponseEntity<ApiResponse<ColisDTO>> createColis(@Valid @RequestBody ColisDTO dto) {
-        ColisDTO created = service.createColis(dto);
+        ColisDTO created = colisService.createColis(dto);
         return ResponseEntity.ok(new ApiResponse<>("Colis créé avec succès", created));
     }
 
     @GetMapping
     public ResponseEntity<ApiResponse<List<ColisDTO>>> getAllColis() {
-        List<ColisDTO> liste = service.getAllColis();
+        List<ColisDTO> liste = colisService.getAllColis();
         return ResponseEntity.ok(new ApiResponse<>("Liste des colis récupérée avec succès", liste));
     }
 
     @GetMapping("/{id}")
     public ResponseEntity<ApiResponse<ColisDTO>> getColisById(@PathVariable Long id) {
-        ColisDTO colis = service.getColisById(id);
+        ColisDTO colis = colisService.getColisById(id);
         if (colis != null) {
             return ResponseEntity.ok(new ApiResponse<>("Colis trouvé", colis));
         } else {
@@ -46,7 +46,7 @@ public class ColisController {
 
     @DeleteMapping("/{id}")
     public ResponseEntity<ApiResponse<Void>> deleteColis(@PathVariable Long id) {
-        service.deleteColis(id);
+        colisService.deleteColis(id);
         return ResponseEntity.ok(new ApiResponse<>("Colis supprimé avec succès", null));
     }
 }
