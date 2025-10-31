@@ -34,13 +34,13 @@ public class DestinataireService {
                 .collect(Collectors.toList());
     }
 
-    public DestinataireDTO getDestinataireById(Long id) {
+    public DestinataireDTO getDestinataireById(String id) {
         return repository.findById(id)
                 .map(mapper::toDTO)
                 .orElse(null);
     }
 
-    public void deleteDestinataire(Long id) {
+    public void deleteDestinataire(String id) {
         repository.deleteById(id);
     }
 

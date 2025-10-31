@@ -8,10 +8,10 @@ import java.time.LocalDate;
 public class ColisProduitDTO {
 
     @NotNull(message = "L'ID du colis est obligatoire")
-    private Long colisId;
+    private String colisId;
 
     @NotNull(message = "L'ID du produit est obligatoire")
-    private Long produitId;
+    private String produitId;
 
     @NotNull(message = "La quantité est obligatoire")
     @Positive(message = "La quantité doit être positive")
@@ -23,19 +23,19 @@ public class ColisProduitDTO {
 
     private LocalDate dateAjout;
 
-    public Long getColisId() {
+    public String getColisId() {
         return colisId;
     }
 
-    public void setColisId(Long colisId) {
+    public void setColisId(String colisId) {
         this.colisId = colisId;
     }
 
-    public Long getProduitId() {
+    public String getProduitId() {
         return produitId;
     }
 
-    public void setProduitId(Long produitId) {
+    public void setProduitId(String produitId) {
         this.produitId = produitId;
     }
 

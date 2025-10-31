@@ -8,8 +8,7 @@ databaseChangeLog:
             columns:
               - column:
                   name: id
-                  type: BIGINT
-                  autoIncrement: true
+                  type: VARCHAR(36)
                   constraints:
                     primaryKey: true
                     nullable: false
@@ -26,12 +25,12 @@ databaseChangeLog:
                   type: TIMESTAMP
               - column:
                   name: colis_id
-                  type: BIGINT
+                  type: VARCHAR(36)
                   constraints:
                     nullable: false
               - column:
                   name: produit_id
-                  type: BIGINT
+                  type: VARCHAR(36)
                   constraints:
                     nullable: false
 

@@ -63,7 +63,7 @@ public class ColisService {
                 .collect(Collectors.toList());
     }
 
-    public List<ColisDTO> getColisByDestinataireId(Long destinataireId) {
+    public List<ColisDTO> getColisByDestinataireId(String destinataireId) {
         // 1. Vérifier que le destinataire existe
         destinataireRepository.findById(destinataireId)
                 .orElseThrow(() -> new ResourceNotFoundException(
@@ -76,13 +76,13 @@ public class ColisService {
                 .collect(Collectors.toList());
     }
 
-    public ColisDTO getColisById(Long id) {
+    public ColisDTO getColisById(String id) {
         return colisRepository.findById(id)
                 .map(colisMapper::toDTO)
                 .orElse(null);
     }
 
-    public void deleteColis(Long id) {
+    public void deleteColis(String id) {
         colisRepository.deleteById(id);
     }
 }

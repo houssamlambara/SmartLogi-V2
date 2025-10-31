@@ -32,7 +32,7 @@ public class LivreurController {
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<ApiResponse<LivreurDTO>> getLivreurById(@PathVariable Long id) {
+    public ResponseEntity<ApiResponse<LivreurDTO>> getLivreurById(@PathVariable String id) {
         LivreurDTO livreur = service.getLivreurById(id);
         if (livreur != null) {
             return ResponseEntity.ok(new ApiResponse<>("Livreur trouvé", livreur));
@@ -41,7 +41,7 @@ public class LivreurController {
         }    }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<ApiResponse<Void>> deleteLivreur(@PathVariable Long id) {
+    public ResponseEntity<ApiResponse<Void>> deleteLivreur(@PathVariable String id) {
         service.deleteLivreur(id);
         return ResponseEntity.ok(new ApiResponse<>("Livreur supprimé avec succès", null));
     }

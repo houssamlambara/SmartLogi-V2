@@ -32,7 +32,7 @@ public class ClientExpediteurController {
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<ApiResponse<ClientExpediteurDTO>> getClientById(@PathVariable Long id) {
+    public ResponseEntity<ApiResponse<ClientExpediteurDTO>> getClientById(@PathVariable String id) {
         ClientExpediteurDTO client = service.getClientById(id);
         if (client == null) {
             return ResponseEntity.ok(new ApiResponse<>("Client trouvé", client));
@@ -41,7 +41,7 @@ public class ClientExpediteurController {
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<ApiResponse<Void>> deleteClient(@PathVariable Long id) {
+    public ResponseEntity<ApiResponse<Void>> deleteClient(@PathVariable String id) {
         service.deleteClient(id);
         return ResponseEntity.ok(new ApiResponse<>("Clinet supprimé avec succès", null));
     }

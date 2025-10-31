@@ -33,13 +33,13 @@ public class ZoneService {
                 .collect(Collectors.toList());
     }
 
-    public ZoneDTO getZoneById(Long id) {
+    public ZoneDTO getZoneById(String id) {
         return repository.findById(id)
                 .map(mapper::toDTO)
                 .orElse(null);
     }
 
-    public void deleteZone(Long id){
+    public void deleteZone(String id){
         repository.deleteById(id);
     }
 

@@ -1,6 +1,8 @@
 package com.houssam.SmartLogi.model;
 
 import jakarta.persistence.*;
+import org.hibernate.annotations.GenericGenerator;
+
 import java.util.List;
 
 @Entity
@@ -8,8 +10,9 @@ import java.util.List;
 public class Livreur {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+    @GeneratedValue(generator = "UUID")
+    @GenericGenerator(name = "UUID", strategy = "org.hibernate.id.UUIDGenerator")
+    private String id;
 
     private String nom;
     private String prenom;
@@ -23,11 +26,11 @@ public class Livreur {
     @OneToMany(mappedBy = "livreur")
     private List<Colis> colis;
 
-    public Long getId() {
+    public String getId() {
         return id;
     }
 
-    public void setId(Long id) {
+    public void setId(String id) {
         this.id = id;
     }
 

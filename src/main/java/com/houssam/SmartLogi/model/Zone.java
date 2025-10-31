@@ -1,36 +1,53 @@
 package com.houssam.SmartLogi.model;
 
 import jakarta.persistence.*;
-import java.util.List;
+import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Size;
+import org.hibernate.annotations.GenericGenerator;
+
+import java.util.LinkedHashSet;
+import java.util.Set;
+import java.util.UUID;
 
 @Entity
 @Table(name = "zone")
 public class Zone {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+    @GeneratedValue(generator = "UUID")
+    @GenericGenerator(name = "UUID", strategy = "org.hibernate.id.UUIDGenerator")
+    private String id;
 
+    @Size(max = 255)
+    @NotNull
+    @Column(name = "nom", nullable = false)
     private String nom;
+
+    @Size(max = 10)
+    @NotNull
+    @Column(name = "code_postal", nullable = false, length = 10)
     private String codePostal;
 
     @OneToMany(mappedBy = "zone")
-    private List<Colis> colis;
+    private Set<Colis> colis = new LinkedHashSet<>();
 
-    public Long getId() {
-        return id;
+    @OneToMany(mappedBy = "zoneAssignee")
+    private Set<Livreur> livreurs = new LinkedHashSet<>();
+
+    public Set<Livreur> getLivreurs() {
+        return livreurs;
     }
 
-    public void setId(Long id) {
-        this.id = id;
+    public void setLivreurs(Set<Livreur> livreurs) {
+        this.livreurs = livreurs;
     }
 
-    public String getNom() {
-        return nom;
+    public Set<Colis> getColis() {
+        return colis;
     }
 
-    public void setNom(String nom) {
-        this.nom = nom;
+    public void setColis(Set<Colis> colis) {
+        this.colis = colis;
     }
 
     public String getCodePostal() {
@@ -41,12 +58,20 @@ public class Zone {
         this.codePostal = codePostal;
     }
 
-    public List<Colis> getColis() {
-        return colis;
+    public String getNom() {
+        return nom;
     }
 
-    public void setColis(List<Colis> colis) {
-        this.colis = colis;
+    public void setNom(String nom) {
+        this.nom = nom;
+    }
+
+    public String getId() {
+        return id;
+    }
+
+    public void setId(String id) {
+        this.id = id;
     }
 }
 

@@ -36,7 +36,7 @@ public class DestinationController {
 
     @GetMapping("/{id}/colis")
     public ResponseEntity<ApiResponse<List<ColisDTO>>> getColisByDestinataire(
-            @PathVariable Long id) {
+            @PathVariable String id) {
         List<ColisDTO> colis = colisService.getColisByDestinataireId(id);
         return ResponseEntity.ok(
                 new ApiResponse<>("Colis du destinataire récupérés avec succès", colis)
@@ -44,7 +44,7 @@ public class DestinationController {
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<ApiResponse<DestinataireDTO>> getById(@PathVariable Long id){
+    public ResponseEntity<ApiResponse<DestinataireDTO>> getById(@PathVariable String id){
         DestinataireDTO dto = service.getDestinataireById(id);
         if(dto!=null){
             return ResponseEntity.ok(new ApiResponse<>("Destinataire Trouvé", dto));
@@ -53,7 +53,7 @@ public class DestinationController {
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<ApiResponse<DestinataireDTO>> deleteById(@PathVariable Long id){
+    public ResponseEntity<ApiResponse<DestinataireDTO>> deleteById(@PathVariable String id){
         service.deleteDestinataire(id);
         return ResponseEntity.ok(new ApiResponse<>("Destinataire supprimé avec succès", null));
     }

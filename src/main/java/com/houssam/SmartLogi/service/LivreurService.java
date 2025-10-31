@@ -43,13 +43,13 @@ public class LivreurService {
                 .collect(Collectors.toList());
     }
 
-    public LivreurDTO getLivreurById(Long id) {
+    public LivreurDTO getLivreurById(String id) {
         return repository.findById(id)
                 .map(mapper::toDTO)
                 .orElse(null);
     }
 
-    public void deleteLivreur(Long id) {
+    public void deleteLivreur(String id) {
         repository.deleteById(id);
     }
 }

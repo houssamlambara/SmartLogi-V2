@@ -35,7 +35,7 @@ public class ColisController {
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<ApiResponse<ColisDTO>> getColisById(@PathVariable Long id) {
+    public ResponseEntity<ApiResponse<ColisDTO>> getColisById(@PathVariable String id) {
         ColisDTO colis = colisService.getColisById(id);
         if (colis != null) {
             return ResponseEntity.ok(new ApiResponse<>("Colis trouvé", colis));
@@ -45,7 +45,7 @@ public class ColisController {
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<ApiResponse<Void>> deleteColis(@PathVariable Long id) {
+    public ResponseEntity<ApiResponse<Void>> deleteColis(@PathVariable String id) {
         colisService.deleteColis(id);
         return ResponseEntity.ok(new ApiResponse<>("Colis supprimé avec succès", null));
     }

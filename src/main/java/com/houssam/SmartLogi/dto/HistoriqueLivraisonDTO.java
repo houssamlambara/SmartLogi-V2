@@ -7,10 +7,10 @@ import jakarta.validation.constraints.Size;
 import java.time.LocalDateTime;
 
 public class HistoriqueLivraisonDTO {
-    private Long id;
+    private String id;
 
     @NotNull(message = "L'ID du colis est obligatoire")
-    private Long colisId;
+    private String colisId;
 
     @NotNull(message = "Le statut est obligatoire")
     private Statut statut;
@@ -21,19 +21,19 @@ public class HistoriqueLivraisonDTO {
     @Size(max = 500, message = "Le commentaire ne peut pas dépasser 500 caractères")
     private String commentaire;
 
-    public Long getId() {
+    public String getId() {
         return id;
     }
 
-    public void setId(Long id) {
+    public void setId(String id) {
         this.id = id;
     }
 
-    public Long getColisId() {
+    public String getColisId() {
         return colisId;
     }
 
-    public void setColisId(Long colisId) {
+    public void setColisId(String colisId) {
         this.colisId = colisId;
     }
 

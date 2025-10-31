@@ -3,14 +3,19 @@ package com.houssam.SmartLogi.model;
 import com.houssam.SmartLogi.enums.Prioriter;
 import com.houssam.SmartLogi.enums.Statut;
 import jakarta.persistence.*;
+import org.hibernate.annotations.GenericGenerator;
+
 import java.util.List;
+import java.util.UUID;
 
 @Entity
 @Table(name = "colis")
 public class Colis {
+
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+    @GeneratedValue(generator = "UUID")
+    @GenericGenerator(name = "UUID", strategy = "org.hibernate.id.UUIDGenerator")
+    private String id;
 
     private String description;
     private double poids;
@@ -45,11 +50,11 @@ public class Colis {
     @OneToMany(mappedBy = "colis")
     private List<ColisProduit> produits;
 
-    public Long getId() {
+    public String getId() {
         return id;
     }
 
-    public void setId(Long id) {
+    public void setId(String id) {
         this.id = id;
     }
 

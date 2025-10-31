@@ -1,6 +1,8 @@
 package com.houssam.SmartLogi.model;
 
 import jakarta.persistence.*;
+import org.hibernate.annotations.GenericGenerator;
+
 import java.time.LocalDateTime;
 
 @Entity
@@ -8,8 +10,9 @@ import java.time.LocalDateTime;
 public class HistoriqueLivraison {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+    @GeneratedValue(generator = "UUID")
+    @GenericGenerator(name = "UUID", strategy = "org.hibernate.id.UUIDGenerator")
+    private String id;
 
     private String statut;
     private LocalDateTime dateChangement;
@@ -20,11 +23,11 @@ public class HistoriqueLivraison {
     private Colis colis;
 
 
-    public Long getId() {
+    public String getId() {
         return id;
     }
 
-    public void setId(Long id) {
+    public void setId(String id) {
         this.id = id;
     }
 

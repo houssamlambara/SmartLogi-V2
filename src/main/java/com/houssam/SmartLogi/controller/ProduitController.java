@@ -32,7 +32,7 @@ public class ProduitController {
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<ApiResponse<ProduitDTO>> findProduitById(@PathVariable Long id){
+    public ResponseEntity<ApiResponse<ProduitDTO>> findProduitById(@PathVariable String id){
         ProduitDTO produit = service.getProduitById(id);
         if(produit == null){
             return ResponseEntity.status(404).body(new ApiResponse("Produit non trouvé", null));
@@ -42,7 +42,7 @@ public class ProduitController {
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<ApiResponse<Void>> deleteProduit(@PathVariable Long id){
+    public ResponseEntity<ApiResponse<Void>> deleteProduit(@PathVariable String id){
         service.deleteProduit(id);
         return ResponseEntity.ok(new ApiResponse("Produit supprimé avec succès", null));
     }

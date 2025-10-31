@@ -11,10 +11,6 @@ import java.time.LocalDateTime;
 
 public class ColisDTO {
 
-    private String trackingNumber;
-    private LocalDateTime dateCreation;
-    private LocalDate dateLivraisonPrevue;
-
     @NotNull(message = "La description est obligatoire")
     @Size(min = 2, max = 300, message = "La description doit contenir entre 2 et 300 caractères")
     private String description;
@@ -34,16 +30,16 @@ public class ColisDTO {
     private String villeDestination;
 
     @NotNull(message = "L'ID du livreur est obligatoire")
-    private Long livreurId;
+    private String livreurId;
 
     @NotNull(message = "L'ID du client expéditeur est obligatoire")
-    private Long clientExpediteurId;
+    private String clientExpediteurId;
 
     @NotNull(message = "L'ID du destinataire est obligatoire")
-    private Long destinataireId;
+    private String destinataireId;
 
     @NotNull(message = "L'ID de la zone est obligatoire")
-    private Long zoneId;
+    private String zoneId;
 
     // Getters et Setters
     public String getDescription() {
@@ -86,60 +82,37 @@ public class ColisDTO {
         this.villeDestination = villeDestination;
     }
 
-    public Long getLivreurId() {
+    public String getLivreurId() {
         return livreurId;
     }
 
-    public void setLivreurId(Long livreurId) {
+    public void setLivreurId(String livreurId) {
         this.livreurId = livreurId;
     }
 
-    public Long getClientExpediteurId() {
+    public String getClientExpediteurId() {
         return clientExpediteurId;
     }
 
-    public void setClientExpediteurId(Long clientExpediteurId) {
+    public void setClientExpediteurId(String clientExpediteurId) {
         this.clientExpediteurId = clientExpediteurId;
     }
 
-    public Long getDestinataireId() {
+    public String getDestinataireId() {
         return destinataireId;
     }
 
-    public void setDestinataireId(Long destinataireId) {
+    public void setDestinataireId(String destinataireId) {
         this.destinataireId = destinataireId;
     }
 
-    public Long getZoneId() {
+    public String getZoneId() {
         return zoneId;
     }
 
-    public void setZoneId(Long zoneId) {
+    public void setZoneId(String zoneId) {
         this.zoneId = zoneId;
     }
 
-    public String getTrackingNumber() {
-        return trackingNumber;
-    }
-
-    public void setTrackingNumber(String trackingNumber) {
-        this.trackingNumber = trackingNumber;
-    }
-
-    public LocalDateTime getDateCreation() {
-        return dateCreation;
-    }
-
-    public void setDateCreation(LocalDateTime dateCreation) {
-        this.dateCreation = dateCreation;
-    }
-
-    public LocalDate getDateLivraisonPrevue() {
-        return dateLivraisonPrevue;
-    }
-
-    public void setDateLivraisonPrevue(LocalDate dateLivraisonPrevue) {
-        this.dateLivraisonPrevue = dateLivraisonPrevue;
-    }
 }
 

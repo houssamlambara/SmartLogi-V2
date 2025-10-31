@@ -14,7 +14,7 @@ databaseChangeLog:
             columns:
               - column:
                   name: zone_assignee_id
-                  type: BIGINT
+                  type: VARCHAR(36)
                   constraints:
                     nullable: true
 

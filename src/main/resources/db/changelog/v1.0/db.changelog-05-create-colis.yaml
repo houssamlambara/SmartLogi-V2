@@ -8,8 +8,7 @@ databaseChangeLog:
             columns:
               - column:
                   name: id
-                  type: BIGINT
-                  autoIncrement: true
+                  type: VARCHAR(36)
                   constraints:
                     primaryKey: true
                     nullable: false
@@ -34,16 +33,16 @@ databaseChangeLog:
                   type: VARCHAR(255)
               - column:
                   name: livreur_id
-                  type: BIGINT
+                  type: VARCHAR(36)
               - column:
                   name: client_expediteur_id
-                  type: BIGINT
+                  type: VARCHAR(36)
               - column:
                   name: destinataire_id
-                  type: BIGINT
+                  type: VARCHAR(36)
               - column:
                   name: zone_id
-                  type: BIGINT
+                  type: VARCHAR(36)
 
         # Ajouter les clés étrangères
         - addForeignKeyConstraint:

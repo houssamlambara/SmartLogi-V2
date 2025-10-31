@@ -34,13 +34,13 @@ public class ProduitService {
                 .collect(Collectors.toList());
     }
 
-    public ProduitDTO getProduitById(Long id) {
+    public ProduitDTO getProduitById(String id) {
         return repository.findById(id)
                 .map(mapper::toDTO)
                 .orElse(null);
     }
 
-    public void deleteProduit(Long id) {
+    public void deleteProduit(String id) {
         repository.deleteById(id);
     }
 }

@@ -7,8 +7,8 @@ import org.springframework.stereotype.Repository;
 import java.util.List;
 
 @Repository
-public interface ColisRepository extends JpaRepository<Colis, Long> {
+public interface ColisRepository extends JpaRepository<Colis, String> {
 
-    List<Colis> findByDestinataireId(Long destinataireId);
+    List<Colis> findByDestinataireId(String destinataireId);
 
 }

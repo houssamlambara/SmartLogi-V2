@@ -32,7 +32,7 @@ public class ZoneController {
     }
 
     @GetMapping("{id}")
-        public ResponseEntity<ApiResponse<ZoneDTO>> getZoneById(@PathVariable Long id){
+        public ResponseEntity<ApiResponse<ZoneDTO>> getZoneById(@PathVariable String id){
             ZoneDTO zone = service.getZoneById(id);
             if (zone == null){
                 return ResponseEntity.status(404).body(new ApiResponse<>("Zone non trouvée", null));
@@ -42,7 +42,7 @@ public class ZoneController {
         }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<ApiResponse<Void>> deleteZone(@PathVariable Long id) {
+    public ResponseEntity<ApiResponse<Void>> deleteZone(@PathVariable String id) {
         service.deleteZone(id);
         return ResponseEntity.ok(new ApiResponse<>("Zone supprimée avec succès", null));
     }
