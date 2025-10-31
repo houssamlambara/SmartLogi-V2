@@ -27,10 +27,6 @@ public class ClientExpediteurDTO {
     @Size(min = 5, max = 100, message = "L'adresse doit contenir entre 5 et 100 caractères")
     private String adresse;
 
-    @NotNull(message = "La zone assignée est obligatoire")
-    @Size(min = 2, max = 50, message = "La zone assignée doit contenir entre 2 et 50 caractères")
-    private String zoneAssigner;
-
     public String getNom() {
         return nom;
     }
@@ -71,11 +67,4 @@ public class ClientExpediteurDTO {
         this.adresse = adresse;
     }
 
-    public String getZoneAssigner() {
-        return zoneAssigner;
-    }
-
-    public void setZoneAssigner(String zoneAssigner) {
-        this.zoneAssigner = zoneAssigner;
-    }
 }

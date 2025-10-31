@@ -1,6 +1,8 @@
 package com.houssam.SmartLogi.model;
 
 import jakarta.persistence.*;
+import org.hibernate.annotations.GenericGenerator;
+
 import java.util.List;
 
 @Entity
@@ -8,8 +10,9 @@ import java.util.List;
 public class ClientExpediteur {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+    @GeneratedValue(generator = "UUID")
+    @GenericGenerator(name = "UUID", strategy = "org.hibernate.id.UUIDGenerator")
+    private String id;
 
     private String nom;
     private String prenom;
@@ -17,17 +20,15 @@ public class ClientExpediteur {
     private String telephone;
     private String adresse;
 
-    @Column(name = "zone_assigner")
-    private String zoneAssigner;
 
     @OneToMany(mappedBy = "clientExpediteur")
     private List<Colis> colis;
 
-    public Long getId() {
+    public String getId() {
         return id;
     }
 
-    public void setId(Long id) {
+    public void setId(String id) {
         this.id = id;
     }
 
@@ -69,14 +70,6 @@ public class ClientExpediteur {
 
     public void setAdresse(String adresse) {
         this.adresse = adresse;
-    }
-
-    public String getZoneAssigner() {
-        return zoneAssigner;
-    }
-
-    public void setZoneAssigner(String zoneAssigner) {
-        this.zoneAssigner = zoneAssigner;
     }
 
     public List<Colis> getColis() {

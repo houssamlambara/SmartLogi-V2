@@ -33,13 +33,13 @@ public class ClientExpediteurService {
                 .collect(Collectors.toList());
     }
 
-    public ClientExpediteurDTO getClientById(Long id) {
+    public ClientExpediteurDTO getClientById(String id) {
         return repository.findById(id)
                 .map(mapper::toDTO)
                 .orElse(null);
     }
 
-    public void deleteClient(Long id) {
+    public void deleteClient(String id) {
         repository.deleteById(id);
     }
 }
