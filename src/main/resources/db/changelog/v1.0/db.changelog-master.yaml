@@ -1,5 +1,12 @@
 databaseChangeLog:
-  # Tables indépendantes (sans relations)
+  # Tables indépendantes (sans relations) - ZONE EN PREMIER
+  - include:
+      file: db/changelog/v1.0/db.changelog-04-create-zone.yaml
+
+  - include:
+      file: db/changelog/v1.0/db.changelog-06-create-produit.yaml
+
+  # Tables avec clé étrangère vers zone
   - include:
       file: db/changelog/v1.0/db.changelog-01-create-client-expediteur.yaml
 
@@ -9,14 +16,10 @@ databaseChangeLog:
   - include:
       file: db/changelog/v1.0/db.changelog-03-create-livreur.yaml
 
-  - include:
-      file: db/changelog/v1.0/db.changelog-04-create-zone.yaml
-
+  # Tables avec clés étrangères multiples
   - include:
       file: db/changelog/v1.0/db.changelog-05-create-colis.yaml
 
-  - include:
-      file: db/changelog/v1.0/db.changelog-06-create-produit.yaml
 
   # Tables de relation/historique (dépendent de colis et produit)
   - include:
@@ -24,4 +27,8 @@ databaseChangeLog:
 
   - include:
       file: db/changelog/v1.0/db.changelog-08-create-historique-livraison.yaml
+
+  # Modifier Livreur : zone_assignee String -> Foreign Key
+  - include:
+      file: db/changelog/v1.0/db.changelog-10-modify-livreur-zone.yaml
 
