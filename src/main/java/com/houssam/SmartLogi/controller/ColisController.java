@@ -1,15 +1,12 @@
 package com.houssam.SmartLogi.controller;
 
 import com.houssam.SmartLogi.dto.ColisDTO;
-import com.houssam.SmartLogi.model.Colis;
-import com.houssam.SmartLogi.repository.ColisRepository;
 import com.houssam.SmartLogi.response.ApiResponse;
 import com.houssam.SmartLogi.service.ColisService;
 import jakarta.validation.Valid;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.security.PublicKey;
 import java.util.List;
 
 @RestController
@@ -48,5 +45,13 @@ public class ColisController {
     public ResponseEntity<ApiResponse<Void>> deleteColis(@PathVariable String id) {
         colisService.deleteColis(id);
         return ResponseEntity.ok(new ApiResponse<>("Colis supprimé avec succès", null));
+    }
+
+    @PatchMapping("/{id}/statut")
+    public ResponseEntity<ApiResponse<ColisDTO>> updateStatut(
+            @PathVariable String id,
+            @RequestParam com.houssam.SmartLogi.enums.Statut nouveauStatut) {
+        ColisDTO updated = colisService.updateStatut(id, nouveauStatut);
+        return ResponseEntity.ok(new ApiResponse<>("Statut du colis mis à jour avec succès", updated));
     }
 }
