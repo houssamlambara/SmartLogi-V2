@@ -1,13 +1,11 @@
 package com.houssam.SmartLogi.service;
 
 import com.houssam.SmartLogi.dto.ColisDTO;
-import com.houssam.SmartLogi.dto.LivreurDTO;
+import com.houssam.SmartLogi.enums.Prioriter;
+import com.houssam.SmartLogi.enums.Statut;
 import com.houssam.SmartLogi.exception.ResourceNotFoundException;
 import com.houssam.SmartLogi.mapper.ColisMapper;
-import com.houssam.SmartLogi.model.ClientExpediteur;
 import com.houssam.SmartLogi.model.Colis;
-import com.houssam.SmartLogi.model.Livreur;
-import com.houssam.SmartLogi.model.Zone;
 import com.houssam.SmartLogi.repository.*;
 import org.springframework.stereotype.Service;
 
@@ -76,6 +74,19 @@ public class ColisService {
                 .collect(Collectors.toList());
     }
 
+    public List<ColisDTO> getColisByLivreurId(String livreurId) {
+        // 1. Vérifier que le livreur existe
+        livreurRepository.findById(livreurId)
+                .orElseThrow(() -> new ResourceNotFoundException(
+                        "Livreur introuvable avec l'ID " + livreurId));
+
+        // 2. Récupérer et mapper les colis assignés à ce livreur
+        return colisRepository.findByLivreurId(livreurId)
+                .stream()
+                .map(colisMapper::toDTO)
+                .collect(Collectors.toList());
+    }
+
     public ColisDTO getColisById(String id) {
         return colisRepository.findById(id)
                 .map(colisMapper::toDTO)
@@ -84,5 +95,13 @@ public class ColisService {
 
     public void deleteColis(String id) {
         colisRepository.deleteById(id);
+    }
+
+    public ColisDTO updateStatut(String colisId, Statut nouveauStatut) {
+        Colis colis = colisRepository.findById(colisId)
+                .orElseThrow(() -> new ResourceNotFoundException("Colis introuvable avec l'ID " + colisId));
+        colis.setStatut(nouveauStatut);
+        Colis updated = colisRepository.save(colis);
+        return colisMapper.toDTO(updated);
     }
 }
