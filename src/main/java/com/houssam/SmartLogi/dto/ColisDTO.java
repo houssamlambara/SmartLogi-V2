@@ -6,10 +6,10 @@ import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Positive;
 import jakarta.validation.constraints.Size;
 
-import java.time.LocalDate;
-import java.time.LocalDateTime;
 
 public class ColisDTO {
+
+    private String id;
 
     @NotNull(message = "La description est obligatoire")
     @Size(min = 2, max = 300, message = "La description doit contenir entre 2 et 300 caractères")
@@ -19,7 +19,6 @@ public class ColisDTO {
     @Positive(message = "Le poids doit être positif")
     private double poids;
 
-    @NotNull(message = "Le statut est obligatoire")
     private Statut statut;
 
     @NotNull(message = "La priorité est obligatoire")
@@ -29,7 +28,7 @@ public class ColisDTO {
     @Size(min = 2, max = 50)
     private String villeDestination;
 
-    @NotNull(message = "L'ID du livreur est obligatoire")
+    // Livreur optionnel - sera assigné par le gestionnaire
     private String livreurId;
 
     @NotNull(message = "L'ID du client expéditeur est obligatoire")
@@ -38,10 +37,17 @@ public class ColisDTO {
     @NotNull(message = "L'ID du destinataire est obligatoire")
     private String destinataireId;
 
-    @NotNull(message = "L'ID de la zone est obligatoire")
     private String zoneId;
 
     // Getters et Setters
+    public String getId() {
+        return id;
+    }
+
+    public void setId(String id) {
+        this.id = id;
+    }
+
     public String getDescription() {
         return description;
     }

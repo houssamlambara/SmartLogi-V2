@@ -8,12 +8,14 @@ import org.mapstruct.Mapping;
 @Mapper(componentModel = "spring")
 public interface ColisMapper {
 
+    @Mapping(source = "id", target = "id")
     @Mapping(source = "livreur.id", target = "livreurId")
     @Mapping(source = "clientExpediteur.id", target = "clientExpediteurId")
     @Mapping(source = "destinataire.id", target = "destinataireId")
     @Mapping(source = "zone.id", target = "zoneId")
     ColisDTO toDTO(Colis colis);
 
+    @Mapping(target = "id", ignore = true)
     @Mapping(target = "livreur", ignore = true)
     @Mapping(target = "clientExpediteur", ignore = true)
     @Mapping(target = "destinataire", ignore = true)
