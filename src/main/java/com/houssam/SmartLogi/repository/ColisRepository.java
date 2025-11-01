@@ -11,4 +11,6 @@ public interface ColisRepository extends JpaRepository<Colis, String> {
 
     List<Colis> findByDestinataireId(String destinataireId);
 
+    List<Colis> findByLivreurId(String livreurId);
+
 }
