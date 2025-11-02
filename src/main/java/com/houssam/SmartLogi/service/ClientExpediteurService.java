@@ -39,6 +39,20 @@ public class ClientExpediteurService {
                 .orElse(null);
     }
 
+    public ClientExpediteurDTO updateClient(String id, ClientExpediteurDTO dto) {
+        ClientExpediteur client = repository.findById(id)
+                .orElseThrow(() -> new RuntimeException("ClientExpediteur introuvable avec l'ID " + id));
+
+        client.setNom(dto.getNom());
+        client.setPrenom(dto.getPrenom());
+        client.setTelephone(dto.getTelephone());
+        client.setEmail(dto.getEmail());
+        client.setAdresse(dto.getAdresse());
+
+        ClientExpediteur updated = repository.save(client);
+        return mapper.toDTO(updated);
+    }
+
     public void deleteClient(String id) {
         repository.deleteById(id);
     }

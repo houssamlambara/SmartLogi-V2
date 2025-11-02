@@ -40,6 +40,12 @@ public class ClientExpediteurController {
         return ResponseEntity.status(404).body(new ApiResponse<>("Client non trouvé", null));
     }
 
+    @PutMapping("/{id}")
+    public ResponseEntity<ApiResponse<ClientExpediteurDTO>> updateClient(@PathVariable String id, @Valid @RequestBody ClientExpediteurDTO dto) {
+        ClientExpediteurDTO updated = service.updateClient(id, dto);
+        return ResponseEntity.ok(new ApiResponse<>("Client mis à jour avec succès", updated));
+    }
+
     @DeleteMapping("/{id}")
     public ResponseEntity<ApiResponse<Void>> deleteClient(@PathVariable String id) {
         service.deleteClient(id);
