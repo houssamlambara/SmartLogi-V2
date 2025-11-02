@@ -72,7 +72,6 @@ public class ClientExpediteur {
         this.adresse = adresse;
     }
 
-
     public List<Colis> getColis() {
         return colis;
     }

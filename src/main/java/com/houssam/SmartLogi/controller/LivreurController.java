@@ -51,6 +51,12 @@ public class LivreurController {
         return ResponseEntity.ok(new ApiResponse<>("Liste des colis assignés au livreur récupérée avec succès", colis));
     }
 
+    @PutMapping("/{id}")
+    public ResponseEntity<ApiResponse<LivreurDTO>> updateLivreur(@PathVariable String id, @Valid @RequestBody LivreurDTO dto) {
+        LivreurDTO updated = service.updateLivreur(id, dto);
+        return ResponseEntity.ok(new ApiResponse<>("Livreur mis à jour avec succès", updated));
+    }
+
     @DeleteMapping("/{id}")
     public ResponseEntity<ApiResponse<Void>> deleteLivreur(@PathVariable String id) {
         service.deleteLivreur(id);

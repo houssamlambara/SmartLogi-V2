@@ -43,6 +43,24 @@ public class LivreurService {
                 .collect(Collectors.toList());
     }
 
+    public LivreurDTO updateLivreur(String id, LivreurDTO dto) {
+        Livreur livreur = repository.findById(id)
+                .orElseThrow(() -> new ResourceNotFoundException("Livreur introuvable avec l'ID " + id));
+
+        livreur.setNom(dto.getNom());
+        livreur.setPrenom(dto.getPrenom());
+        livreur.setTelephone(dto.getTelephone());
+        livreur.setVehicule(dto.getVehicule());
+
+        if (dto.getZoneAssigneeId() != null) {
+            Zone zone = zoneRepository.findById(dto.getZoneAssigneeId())
+                    .orElseThrow(() -> new ResourceNotFoundException("Zone introuvable avec l'ID " + dto.getZoneAssigneeId()));
+            livreur.setZoneAssignee(zone);
+        }
+        Livreur updated = repository.save(livreur);
+        return mapper.toDTO(updated);
+    }
+
     public LivreurDTO getLivreurById(String id) {
         return repository.findById(id)
                 .map(mapper::toDTO)
