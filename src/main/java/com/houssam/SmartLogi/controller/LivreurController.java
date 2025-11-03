@@ -19,30 +19,30 @@ import java.util.List;
 @RequestMapping("/api/livreurs")
 public class LivreurController {
 
-    private final LivreurService service;
+    private final LivreurService livreurService;
     private final ColisService colisService;
 
     public LivreurController(LivreurService service, ColisService colisService) {
-        this.service = service;
+        this.livreurService = service;
         this.colisService = colisService;
     }
 
     @PostMapping
     public ResponseEntity<ApiResponse<LivreurDTO>> createLivreur(@Valid @RequestBody LivreurDTO dto) {
-        LivreurDTO created = service.createLivreur(dto);
+        LivreurDTO created = livreurService.createLivreur(dto);
         return ResponseEntity.ok(new ApiResponse<>("Livreur créé avec succès", created));
     }
 
     @GetMapping
     public ResponseEntity<ApiResponse<Page<LivreurDTO>>> getAllLivreurs(
             @PageableDefault(size = 20, sort = "nom") Pageable pageable) {
-        Page<LivreurDTO> liste = service.getAllLivreurs(pageable);
+        Page<LivreurDTO> liste = livreurService.getAllLivreurs(pageable);
         return ResponseEntity.ok(new ApiResponse<>("Liste des livreurs récupérée avec succès", liste));
     }
 
     @GetMapping("/{id}")
     public ResponseEntity<ApiResponse<LivreurDTO>> getLivreurById(@PathVariable String id) {
-        LivreurDTO livreur = service.getLivreurById(id);
+        LivreurDTO livreur = livreurService.getLivreurById(id);
         if (livreur != null) {
             return ResponseEntity.ok(new ApiResponse<>("Livreur trouvé", livreur));
         } else {
@@ -60,13 +60,27 @@ public class LivreurController {
 
     @PutMapping("/{id}")
     public ResponseEntity<ApiResponse<LivreurDTO>> updateLivreur(@PathVariable String id, @Valid @RequestBody LivreurDTO dto) {
-        LivreurDTO updated = service.updateLivreur(id, dto);
+        LivreurDTO updated = livreurService.updateLivreur(id, dto);
         return ResponseEntity.ok(new ApiResponse<>("Livreur mis à jour avec succès", updated));
     }
 
     @DeleteMapping("/{id}")
     public ResponseEntity<ApiResponse<Void>> deleteLivreur(@PathVariable String id) {
-        service.deleteLivreur(id);
+        livreurService.deleteLivreur(id);
         return ResponseEntity.ok(new ApiResponse<>("Livreur supprimé avec succès", null));
+    }
+
+    @GetMapping("/search")
+    public ResponseEntity<ApiResponse<Page<LivreurDTO>>> searchLivreurs(
+            @RequestParam(required = false) String keyword,
+            @PageableDefault(size = 10, sort = "nom", direction = Sort.Direction.ASC) Pageable pageable) {
+
+        Page<LivreurDTO> result = livreurService.searchLivreurs(keyword, pageable);
+        return ResponseEntity.ok(new ApiResponse<>(
+                (keyword == null || keyword.isBlank())
+                        ? "Tous les livreurs ont été récupérés"
+                        : "Résultats de recherche pour : " + keyword,
+                result
+        ));
     }
 }

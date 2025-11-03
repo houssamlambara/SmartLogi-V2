@@ -70,4 +70,13 @@ public class LivreurService {
     public void deleteLivreur(String id) {
         repository.deleteById(id);
     }
+
+    public Page<LivreurDTO> searchLivreurs(String keyword, Pageable pageable) {
+        if (keyword == null || keyword.trim().isEmpty()) {
+            return repository.findAll(pageable)
+                    .map(mapper::toDTO);
+        }
+        return repository.searchLivreurs(keyword.trim(), pageable)
+                .map(mapper::toDTO);
+    }
 }

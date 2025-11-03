@@ -56,4 +56,12 @@ public class ClientExpediteurService {
     public void deleteClient(String id) {
         repository.deleteById(id);
     }
+
+    public Page<ClientExpediteurDTO> searchClients(String keyword, Pageable pageable) {
+        if (keyword == null || keyword.trim().isEmpty()) {
+            return repository.findAll(pageable).map(mapper::toDTO);
+        }
+        return repository.searchClients(keyword.trim(), pageable)
+                .map(mapper::toDTO);
+    }
 }
