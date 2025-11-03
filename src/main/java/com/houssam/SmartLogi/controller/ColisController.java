@@ -64,17 +64,17 @@ public class ColisController {
     }
 
     @GetMapping("/filter")
-    public ResponseEntity<String> testFilter(
+    public ResponseEntity<ApiResponse<Page<ColisDTO>>> filterColis(
             @RequestParam(required = false) Statut statut,
             @RequestParam(required = false) String zoneId,
             @RequestParam(required = false) String villeDestination,
-            @RequestParam(required = false) Prioriter priorite
-    ) {
-        return ResponseEntity.ok(
-                "statut=" + statut +
-                        ", zoneId=" + zoneId +
-                        ", villeDestination=" + villeDestination +
-                        ", priorite=" + priorite
-        );
+            @RequestParam(required = false) Prioriter priorite,
+            @PageableDefault(size = 10, sort = "id") Pageable pageable) {
+
+        // Appel du service pour filtrer les colis
+        Page<ColisDTO> result = colisService.filterColis(statut, zoneId, villeDestination, priorite, pageable);
+
+        // Retourner le résultat encapsulé dans ApiResponse
+        return ResponseEntity.ok(new ApiResponse<>("Colis filtrés récupérés avec succès", result));
     }
 }
