@@ -22,15 +22,15 @@ databaseChangeLog:
                     nullable: false
               - column:
                   name: statut
-                  type: VARCHAR(50)
+                  type: TEXT
                   constraints:
                     nullable: false
               - column:
                   name: priorite
-                  type: VARCHAR(50)
+                  type: TEXT
               - column:
                   name: ville_destination
-                  type: VARCHAR(255)
+                  type: TEXT
               - column:
                   name: livreur_id
                   type: VARCHAR(36)
