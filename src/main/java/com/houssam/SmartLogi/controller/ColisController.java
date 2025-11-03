@@ -1,9 +1,17 @@
 package com.houssam.SmartLogi.controller;
 
 import com.houssam.SmartLogi.dto.ColisDTO;
+import com.houssam.SmartLogi.enums.Prioriter;
+import com.houssam.SmartLogi.enums.Statut;
+import com.houssam.SmartLogi.model.Colis;
 import com.houssam.SmartLogi.response.ApiResponse;
 import com.houssam.SmartLogi.service.ColisService;
 import jakarta.validation.Valid;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -53,5 +61,17 @@ public class ColisController {
             @RequestParam com.houssam.SmartLogi.enums.Statut nouveauStatut) {
         ColisDTO updated = colisService.updateStatut(id, nouveauStatut);
         return ResponseEntity.ok(new ApiResponse<>("Statut du colis mis à jour avec succès", updated));
+    }
+
+    @GetMapping("/filter")
+    public ResponseEntity<ApiResponse<Page<ColisDTO>>> filterColis(
+            @RequestParam(required = false) Statut statut,
+            @RequestParam(required = false) String zoneId,
+            @RequestParam(required = false) String villeDestination,
+            @RequestParam(required = false) Prioriter priorite,
+            @PageableDefault(size = 10, sort = "id") Pageable pageable
+    ) {
+        Page<ColisDTO> result = colisService.filterColis(statut, zoneId, villeDestination, priorite, pageable);
+        return ResponseEntity.ok(new ApiResponse<>("Colis filtrés récupérés avec succès", result));
     }
 }
