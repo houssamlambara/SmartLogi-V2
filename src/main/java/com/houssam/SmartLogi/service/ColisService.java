@@ -7,6 +7,8 @@ import com.houssam.SmartLogi.exception.ResourceNotFoundException;
 import com.houssam.SmartLogi.mapper.ColisMapper;
 import com.houssam.SmartLogi.model.Colis;
 import com.houssam.SmartLogi.repository.*;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -105,5 +107,15 @@ public class ColisService {
         colisRepository.deleteById(id);
     }
 
+    public Page<ColisDTO> filterColis(
+            Statut statut,
+            String zoneId,
+            String villeDestination,
+            Prioriter priorite,
+            Pageable pageable
+    ) {
+        return colisRepository.filterColis(statut, zoneId, villeDestination, priorite, pageable)
+                .map(colisMapper::toDTO);
+    }
 
 }
