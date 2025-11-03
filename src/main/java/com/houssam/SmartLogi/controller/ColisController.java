@@ -34,9 +34,10 @@ public class ColisController {
     }
 
     @GetMapping
-    public ResponseEntity<ApiResponse<List<ColisDTO>>> getAllColis() {
-        List<ColisDTO> liste = colisService.getAllColis();
-        return ResponseEntity.ok(new ApiResponse<>("Liste des colis récupérée avec succès", liste));
+    public ResponseEntity<ApiResponse<Page<ColisDTO>>> getAllColis(
+            @PageableDefault(size = 20, sort = "createdAt", direction = Sort.Direction.DESC) Pageable pageable) {
+        Page<ColisDTO> page = colisService.getAllColis(pageable);
+        return ResponseEntity.ok(new ApiResponse<>("Liste des colis récupérée avec succès", page));
     }
 
     @GetMapping("/{id}")

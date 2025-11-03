@@ -4,6 +4,8 @@ import com.houssam.SmartLogi.dto.ClientExpediteurDTO;
 import com.houssam.SmartLogi.mapper.ClientExpediteurMapper;
 import com.houssam.SmartLogi.model.ClientExpediteur;
 import com.houssam.SmartLogi.repository.ClientExpediteurRepository;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -26,11 +28,9 @@ public class ClientExpediteurService {
         return mapper.toDTO(saved);
     }
 
-    public List<ClientExpediteurDTO> getAllClients() {
-        return repository.findAll()
-                .stream()
-                .map(mapper::toDTO)
-                .collect(Collectors.toList());
+    public Page<ClientExpediteurDTO> getAllClients(Pageable pageable) {
+        return repository.findAll(pageable)
+                .map(mapper::toDTO);
     }
 
     public ClientExpediteurDTO getClientById(String id) {

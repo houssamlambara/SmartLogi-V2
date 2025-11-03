@@ -5,6 +5,8 @@ import com.houssam.SmartLogi.dto.ProduitDTO;
 import com.houssam.SmartLogi.mapper.ProduitMapper;
 import com.houssam.SmartLogi.model.Produit;
 import com.houssam.SmartLogi.repository.ProduitRepository;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -25,6 +27,11 @@ public class ProduitService {
         Produit entity = mapper.toEntity(dto);
         Produit saved = repository.save(entity);
         return mapper.toDTO(saved);
+    }
+
+    public Page<ProduitDTO> getAllProduits(Pageable pageable) {
+        return repository.findAll(pageable)
+                .map(mapper::toDTO);
     }
 
     public List<ProduitDTO> getAllProduits() {

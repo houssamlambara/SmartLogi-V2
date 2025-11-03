@@ -4,6 +4,9 @@ import com.houssam.SmartLogi.dto.ZoneDTO;
 import com.houssam.SmartLogi.response.ApiResponse;
 import com.houssam.SmartLogi.service.ZoneService;
 import jakarta.validation.Valid;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -26,9 +29,10 @@ public class ZoneController {
     }
 
     @GetMapping
-    public ResponseEntity<ApiResponse<List<ZoneDTO>>> getAllZones(){
-        List<ZoneDTO> zones = service.getAllZones();
-        return ResponseEntity.ok(new ApiResponse<>("Liste des zones", zones));
+    public ResponseEntity<ApiResponse<Page<ZoneDTO>>> getAllZones(
+            @PageableDefault(size = 20, sort = "nom") Pageable pageable){
+        Page<ZoneDTO> zones = service.getAllZones(pageable);
+        return ResponseEntity.ok(new ApiResponse<>("Liste des zones récupérée avec succès", zones));
     }
 
     @GetMapping("{id}")

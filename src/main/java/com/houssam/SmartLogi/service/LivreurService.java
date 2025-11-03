@@ -7,6 +7,8 @@ import com.houssam.SmartLogi.model.Livreur;
 import com.houssam.SmartLogi.model.Zone;
 import com.houssam.SmartLogi.repository.LivreurRepository;
 import com.houssam.SmartLogi.repository.ZoneRepository;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -36,11 +38,9 @@ public class LivreurService {
         return mapper.toDTO(saved);
     }
 
-    public List<LivreurDTO> getAllLivreurs() {
-        return repository.findAll()
-                .stream()
-                .map(mapper::toDTO)
-                .collect(Collectors.toList());
+    public Page<LivreurDTO> getAllLivreurs(Pageable pageable) {
+        return repository.findAll(pageable)
+                .map(mapper::toDTO);
     }
 
     public LivreurDTO updateLivreur(String id, LivreurDTO dto) {

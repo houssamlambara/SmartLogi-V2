@@ -59,37 +59,31 @@ public class ColisService {
         return colisMapper.toDTO(saved);
     }
 
-    public List<ColisDTO> getAllColis() {
-        return colisRepository.findAll()
-                .stream()
-                .map(colisMapper::toDTO)
-                .collect(Collectors.toList());
+    public Page<ColisDTO> getAllColis(Pageable pageable) {
+        return colisRepository.findAll(pageable)
+                .map(colisMapper::toDTO);
     }
 
-    public List<ColisDTO> getColisByDestinataireId(String destinataireId) {
+    public Page<ColisDTO> getColisByDestinataireId(String destinataireId, Pageable pageable) {
         // 1. Vérifier que le destinataire existe
         destinataireRepository.findById(destinataireId)
                 .orElseThrow(() -> new ResourceNotFoundException(
                         "Destinataire introuvable avec l'ID " + destinataireId));
 
-        // 2. Récupérer et mapper les colis
-        return colisRepository.findByDestinataireId(destinataireId)
-                .stream()
-                .map(colisMapper::toDTO)
-                .collect(Collectors.toList());
+        // 2. Récupérer et mapper les colis avec pagination
+        return colisRepository.findByDestinataireId(destinataireId, pageable)
+                .map(colisMapper::toDTO);
     }
 
-    public List<ColisDTO> getColisByLivreurId(String livreurId) {
+    public Page<ColisDTO> getColisByLivreurId(String livreurId, Pageable pageable) {
         // 1. Vérifier que le livreur existe
         livreurRepository.findById(livreurId)
                 .orElseThrow(() -> new ResourceNotFoundException(
                         "Livreur introuvable avec l'ID " + livreurId));
 
-        // 2. Récupérer et mapper les colis assignés à ce livreur
-        return colisRepository.findByLivreurId(livreurId)
-                .stream()
-                .map(colisMapper::toDTO)
-                .collect(Collectors.toList());
+        // 2. Récupérer et mapper les colis assignés à ce livreur avec pagination
+        return colisRepository.findByLivreurId(livreurId, pageable)
+                .map(colisMapper::toDTO);
     }
 
     public ColisDTO getColisById(String id) {

@@ -6,6 +6,10 @@ import com.houssam.SmartLogi.response.ApiResponse;
 import com.houssam.SmartLogi.service.ColisService;
 import com.houssam.SmartLogi.service.DestinataireService;
 import jakarta.validation.Valid;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -30,15 +34,17 @@ public class DestinationController {
     }
 
     @GetMapping
-    public ResponseEntity<ApiResponse<List<DestinataireDTO>>> getAll() {
-        List<DestinataireDTO> liste = service.getAllDestinataires();
+    public ResponseEntity<ApiResponse<Page<DestinataireDTO>>> getAll(
+            @PageableDefault(size = 20, sort = "nom") Pageable pageable) {
+        Page<DestinataireDTO> liste = service.getAllDestinataires(pageable);
         return ResponseEntity.ok(new ApiResponse<>("Liste des Destinataire récupérée avec succès" ,liste));
     }
 
     @GetMapping("/{id}/colis")
-    public ResponseEntity<ApiResponse<List<ColisDTO>>> getColisByDestinataire(
-            @PathVariable String id) {
-        List<ColisDTO> colis = colisService.getColisByDestinataireId(id);
+    public ResponseEntity<ApiResponse<Page<ColisDTO>>> getColisByDestinataire(
+            @PathVariable String id,
+            @PageableDefault(size = 20, sort = "createdAt", direction = Sort.Direction.DESC) Pageable pageable) {
+        Page<ColisDTO> colis = colisService.getColisByDestinataireId(id, pageable);
         return ResponseEntity.ok(
                 new ApiResponse<>("Colis du destinataire récupérés avec succès", colis)
         );

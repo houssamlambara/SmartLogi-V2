@@ -4,6 +4,8 @@ import com.houssam.SmartLogi.dto.DestinataireDTO;
 import com.houssam.SmartLogi.mapper.DestinataireMapper;
 import com.houssam.SmartLogi.model.Destinataire;
 import com.houssam.SmartLogi.repository.DestinataireRepository;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -25,6 +27,11 @@ public class DestinataireService {
         Destinataire saved = repository.save(entity);
         return mapper.toDTO(saved);
 
+    }
+
+    public Page<DestinataireDTO> getAllDestinataires(Pageable pageable) {
+        return repository.findAll(pageable)
+                .map(mapper::toDTO);
     }
 
     public List<DestinataireDTO> getAllDestinataires() {

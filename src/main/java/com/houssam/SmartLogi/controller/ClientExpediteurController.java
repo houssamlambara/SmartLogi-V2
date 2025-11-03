@@ -4,10 +4,12 @@ import com.houssam.SmartLogi.dto.ClientExpediteurDTO;
 import com.houssam.SmartLogi.response.ApiResponse;
 import com.houssam.SmartLogi.service.ClientExpediteurService;
 import jakarta.validation.Valid;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.List;
 
 @RestController
 @RequestMapping("/api/clients")
@@ -26,15 +28,16 @@ public class ClientExpediteurController {
     }
 
     @GetMapping
-    public ResponseEntity<ApiResponse<List<ClientExpediteurDTO>>> getAllClients() {
-        List<ClientExpediteurDTO> clients = service.getAllClients();
+    public ResponseEntity<ApiResponse<Page<ClientExpediteurDTO>>> getAllClients(
+            @PageableDefault(size = 20, sort = "nom") Pageable pageable) {
+        Page<ClientExpediteurDTO> clients = service.getAllClients(pageable);
         return ResponseEntity.ok(new ApiResponse<>("Liste des clients récupérée avec succès", clients));
     }
 
     @GetMapping("/{id}")
     public ResponseEntity<ApiResponse<ClientExpediteurDTO>> getClientById(@PathVariable String id) {
         ClientExpediteurDTO client = service.getClientById(id);
-        if (client == null) {
+        if (client != null) {
             return ResponseEntity.ok(new ApiResponse<>("Client trouvé", client));
         }
         return ResponseEntity.status(404).body(new ApiResponse<>("Client non trouvé", null));

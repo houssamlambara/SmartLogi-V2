@@ -18,7 +18,11 @@ public interface ColisRepository extends JpaRepository<Colis, String>, JpaSpecif
 
     // Recherche par relations
     List<Colis> findByDestinataireId(String destinataireId);
+    Page<Colis> findByDestinataireId(String destinataireId, Pageable pageable);
+    
     List<Colis> findByLivreurId(String livreurId);
+    Page<Colis> findByLivreurId(String livreurId, Pageable pageable);
+    
     List<Colis> findByClientExpediteurId(String clientId);
 
     List<Colis> findByStatut(Statut statut);

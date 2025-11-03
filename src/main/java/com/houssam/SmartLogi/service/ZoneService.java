@@ -4,6 +4,8 @@ import com.houssam.SmartLogi.dto.ZoneDTO;
 import com.houssam.SmartLogi.mapper.ZoneMapper;
 import com.houssam.SmartLogi.model.Zone;
 import com.houssam.SmartLogi.repository.ZoneRepository;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -26,6 +28,11 @@ public class ZoneService {
         return mapper.toDTO(saved);
     }
 
+    public Page<ZoneDTO> getAllZones(Pageable pageable){
+        return repository.findAll(pageable)
+                .map(mapper::toDTO);
+    }
+    
     public List<ZoneDTO> getAllZones(){
         return repository.findAll()
                 .stream()

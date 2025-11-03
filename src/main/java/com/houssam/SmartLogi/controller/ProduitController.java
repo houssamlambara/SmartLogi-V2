@@ -4,6 +4,9 @@ import com.houssam.SmartLogi.dto.ProduitDTO;
 import com.houssam.SmartLogi.response.ApiResponse;
 import com.houssam.SmartLogi.service.ProduitService;
 import jakarta.validation.Valid;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -26,9 +29,10 @@ public class ProduitController {
     }
 
     @GetMapping
-    public ResponseEntity<ApiResponse<List<ProduitDTO>>> findAllProduits(){
-        List<ProduitDTO> liste = service.getAllProduits();
-        return ResponseEntity.ok(new ApiResponse("Produits liste", liste));
+    public ResponseEntity<ApiResponse<Page<ProduitDTO>>> findAllProduits(
+            @PageableDefault(size = 20, sort = "nom") Pageable pageable){
+        Page<ProduitDTO> page = service.getAllProduits(pageable);
+        return ResponseEntity.ok(new ApiResponse("Liste des produits récupérée avec succès", page));
     }
 
     @GetMapping("/{id}")

@@ -5,6 +5,10 @@ import com.houssam.SmartLogi.dto.LivreurDTO;
 import com.houssam.SmartLogi.service.ColisService;
 import com.houssam.SmartLogi.service.LivreurService;
 import jakarta.validation.Valid;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import com.houssam.SmartLogi.response.ApiResponse;
@@ -30,8 +34,9 @@ public class LivreurController {
     }
 
     @GetMapping
-    public ResponseEntity<ApiResponse<List<LivreurDTO>>> getAllLivreurs() {
-        List<LivreurDTO> liste = service.getAllLivreurs();
+    public ResponseEntity<ApiResponse<Page<LivreurDTO>>> getAllLivreurs(
+            @PageableDefault(size = 20, sort = "nom") Pageable pageable) {
+        Page<LivreurDTO> liste = service.getAllLivreurs(pageable);
         return ResponseEntity.ok(new ApiResponse<>("Liste des livreurs récupérée avec succès", liste));
     }
 
@@ -46,8 +51,10 @@ public class LivreurController {
     }
 
     @GetMapping("/{id}/colis")
-    public ResponseEntity<ApiResponse<List<ColisDTO>>> getColisByLivreur(@PathVariable String id) {
-        List<ColisDTO> colis = colisService.getColisByLivreurId(id);
+    public ResponseEntity<ApiResponse<Page<ColisDTO>>> getColisByLivreur(
+            @PathVariable String id,
+            @PageableDefault(size = 20, sort = "createdAt", direction = Sort.Direction.DESC) Pageable pageable) {
+        Page<ColisDTO> colis = colisService.getColisByLivreurId(id, pageable);
         return ResponseEntity.ok(new ApiResponse<>("Liste des colis assignés au livreur récupérée avec succès", colis));
     }
 
