@@ -53,4 +53,19 @@ ORDER BY c.id
             @Param("priorite") Prioriter priorite,
             Pageable pageable
     );
+
+    @Query("""
+SELECT c FROM Colis c
+LEFT JOIN c.livreur l
+LEFT JOIN c.clientExpediteur ce
+LEFT JOIN c.destinataire d
+WHERE 
+    LOWER(c.description) LIKE LOWER(CONCAT('%', :keyword, '%')) OR
+    LOWER(c.villeDestination) LIKE LOWER(CONCAT('%', :keyword, '%')) OR
+    LOWER(l.nom) LIKE LOWER(CONCAT('%', :keyword, '%')) OR
+    LOWER(ce.nom) LIKE LOWER(CONCAT('%', :keyword, '%')) OR
+    LOWER(d.nom) LIKE LOWER(CONCAT('%', :keyword, '%'))
+""")
+    Page<Colis> searchColis(@Param("keyword") String keyword, Pageable pageable);
+
 }

@@ -114,4 +114,12 @@ public class ColisService {
         return colisRepository.filterColis(statut, zoneId, villeDestination, priorite, pageable)
                 .map(colisMapper::toDTO);
     }
+
+    public Page<ColisDTO> searchColis(String keyword, Pageable pageable) {
+        if (keyword == null || keyword.trim().isEmpty()) {
+            return colisRepository.findAll(pageable).map(colisMapper::toDTO);
+        }
+        return colisRepository.searchColis(keyword.trim(), pageable)
+                .map(colisMapper::toDTO);
+    }
 }

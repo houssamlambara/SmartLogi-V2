@@ -78,4 +78,19 @@ public class ColisController {
         // Retourner le résultat encapsulé dans ApiResponse
         return ResponseEntity.ok(new ApiResponse<>("Colis filtrés récupérés avec succès", result));
     }
+
+    @GetMapping("/search")
+    public ResponseEntity<ApiResponse<Page<ColisDTO>>> searchColis(
+            @RequestParam(required = false) String keyword,
+            @PageableDefault(size = 10, sort = "createdAt", direction = Sort.Direction.DESC) Pageable pageable) {
+
+        Page<ColisDTO> result = colisService.searchColis(keyword, pageable);
+        return ResponseEntity.ok(new ApiResponse<>(
+                (keyword == null || keyword.isBlank())
+                        ? "Tous les colis ont été récupérés"
+                        : "Résultats de recherche pour : " + keyword,
+                result
+        ));
+    }
+
 }
