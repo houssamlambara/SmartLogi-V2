@@ -5,8 +5,8 @@ import com.houssam.SmartLogi.enums.Statut;
 import jakarta.persistence.*;
 import org.hibernate.annotations.GenericGenerator;
 
+import java.time.LocalDateTime;
 import java.util.List;
-import java.util.UUID;
 
 @Entity
 @Table(name = "colis")
@@ -24,9 +24,12 @@ public class Colis {
     private Statut statut;
 
     @Enumerated(EnumType.STRING)
-
     private Prioriter priorite;
+
+    @Column(columnDefinition = "TEXT")
     private String villeDestination;
+
+    private LocalDateTime createdAt;
 
     @ManyToOne
     @JoinColumn(name = "livreur_id")
@@ -145,4 +148,12 @@ public class Colis {
     public void setProduits(List<ColisProduit> produits) {
         this.produits = produits;
     }
-}
+
+    public LocalDateTime getCreatedAt() {
+        return createdAt;
+    }
+
+    public void setCreatedAt(LocalDateTime createdAt) {
+        this.createdAt = createdAt;
+    }}
+
