@@ -5,6 +5,7 @@ import com.houssam.SmartLogi.dto.DestinataireDTO;
 import com.houssam.SmartLogi.response.ApiResponse;
 import com.houssam.SmartLogi.service.ColisService;
 import com.houssam.SmartLogi.service.DestinataireService;
+import jakarta.validation.Valid;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -50,6 +51,12 @@ public class DestinationController {
             return ResponseEntity.ok(new ApiResponse<>("Destinataire Trouvé", dto));
         }
         return ResponseEntity.status(404).body(new ApiResponse<>("Destinataire non trouvé", null));
+    }
+
+    @PutMapping("/{id}")
+    public ResponseEntity<ApiResponse<DestinataireDTO>> updateDestinataire(@PathVariable String id, @Valid @RequestBody DestinataireDTO dto){
+        DestinataireDTO updated = service.updateDestinataire(id, dto);
+        return ResponseEntity.ok(new ApiResponse<>("Destinataire mis à jour avec succès", updated));
     }
 
     @DeleteMapping("/{id}")

@@ -10,7 +10,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
-@RequestMapping("api/zone")
+@RequestMapping("api/zones")
 public class ZoneController {
 
     public final ZoneService service;
@@ -32,14 +32,20 @@ public class ZoneController {
     }
 
     @GetMapping("{id}")
-        public ResponseEntity<ApiResponse<ZoneDTO>> getZoneById(@PathVariable String id){
+    public ResponseEntity<ApiResponse<ZoneDTO>> getZoneById(@PathVariable String id){
             ZoneDTO zone = service.getZoneById(id);
             if (zone == null){
                 return ResponseEntity.status(404).body(new ApiResponse<>("Zone non trouvée", null));
             } else {
                 return ResponseEntity.ok(new ApiResponse<>("Zone trouvée", zone));
             }
-        }
+    }
+
+    @PutMapping("/{id}")
+    public ResponseEntity<ApiResponse<ZoneDTO>> updateZone(@PathVariable String id, @Valid @RequestBody ZoneDTO dto) {
+        ZoneDTO updated = service.updateZone(id, dto);
+        return ResponseEntity.ok(new ApiResponse<>("Zone mise à jour avec succès", updated));
+    }
 
     @DeleteMapping("/{id}")
     public ResponseEntity<ApiResponse<Void>> deleteZone(@PathVariable String id) {

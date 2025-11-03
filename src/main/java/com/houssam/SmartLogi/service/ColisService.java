@@ -93,10 +93,6 @@ public class ColisService {
                 .orElse(null);
     }
 
-    public void deleteColis(String id) {
-        colisRepository.deleteById(id);
-    }
-
     public ColisDTO updateStatut(String colisId, Statut nouveauStatut) {
         Colis colis = colisRepository.findById(colisId)
                 .orElseThrow(() -> new ResourceNotFoundException("Colis introuvable avec l'ID " + colisId));
@@ -104,4 +100,10 @@ public class ColisService {
         Colis updated = colisRepository.save(colis);
         return colisMapper.toDTO(updated);
     }
+
+    public void deleteColis(String id) {
+        colisRepository.deleteById(id);
+    }
+
+
 }

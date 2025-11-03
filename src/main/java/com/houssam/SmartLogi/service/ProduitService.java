@@ -40,6 +40,19 @@ public class ProduitService {
                 .orElse(null);
     }
 
+    public ProduitDTO updateProduit(String id, ProduitDTO dto) {
+        Produit produit = repository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Produit introuvable avec l'ID " + id));
+
+        produit.setNom(dto.getNom());
+        produit.setCategorie(dto.getCategorie());
+        produit.setPoids(dto.getPoids());
+        produit.setPrix(dto.getPrix());
+
+        Produit updated = repository.save(produit);
+        return mapper.toDTO(updated);
+    }
+
     public void deleteProduit(String id) {
         repository.deleteById(id);
     }

@@ -39,6 +39,17 @@ public class ZoneService {
                 .orElse(null);
     }
 
+    public ZoneDTO updateZone(String id, ZoneDTO dto){
+        Zone zone = repository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Zone introuvable avec l'ID " + id));
+
+        zone.setNom(dto.getNom());
+        zone.setCodePostal(dto.getCodePostal());
+
+        Zone updated = repository.save(zone);
+        return mapper.toDTO(updated);
+    }
+
     public void deleteZone(String id){
         repository.deleteById(id);
     }

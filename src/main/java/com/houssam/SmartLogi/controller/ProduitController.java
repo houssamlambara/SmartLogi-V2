@@ -41,6 +41,12 @@ public class ProduitController {
         }
     }
 
+    @PutMapping("/{id}")
+    public ResponseEntity<ApiResponse<ProduitDTO>> updateProduit(@PathVariable String id, @Valid @RequestBody ProduitDTO dto){
+        ProduitDTO updated = service.updateProduit(id, dto);
+        return ResponseEntity.ok(new ApiResponse("Produit mis à jour avec succès", updated));
+    }
+
     @DeleteMapping("/{id}")
     public ResponseEntity<ApiResponse<Void>> deleteProduit(@PathVariable String id){
         service.deleteProduit(id);

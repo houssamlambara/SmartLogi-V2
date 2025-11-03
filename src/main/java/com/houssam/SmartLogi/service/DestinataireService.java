@@ -40,6 +40,18 @@ public class DestinataireService {
                 .orElse(null);
     }
 
+    public DestinataireDTO updateDestinataire(String id, DestinataireDTO dto){
+        Destinataire destinataire = repository.findById(id)
+                        .orElseThrow(() -> new RuntimeException("Destinataire introuvable avec l'ID " + id));
+        destinataire.setNom(dto.getNom());
+        destinataire.setPrenom(dto.getPrenom());
+        destinataire.setTelephone(dto.getTelephone());
+        destinataire.setEmail(dto.getEmail());
+        destinataire.setAdresse(dto.getAdresse());
+        Destinataire updated = repository.save(destinataire);
+        return mapper.toDTO(updated);
+    }
+
     public void deleteDestinataire(String id) {
         repository.deleteById(id);
     }
