@@ -1,0 +1,13 @@
+databaseChangeLog:
+  - changeSet:
+      id: 13-add-created-at-column-to-colis
+      author: houssam
+      changes:
+        - addColumn:
+            tableName: colis
+            columns:
+              - column:
+                  name: created_at
+                  type: TIMESTAMP
+                  defaultValueComputed: CURRENT_TIMESTAMP
+
