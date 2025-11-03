@@ -3,12 +3,12 @@ package com.houssam.SmartLogi.controller;
 import com.houssam.SmartLogi.dto.ColisDTO;
 import com.houssam.SmartLogi.enums.Prioriter;
 import com.houssam.SmartLogi.enums.Statut;
-import com.houssam.SmartLogi.model.Colis;
 import com.houssam.SmartLogi.response.ApiResponse;
 import com.houssam.SmartLogi.service.ColisService;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.web.PageableDefault;
@@ -19,6 +19,7 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/api/colis")
+@Tag(name = "Colis", description = "API pour gérer les colis")
 public class ColisController {
 
     private final ColisService colisService;
@@ -28,12 +29,16 @@ public class ColisController {
     }
 
     @PostMapping
+    @Operation(summary = "Créer un colis", description = "Cette API permet de créer un nouveau colis")
+
     public ResponseEntity<ApiResponse<ColisDTO>> createColis(@Valid @RequestBody ColisDTO dto) {
         ColisDTO created = colisService.createColis(dto);
         return ResponseEntity.ok(new ApiResponse<>("Colis créé avec succès", created));
     }
 
     @GetMapping
+    @Operation(summary = "Lister tous les colis", description = "Récupère tous les colis avec pagination")
+
     public ResponseEntity<ApiResponse<Page<ColisDTO>>> getAllColis(
             @PageableDefault(size = 20, sort = "createdAt", direction = Sort.Direction.DESC) Pageable pageable) {
         Page<ColisDTO> page = colisService.getAllColis(pageable);
@@ -41,6 +46,8 @@ public class ColisController {
     }
 
     @GetMapping("/{id}")
+    @Operation(summary = "Récupérer un colis par ID", description = "Cherche un colis par son ID")
+
     public ResponseEntity<ApiResponse<ColisDTO>> getColisById(@PathVariable String id) {
         ColisDTO colis = colisService.getColisById(id);
         if (colis != null) {
@@ -51,12 +58,16 @@ public class ColisController {
     }
 
     @DeleteMapping("/{id}")
+    @Operation(summary = "Supprimer un colis", description = "Supprime un colis par son ID")
+
     public ResponseEntity<ApiResponse<Void>> deleteColis(@PathVariable String id) {
         colisService.deleteColis(id);
         return ResponseEntity.ok(new ApiResponse<>("Colis supprimé avec succès", null));
     }
 
     @PatchMapping("/{id}/statut")
+    @Operation(summary = "Mettre à jour le statut d'un colis", description = "Change le statut d'un colis existant")
+
     public ResponseEntity<ApiResponse<ColisDTO>> updateStatut(
             @PathVariable String id,
             @RequestParam com.houssam.SmartLogi.enums.Statut nouveauStatut) {
@@ -65,6 +76,8 @@ public class ColisController {
     }
 
     @GetMapping("/filter")
+    @Operation(summary = "Filtrer les colis", description = "Filtre les colis selon différents critères")
+
     public ResponseEntity<ApiResponse<Page<ColisDTO>>> filterColis(
             @RequestParam(required = false) Statut statut,
             @RequestParam(required = false) String zoneId,
@@ -75,11 +88,12 @@ public class ColisController {
         // Appel du service pour filtrer les colis
         Page<ColisDTO> result = colisService.filterColis(statut, zoneId, villeDestination, priorite, pageable);
 
-        // Retourner le résultat encapsulé dans ApiResponse
         return ResponseEntity.ok(new ApiResponse<>("Colis filtrés récupérés avec succès", result));
     }
 
     @GetMapping("/search")
+    @Operation(summary = "Rechercher des colis", description = "Recherche des colis par mot-clé")
+
     public ResponseEntity<ApiResponse<Page<ColisDTO>>> searchColis(
             @RequestParam(required = false) String keyword,
             @PageableDefault(size = 10, sort = "createdAt", direction = Sort.Direction.DESC) Pageable pageable) {

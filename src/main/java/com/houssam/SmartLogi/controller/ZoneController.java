@@ -3,6 +3,8 @@ package com.houssam.SmartLogi.controller;
 import com.houssam.SmartLogi.dto.ZoneDTO;
 import com.houssam.SmartLogi.response.ApiResponse;
 import com.houssam.SmartLogi.service.ZoneService;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -10,10 +12,11 @@ import org.springframework.data.web.PageableDefault;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.List;
 
 @RestController
 @RequestMapping("api/zones")
+@Tag(name = "Zones", description = "API pour gérer les zones")
+
 public class ZoneController {
 
     public final ZoneService service;
@@ -23,12 +26,16 @@ public class ZoneController {
     }
 
     @PostMapping
+    @Operation(summary = "Créer une zone", description = "Permet de créer une nouvelle zone")
+
     public ResponseEntity<ApiResponse<ZoneDTO>> createZone(@Valid @RequestBody ZoneDTO dto){
         ZoneDTO created = service.createZone(dto);
         return ResponseEntity.ok(new ApiResponse<>("Zone créée avec succès", created));
     }
 
     @GetMapping
+    @Operation(summary = "Lister toutes les zones", description = "Récupère toutes les zones avec pagination")
+
     public ResponseEntity<ApiResponse<Page<ZoneDTO>>> getAllZones(
             @PageableDefault(size = 20, sort = "nom") Pageable pageable){
         Page<ZoneDTO> zones = service.getAllZones(pageable);
@@ -36,6 +43,8 @@ public class ZoneController {
     }
 
     @GetMapping("{id}")
+    @Operation(summary = "Récupérer une zone par ID", description = "Cherche une zone par son ID")
+
     public ResponseEntity<ApiResponse<ZoneDTO>> getZoneById(@PathVariable String id){
             ZoneDTO zone = service.getZoneById(id);
             if (zone == null){
@@ -46,12 +55,16 @@ public class ZoneController {
     }
 
     @PutMapping("/{id}")
+    @Operation(summary = "Mettre à jour une zone", description = "Modifie les informations d'une zone existante")
+
     public ResponseEntity<ApiResponse<ZoneDTO>> updateZone(@PathVariable String id, @Valid @RequestBody ZoneDTO dto) {
         ZoneDTO updated = service.updateZone(id, dto);
         return ResponseEntity.ok(new ApiResponse<>("Zone mise à jour avec succès", updated));
     }
 
     @DeleteMapping("/{id}")
+    @Operation(summary = "Supprimer une zone", description = "Supprime une zone par son ID")
+
     public ResponseEntity<ApiResponse<Void>> deleteZone(@PathVariable String id) {
         service.deleteZone(id);
         return ResponseEntity.ok(new ApiResponse<>("Zone supprimée avec succès", null));
