@@ -16,6 +16,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Map;
 
 @RestController
 @RequestMapping("/api/colis")
@@ -107,4 +108,24 @@ public class ColisController {
         ));
     }
 
+    @GetMapping("/stats/by-zone")
+    @Operation(summary = "Statistiques des colis par zone", description = "Récupère le nombre de colis par zone de livraison")
+        public ResponseEntity<ApiResponse<Map<String, Long>>> getColisCountByZne(){
+            Map<String, Long> stats = colisService.getColisCountByZone();
+            return ResponseEntity.ok(new ApiResponse<>("Statistiques par zone", stats));
+    }
+
+    @GetMapping("/stats/by-statut")
+    @Operation(summary = "Statistiques par statut", description = "Nombre de colis par statut")
+    public ResponseEntity<ApiResponse<Map<String, Long>>> getColisCountByStatut() {
+        Map<String, Long> stats = colisService.getColisCountByStatut();
+        return ResponseEntity.ok(new ApiResponse<>("Statistiques par statut", stats));
+    }
+
+    @GetMapping("/stats/by-priorite")
+    @Operation(summary = "Statistiques des colis par priorité", description = "Récupère le nombre de colis par priorité")
+        public ResponseEntity<ApiResponse<Map<String, Long>>> getColicCountByPriorite(){
+        Map<String, Long> stats = colisService.getColisCountByPriorite();
+        return ResponseEntity.ok(new ApiResponse<>("Statistiques par priorité", stats));
+    }
 }

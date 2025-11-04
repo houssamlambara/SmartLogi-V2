@@ -15,6 +15,7 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
 
 @Service
@@ -122,4 +123,32 @@ public class ColisService {
         return colisRepository.searchColis(keyword.trim(), pageable)
                 .map(colisMapper::toDTO);
     }
+
+    public Map<String , Long> getColisCountByZone(){
+        List<Colis> allColis = colisRepository.findAll();
+        return allColis.stream()
+                .collect(Collectors.groupingBy(
+                c -> c.getZone() != null ? c.getZone().getNom() : "Sans Zone",
+                        Collectors.counting()
+                ));
+    }
+
+    public Map<String , Long> getColisCountByStatut(){
+        List<Colis> allColis = colisRepository.findAll();
+        return allColis.stream()
+                .collect(Collectors.groupingBy(
+                        c -> c.getStatut().name(),
+                        Collectors.counting()
+                ));
+    }
+
+    public Map<String, Long> getColisCountByPriorite(){
+        List<Colis> allColis = colisRepository.findAll();
+        return allColis.stream()
+                .collect(Collectors.groupingBy(
+                        c -> c.getPriorite().name(),
+                        Collectors.counting()
+                ));
+    }
+
 }
