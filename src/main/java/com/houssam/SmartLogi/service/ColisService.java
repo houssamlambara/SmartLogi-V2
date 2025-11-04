@@ -6,6 +6,8 @@ import com.houssam.SmartLogi.enums.Statut;
 import com.houssam.SmartLogi.exception.ResourceNotFoundException;
 import com.houssam.SmartLogi.mapper.ColisMapper;
 import com.houssam.SmartLogi.model.Colis;
+import com.houssam.SmartLogi.model.ColisProduit;
+import com.houssam.SmartLogi.model.Produit;
 import com.houssam.SmartLogi.repository.*;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -14,6 +16,7 @@ import org.springframework.stereotype.Service;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -28,18 +31,24 @@ public class ColisService {
     private final ClientExpediteurRepository clientRepository;
     private final DestinataireRepository destinataireRepository;
     private final ZoneRepository zoneRepository;
+    private final ProduitRepository produitRepository;
+    private final ColisProduitRepository colisProduitRepository;
 
     public ColisService(ColisRepository colisRepository, ColisMapper colisMapper,
                         LivreurRepository livreurRepository,
                         ClientExpediteurRepository clientRepository,
                         DestinataireRepository destinataireRepository,
-                        ZoneRepository zoneRepository) {
+                        ZoneRepository zoneRepository,
+                        ProduitRepository produitRepository,
+                        ColisProduitRepository colisProduitRepository) {
         this.colisRepository = colisRepository;
         this.colisMapper = colisMapper;
         this.livreurRepository = livreurRepository;
         this.clientRepository = clientRepository;
         this.destinataireRepository = destinataireRepository;
         this.zoneRepository = zoneRepository;
+        this.produitRepository = produitRepository;
+        this.colisProduitRepository = colisProduitRepository;
     }
 
     public ColisDTO createColis(ColisDTO dto) {
@@ -58,6 +67,25 @@ public class ColisService {
                 .orElseThrow(() -> new ResourceNotFoundException("Zone introuvable avec l'ID " + dto.getZoneId())));
 
         Colis saved = colisRepository.save(colis);
+
+        if (dto.getProductIds() != null && !dto.getProductIds().isEmpty()) {
+            List<Produit> produits = produitRepository.findAllById(dto.getProductIds());
+            List<ColisProduit> colisProduits = new ArrayList<>();
+
+            for (Produit produit : produits) {
+                ColisProduit colisProduit = new ColisProduit();
+                colisProduit.setColis(saved);
+                colisProduit.setProduit(produit);
+                colisProduit.setQuantite(1);
+                colisProduit.setPrix(produit.getPrix());
+                colisProduit.setDateAjout(LocalDateTime.now());
+
+                colisProduitRepository.save(colisProduit);
+                colisProduits.add(colisProduit);
+            }
+            saved.setProduits(colisProduits);
+        }
+
         return colisMapper.toDTO(saved);
     }
 

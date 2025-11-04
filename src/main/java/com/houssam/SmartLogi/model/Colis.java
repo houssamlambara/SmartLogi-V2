@@ -50,7 +50,7 @@ public class Colis {
     @OneToMany(mappedBy = "colis")
     private List<HistoriqueLivraison> historiqueLivraisons;
 
-    @OneToMany(mappedBy = "colis")
+    @OneToMany(mappedBy = "colis", fetch = FetchType.EAGER)
     private List<ColisProduit> produits;
 
     public String getId() {

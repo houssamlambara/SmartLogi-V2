@@ -6,6 +6,8 @@ import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Positive;
 import jakarta.validation.constraints.Size;
 
+import java.util.List;
+
 
 public class ColisDTO {
 
@@ -39,7 +41,8 @@ public class ColisDTO {
 
     private String zoneId;
 
-    // Getters et Setters
+    private List<String> productIds;
+
     public String getId() {
         return id;
     }
@@ -120,5 +123,12 @@ public class ColisDTO {
         this.zoneId = zoneId;
     }
 
+    public List<String> getProductIds() {
+        return productIds;
+    }
+
+    public void setProductIds(List<String> productIds) {
+        this.productIds = productIds;
+    }
 }
 
