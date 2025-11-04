@@ -14,6 +14,7 @@ import org.springframework.stereotype.Service;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
@@ -149,6 +150,28 @@ public class ColisService {
                         c -> c.getPriorite().name(),
                         Collectors.counting()
                 ));
+    }
+
+    public Map<String, Object> getStatistiqueLivreur(String LivreurId){
+        List<Colis> colis = colisRepository.findByLivreurId(LivreurId);
+
+        Map<String , Object> stats = new HashMap<>();
+        stats.put("LivreurId", LivreurId);
+        stats.put("NombreColis", colis.size());
+        stats.put("PoidsTotal",colis.stream().mapToDouble(Colis::getPoids).sum());
+
+        return stats;
+    }
+
+    public Map<String, Object> getStatistiqueZone(String zoneId){
+        List<Colis> colis = colisRepository.findByZoneId(zoneId);
+
+        Map<String, Object> stats = new HashMap<>();
+        stats.put("ZoneId", zoneId);
+        stats.put("NombreColis", colis.size());
+        stats.put("PoidsTotal",colis.stream().mapToDouble(Colis::getPoids).sum());
+
+        return stats;
     }
 
 }

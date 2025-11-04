@@ -128,4 +128,18 @@ public class ColisController {
         Map<String, Long> stats = colisService.getColisCountByPriorite();
         return ResponseEntity.ok(new ApiResponse<>("Statistiques par priorité", stats));
     }
+
+    @GetMapping("/livreur/{livreurId}/stats")
+    @Operation(summary = "Statistiques d'un livreur", description = "Nombre et poids total de colis d'un livreur")
+    public ResponseEntity<ApiResponse<Map<String, Object>>> getStatsLivreur(@PathVariable String livreurId){
+        Map<String, Object> stats = colisService.getStatistiqueLivreur(livreurId);
+        return ResponseEntity.ok(new ApiResponse<>("Statistiques du Livreur", stats));
+    }
+
+    @GetMapping("/zone/{zoneId}/stats")
+    @Operation(summary = "Statistiques d'une zone", description = "Nombre et poids total de colis d'une zone")
+    public ResponseEntity<ApiResponse<Map<String, Object>>> getStatsZone(@PathVariable String zoneId){
+        Map<String, Object> stats = colisService.getStatistiqueZone(zoneId);
+        return ResponseEntity.ok(new ApiResponse<>("Statistiques de la Zone", stats));
+    }
 }
