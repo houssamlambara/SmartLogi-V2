@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<body style="font-family: Arial, sans-serif; color: #333; background-color: #f9fafb; padding: 20px;">
+<div style="max-width: 600px; margin: auto; background: #ffffff; border-radius: 10px; box-shadow: 0 3px 10px rgba(0,0,0,0.1); padding: 30px;">
+    <h2 style="color: #2c7be5; text-align: center;">📦 Colis Créé avec Succès !</h2>
+    <p>Cher(e) <b th:text="${nomExpediteur}">Nom Expéditeur</b>,</p>
+    <p>Votre colis a été créé avec succès le <b th:text="${dateCreation}">Date</b>.</p>
+
+    <h3 style="color:#333;">📝 Détails du Colis</h3>
+    <ul>
+        <li><b>ID de suivi :</b> <span th:text="${idColis}"></span></li>
+        <li><b>Statut :</b> <span th:text="${statut}"></span></li>
+        <li><b>Destination :</b> <span th:text="${destination}"></span></li>
+        <li><b>Destinataire :</b> <span th:text="${nomDestinataire}"></span></li>
+        <li><b>Poids total :</b> <span th:text="${poids}"></span> kg</li>
+    </ul>
+
+    <p>Vous pouvez suivre votre colis à tout moment dans votre <b>Tableau de bord SmartLogi</b>.</p>
+
+    <div style="text-align:center; margin-top:30px; color:gray;">
+        <p>Merci de faire confiance à <b>SmartLogi</b> !<br>Nous apprécions votre partenariat.</p>
+    </div>
+</div>
+</body>
+</html>
+

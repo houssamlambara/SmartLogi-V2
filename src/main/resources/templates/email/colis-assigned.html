@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<body style="font-family: Arial, sans-serif; color: #333; background-color: #f8f9fa; padding: 20px;">
+<div style="max-width: 600px; margin: auto; background: #ffffff; border-radius: 10px; box-shadow: 0 3px 10px rgba(0,0,0,0.1); padding: 30px;">
+    <h2 style="color:#34a853; text-align:center;">🚚 Colis Assigné à un Livreur</h2>
+    <p>Cher(e) <b th:text="${nomExpediteur}">Nom Expéditeur</b>,</p>
+    <p>Votre colis a été assigné avec succès à un agent de livraison pour expédition.</p>
+
+    <h3>📦 Détails du Colis</h3>
+    <ul>
+        <li><b>ID de suivi :</b> <span th:text="${idColis}"></span></li>
+        <li><b>Destination :</b> <span th:text="${destination}"></span></li>
+        <li><b>Destinataire :</b> <span th:text="${nomDestinataire}"></span></li>
+        <li><b>Statut :</b> <span th:text="${statut}"></span></li>
+    </ul>
+
+    <h3>👤 Détails du Livreur</h3>
+    <ul>
+        <li><b>Nom :</b> <span th:text="${nomLivreur}"></span></li>
+        <li><b>Ville :</b> <span th:text="${villeLivreur}"></span></li>
+        <li><b>Contact :</b> <span th:text="${telephoneLivreur}"></span></li>
+    </ul>
+
+    <p>Le processus de livraison commencera sous peu. Vous recevrez des mises à jour à chaque étape de la livraison de votre colis.</p>
+
+    <div style="text-align:center; margin-top:30px; color:gray;">
+        <p>Merci d'avoir choisi <b>SmartLogi</b>.<br>Nous apprécions votre confiance.</p>
+    </div>
+</div>
+</body>
+</html>
+

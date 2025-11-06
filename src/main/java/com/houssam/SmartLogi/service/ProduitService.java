@@ -33,7 +33,7 @@ public class ProduitService {
         return repository.findAll(pageable)
                 .map(mapper::toDTO);
     }
-
+    
     public List<ProduitDTO> getAllProduits() {
         return repository.findAll()
                 .stream()

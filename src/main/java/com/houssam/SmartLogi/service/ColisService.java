@@ -1,5 +1,6 @@
 package com.houssam.SmartLogi.service;
 
+import com.houssam.SmartLogi.email.EmailService;
 import com.houssam.SmartLogi.dto.ColisDTO;
 import com.houssam.SmartLogi.dto.ProduitDTO;
 import com.houssam.SmartLogi.enums.Prioriter;
@@ -14,9 +15,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
-import java.time.LocalDate;
 import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -34,7 +33,7 @@ public class ColisService {
     private final ZoneRepository zoneRepository;
     private final ProduitRepository produitRepository;
     private final ColisProduitRepository colisProduitRepository;
-//    private final EmailService emailService;
+    private final EmailService emailService;
 
     public ColisService(ColisRepository colisRepository, ColisMapper colisMapper,
                         LivreurRepository livreurRepository,
@@ -42,8 +41,8 @@ public class ColisService {
                         DestinataireRepository destinataireRepository,
                         ZoneRepository zoneRepository,
                         ProduitRepository produitRepository,
-                        ColisProduitRepository colisProduitRepository)
-//                        EmailService emailService
+                        ColisProduitRepository colisProduitRepository,
+                        EmailService emailService)
 
     {
         this.colisRepository = colisRepository;
@@ -54,7 +53,7 @@ public class ColisService {
         this.zoneRepository = zoneRepository;
         this.produitRepository = produitRepository;
         this.colisProduitRepository = colisProduitRepository;
-//        this.emailService = emailService;
+        this.emailService = emailService;
     }
 
     public ColisDTO createColis(ColisDTO dto) {

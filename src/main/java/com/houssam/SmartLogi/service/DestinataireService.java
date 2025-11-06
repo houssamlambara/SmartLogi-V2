@@ -33,7 +33,7 @@ public class DestinataireService {
         return repository.findAll(pageable)
                 .map(mapper::toDTO);
     }
-
+    
     public List<DestinataireDTO> getAllDestinataires() {
         return repository.findAll()
                 .stream()
