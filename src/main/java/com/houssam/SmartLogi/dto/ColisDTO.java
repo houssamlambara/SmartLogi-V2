@@ -43,6 +43,8 @@ public class ColisDTO {
 
     private List<String> productIds;
 
+    private List<ProduitDTO> nouveauxProduits;
+
     public String getId() {
         return id;
     }
@@ -129,6 +131,14 @@ public class ColisDTO {
 
     public void setProductIds(List<String> productIds) {
         this.productIds = productIds;
+    }
+
+    public List<ProduitDTO> getNouveauxProduits() {
+        return nouveauxProduits;
+    }
+
+    public void setNouveauxProduits(List<ProduitDTO> nouveauxProduits) {
+        this.nouveauxProduits = nouveauxProduits;
     }
 }
 

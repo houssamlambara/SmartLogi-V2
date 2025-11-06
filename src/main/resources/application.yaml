@@ -25,6 +25,19 @@ spring:
 server:
   port: 8080
 
+# Configuration Email SMTP
+  mail:
+    host: smtp.gmail.com
+    port: 587
+    username: votre-email@gmail.com
+    password: votre-mot-de-passe-app
+    properties:
+      mail:
+        smtp:
+          auth: true
+          starttls:
+            enable: true
+
 logging:
   level:
     com.smartlogi: DEBUG

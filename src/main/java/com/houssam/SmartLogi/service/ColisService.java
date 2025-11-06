@@ -1,6 +1,7 @@
 package com.houssam.SmartLogi.service;
 
 import com.houssam.SmartLogi.dto.ColisDTO;
+import com.houssam.SmartLogi.dto.ProduitDTO;
 import com.houssam.SmartLogi.enums.Prioriter;
 import com.houssam.SmartLogi.enums.Statut;
 import com.houssam.SmartLogi.exception.ResourceNotFoundException;
@@ -33,6 +34,7 @@ public class ColisService {
     private final ZoneRepository zoneRepository;
     private final ProduitRepository produitRepository;
     private final ColisProduitRepository colisProduitRepository;
+//    private final EmailService emailService;
 
     public ColisService(ColisRepository colisRepository, ColisMapper colisMapper,
                         LivreurRepository livreurRepository,
@@ -40,7 +42,10 @@ public class ColisService {
                         DestinataireRepository destinataireRepository,
                         ZoneRepository zoneRepository,
                         ProduitRepository produitRepository,
-                        ColisProduitRepository colisProduitRepository) {
+                        ColisProduitRepository colisProduitRepository)
+//                        EmailService emailService
+
+    {
         this.colisRepository = colisRepository;
         this.colisMapper = colisMapper;
         this.livreurRepository = livreurRepository;
@@ -49,6 +54,7 @@ public class ColisService {
         this.zoneRepository = zoneRepository;
         this.produitRepository = produitRepository;
         this.colisProduitRepository = colisProduitRepository;
+//        this.emailService = emailService;
     }
 
     public ColisDTO createColis(ColisDTO dto) {
@@ -68,25 +74,69 @@ public class ColisService {
 
         Colis saved = colisRepository.save(colis);
 
+        List<ColisProduit> colisProduits = new ArrayList<>();
+
         if (dto.getProductIds() != null && !dto.getProductIds().isEmpty()) {
             List<Produit> produits = produitRepository.findAllById(dto.getProductIds());
-            List<ColisProduit> colisProduits = new ArrayList<>();
+            if (produits.size() != dto.getProductIds().size()) {
+                throw new ResourceNotFoundException("Certains produits n'existent pas avec les IDs fournis");
+            }
 
             for (Produit produit : produits) {
-                ColisProduit colisProduit = new ColisProduit();
-                colisProduit.setColis(saved);
-                colisProduit.setProduit(produit);
-                colisProduit.setQuantite(1);
-                colisProduit.setPrix(produit.getPrix());
-                colisProduit.setDateAjout(LocalDateTime.now());
-
-                colisProduitRepository.save(colisProduit);
-                colisProduits.add(colisProduit);
+                ColisProduit cp = new ColisProduit();
+                cp.setColis(saved);
+                cp.setProduit(produit);
+                cp.setQuantite(1);
+                cp.setPrix(produit.getPrix());
+                cp.setDateAjout(LocalDateTime.now());
+                colisProduitRepository.save(cp);
+                colisProduits.add(cp);
             }
-            saved.setProduits(colisProduits);
         }
 
-        return colisMapper.toDTO(saved);
+        if (dto.getNouveauxProduits() != null && !dto.getNouveauxProduits().isEmpty()) {
+            for (ProduitDTO pdto : dto.getNouveauxProduits()) {
+                Produit produit = new Produit();
+                produit.setNom(pdto.getNom());
+                produit.setCategorie(pdto.getCategorie());
+                produit.setPrix(pdto.getPrix());
+                produit.setPoids(pdto.getPoids());
+                produitRepository.save(produit);
+
+                ColisProduit cp = new ColisProduit();
+                cp.setColis(saved);
+                cp.setProduit(produit);
+                cp.setQuantite(1);
+                cp.setPrix(produit.getPrix());
+                cp.setDateAjout(LocalDateTime.now());
+                colisProduitRepository.save(cp);
+                colisProduits.add(cp);
+            }
+        }
+
+        saved.setProduits(colisProduits);
+
+        ColisDTO resultDTO = colisMapper.toDTO(saved);
+
+        List<String> idsProduits = colisProduits.stream()
+                .map(cp -> cp.getProduit().getId())
+                .collect(Collectors.toList());
+        resultDTO.setProductIds(idsProduits);
+
+        List<ProduitDTO> tousProduitsDTO = colisProduits.stream()
+                .map(cp -> {
+                    Produit p = cp.getProduit();
+                    ProduitDTO pdto = new ProduitDTO();
+                    pdto.setNom(p.getNom());
+                    pdto.setCategorie(p.getCategorie());
+                    pdto.setPrix(p.getPrix());
+                    pdto.setPoids(p.getPoids());
+                    return pdto;
+                }).collect(Collectors.toList());
+
+        resultDTO.setNouveauxProduits(tousProduitsDTO);
+
+        return resultDTO;
     }
 
     public Page<ColisDTO> getAllColis(Pageable pageable) {
