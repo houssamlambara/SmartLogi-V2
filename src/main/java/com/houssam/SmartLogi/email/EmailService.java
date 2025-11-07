@@ -13,6 +13,11 @@ import jakarta.mail.internet.MimeMessage;
 import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.stereotype.Service;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 @Service
 public class EmailService {
@@ -53,13 +58,54 @@ public class EmailService {
     public String envoyerEmailColisCreer(Colis colis) {
         try {
             Context ctx = new Context();
+
+            // Informations expéditeur
             ctx.setVariable("nomExpediteur", colis.getClientExpediteur().getNom() + " " + colis.getClientExpediteur().getPrenom());
+
+            // Date et heure de création
             ctx.setVariable("dateCreation", LocalDate.now());
+            ctx.setVariable("heureCreation", colis.getCreatedAt() != null ?
+                colis.getCreatedAt().toLocalTime().toString() : java.time.LocalDateTime.now().toLocalTime().toString());
+
+            // Informations du colis
             ctx.setVariable("idColis", colis.getId());
+            ctx.setVariable("description", colis.getDescription() != null ? colis.getDescription() : "N/A");
             ctx.setVariable("statut", colis.getStatut().toString());
-            ctx.setVariable("destination", colis.getVilleDestination());
-            ctx.setVariable("nomDestinataire", colis.getDestinataire().getNom() + " " + colis.getDestinataire().getPrenom());
+            ctx.setVariable("priorite", colis.getPriorite().toString());
             ctx.setVariable("poids", colis.getPoids());
+            ctx.setVariable("destination", colis.getVilleDestination());
+            ctx.setVariable("zone", colis.getZone() != null ? colis.getZone().getNom() : "Non définie");
+
+            // Informations destinataire
+            ctx.setVariable("nomDestinataire", colis.getDestinataire().getNom() + " " + colis.getDestinataire().getPrenom());
+            ctx.setVariable("emailDestinataire", colis.getDestinataire().getEmail() != null ? colis.getDestinataire().getEmail() : "Non renseigné");
+            ctx.setVariable("telephoneDestinataire", colis.getDestinataire().getTelephone() != null ? colis.getDestinataire().getTelephone() : "Non renseigné");
+            ctx.setVariable("adresseDestinataire", colis.getDestinataire().getAdresse() != null ? colis.getDestinataire().getAdresse() : "Non renseignée");
+
+            // Informations livreur
+            ctx.setVariable("nomLivreur", colis.getLivreur() != null ?
+                colis.getLivreur().getNom() + " " + colis.getLivreur().getPrenom() : "Non assigné");
+            ctx.setVariable("telephoneLivreur", colis.getLivreur() != null && colis.getLivreur().getTelephone() != null ?
+                colis.getLivreur().getTelephone() : "Non renseigné");
+
+            // Liste des produits
+            if (colis.getProduits() != null && !colis.getProduits().isEmpty()) {
+                java.util.List<java.util.Map<String, Object>> produitsInfo = new java.util.ArrayList<>();
+                for (var colisProduit : colis.getProduits()) {
+                    java.util.Map<String, Object> produitMap = new java.util.HashMap<>();
+                    produitMap.put("nom", colisProduit.getProduit().getNom());
+                    produitMap.put("categorie", colisProduit.getProduit().getCategorie() != null ?
+                        colisProduit.getProduit().getCategorie() : "Non catégorisé");
+                    produitMap.put("prix", colisProduit.getProduit().getPrix());
+                    produitMap.put("poids", colisProduit.getProduit().getPoids());
+                    produitsInfo.add(produitMap);
+                }
+                ctx.setVariable("produits", produitsInfo);
+                ctx.setVariable("nombreProduits", produitsInfo.size());
+            } else {
+                ctx.setVariable("produits", new java.util.ArrayList<>());
+                ctx.setVariable("nombreProduits", 0);
+            }
 
             String htmlBody = templateEngine.process("email/colis-created", ctx);
 

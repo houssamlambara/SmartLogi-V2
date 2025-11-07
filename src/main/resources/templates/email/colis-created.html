@@ -1,24 +1,147 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
-<body style="font-family: Arial, sans-serif; color: #333; background-color: #f9fafb; padding: 20px;">
-<div style="max-width: 600px; margin: auto; background: #ffffff; border-radius: 10px; box-shadow: 0 3px 10px rgba(0,0,0,0.1); padding: 30px;">
-    <h2 style="color: #2c7be5; text-align: center;">📦 Colis Créé avec Succès !</h2>
-    <p>Cher(e) <b th:text="${nomExpediteur}">Nom Expéditeur</b>,</p>
-    <p>Votre colis a été créé avec succès le <b th:text="${dateCreation}">Date</b>.</p>
+<body style="font-family: Arial, sans-serif; color: #333; background-color: #f9fafb; padding: 20px; margin: 0;">
+<div style="max-width: 650px; margin: auto; background: #ffffff; border-radius: 12px; box-shadow: 0 4px 15px rgba(0,0,0,0.1); overflow: hidden;">
 
-    <h3 style="color:#333;">📝 Détails du Colis</h3>
-    <ul>
-        <li><b>ID de suivi :</b> <span th:text="${idColis}"></span></li>
-        <li><b>Statut :</b> <span th:text="${statut}"></span></li>
-        <li><b>Destination :</b> <span th:text="${destination}"></span></li>
-        <li><b>Destinataire :</b> <span th:text="${nomDestinataire}"></span></li>
-        <li><b>Poids total :</b> <span th:text="${poids}"></span> kg</li>
-    </ul>
+    <!-- En-tête -->
+    <div style="background: linear-gradient(135deg, #2c7be5 0%, #1a5bb8 100%); color: white; padding: 30px 20px; text-align: center;">
+        <h1 style="margin: 0; font-size: 28px;">📦 Colis Créé avec Succès !</h1>
+        <p style="margin: 10px 0 0 0; font-size: 14px; opacity: 0.9;">SmartLogi - Votre partenaire logistique</p>
+    </div>
 
-    <p>Vous pouvez suivre votre colis à tout moment dans votre <b>Tableau de bord SmartLogi</b>.</p>
+    <!-- Contenu principal -->
+    <div style="padding: 30px;">
+        <p style="font-size: 16px; line-height: 1.6;">
+            Bonjour <b th:text="${nomExpediteur}">Nom Expéditeur</b>,
+        </p>
+        <p style="font-size: 14px; color: #666; line-height: 1.6;">
+            Votre colis a été créé avec succès le <b th:text="${dateCreation}">Date</b> à <b th:text="${heureCreation}">Heure</b>.
+        </p>
 
-    <div style="text-align:center; margin-top:30px; color:gray;">
-        <p>Merci de faire confiance à <b>SmartLogi</b> !<br>Nous apprécions votre partenariat.</p>
+        <!-- Bloc ID de suivi -->
+        <div style="background: #f0f7ff; border-left: 4px solid #2c7be5; padding: 15px; margin: 20px 0; border-radius: 5px;">
+            <p style="margin: 0; font-size: 12px; color: #666; text-transform: uppercase;">ID de Suivi</p>
+            <p style="margin: 5px 0 0 0; font-size: 20px; font-weight: bold; color: #2c7be5;" th:text="${idColis}">ID</p>
+        </div>
+
+        <!-- Informations principales -->
+        <h3 style="color: #2c7be5; border-bottom: 2px solid #e9ecef; padding-bottom: 10px; margin-top: 25px;">
+            📋 Informations du Colis
+        </h3>
+        <table style="width: 100%; border-collapse: collapse; margin: 15px 0;">
+            <tr>
+                <td style="padding: 8px 0; color: #666; font-size: 14px; width: 40%;">📝 Description :</td>
+                <td style="padding: 8px 0; font-weight: 500;" th:text="${description}">Description</td>
+            </tr>
+            <tr style="background: #f8f9fa;">
+                <td style="padding: 8px 0; color: #666; font-size: 14px;">📊 Statut :</td>
+                <td style="padding: 8px 0;">
+                    <span style="background: #28a745; color: white; padding: 3px 12px; border-radius: 12px; font-size: 12px; font-weight: 500;" th:text="${statut}">Statut</span>
+                </td>
+            </tr>
+            <tr>
+                <td style="padding: 8px 0; color: #666; font-size: 14px;">⚡ Priorité :</td>
+                <td style="padding: 8px 0;">
+                    <span style="background: #ffc107; color: #333; padding: 3px 12px; border-radius: 12px; font-size: 12px; font-weight: 500;" th:text="${priorite}">Priorité</span>
+                </td>
+            </tr>
+            <tr style="background: #f8f9fa;">
+                <td style="padding: 8px 0; color: #666; font-size: 14px;">⚖️ Poids :</td>
+                <td style="padding: 8px 0; font-weight: 500;"><span th:text="${poids}">0</span> kg</td>
+            </tr>
+            <tr>
+                <td style="padding: 8px 0; color: #666; font-size: 14px;">📍 Destination :</td>
+                <td style="padding: 8px 0; font-weight: 500;" th:text="${destination}">Ville</td>
+            </tr>
+            <tr style="background: #f8f9fa;">
+                <td style="padding: 8px 0; color: #666; font-size: 14px;">🗺️ Zone :</td>
+                <td style="padding: 8px 0; font-weight: 500;" th:text="${zone}">Zone</td>
+            </tr>
+        </table>
+
+        <!-- Informations Destinataire -->
+        <h3 style="color: #2c7be5; border-bottom: 2px solid #e9ecef; padding-bottom: 10px; margin-top: 25px;">
+            👤 Informations du Destinataire
+        </h3>
+        <table style="width: 100%; border-collapse: collapse; margin: 15px 0;">
+            <tr>
+                <td style="padding: 8px 0; color: #666; font-size: 14px; width: 40%;">Nom complet :</td>
+                <td style="padding: 8px 0; font-weight: 500;" th:text="${nomDestinataire}">Destinataire</td>
+            </tr>
+            <tr style="background: #f8f9fa;">
+                <td style="padding: 8px 0; color: #666; font-size: 14px;">📧 Email :</td>
+                <td style="padding: 8px 0;" th:text="${emailDestinataire}">email@example.com</td>
+            </tr>
+            <tr>
+                <td style="padding: 8px 0; color: #666; font-size: 14px;">📞 Téléphone :</td>
+                <td style="padding: 8px 0;" th:text="${telephoneDestinataire}">Téléphone</td>
+            </tr>
+            <tr style="background: #f8f9fa;">
+                <td style="padding: 8px 0; color: #666; font-size: 14px;">🏠 Adresse :</td>
+                <td style="padding: 8px 0;" th:text="${adresseDestinataire}">Adresse</td>
+            </tr>
+        </table>
+
+        <!-- Informations Livreur -->
+        <h3 style="color: #2c7be5; border-bottom: 2px solid #e9ecef; padding-bottom: 10px; margin-top: 25px;">
+            🚚 Livreur Assigné
+        </h3>
+        <table style="width: 100%; border-collapse: collapse; margin: 15px 0;">
+            <tr>
+                <td style="padding: 8px 0; color: #666; font-size: 14px; width: 40%;">Nom :</td>
+                <td style="padding: 8px 0; font-weight: 500;" th:text="${nomLivreur}">Livreur</td>
+            </tr>
+            <tr style="background: #f8f9fa;">
+                <td style="padding: 8px 0; color: #666; font-size: 14px;">📞 Contact :</td>
+                <td style="padding: 8px 0;" th:text="${telephoneLivreur}">Téléphone</td>
+            </tr>
+        </table>
+
+        <!-- Liste des Produits -->
+        <h3 style="color: #2c7be5; border-bottom: 2px solid #e9ecef; padding-bottom: 10px; margin-top: 25px;">
+            📦 Produits dans le Colis (<span th:text="${nombreProduits}">0</span>)
+        </h3>
+        <div th:if="${produits != null and !produits.isEmpty()}">
+            <div th:each="produit, iterStat : ${produits}"
+                 style="border: 1px solid #e9ecef; border-radius: 8px; padding: 12px; margin: 10px 0;"
+                 th:style="${iterStat.even} ? 'background: #f8f9fa;' : 'background: white;'">
+                <div style="display: flex; justify-content: space-between; align-items: start;">
+                    <div style="flex: 1;">
+                        <p style="margin: 0; font-weight: 600; font-size: 15px; color: #333;" th:text="${produit.nom}">Nom Produit</p>
+                        <p style="margin: 5px 0 0 0; font-size: 13px; color: #666;">
+                            Catégorie : <span th:text="${produit.categorie}">Catégorie</span>
+                        </p>
+                    </div>
+                    <div style="text-align: right;">
+                        <p style="margin: 0; font-size: 16px; font-weight: 600; color: #2c7be5;" th:text="${produit.prix} + ' DH'">Prix</p>
+                        <p style="margin: 5px 0 0 0; font-size: 12px; color: #666;" th:text="${produit.poids} + ' kg'">Poids</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div th:if="${produits == null or produits.isEmpty()}" style="padding: 15px; background: #fff3cd; border-radius: 8px; margin: 10px 0;">
+            <p style="margin: 0; color: #856404; font-size: 14px;">Aucun produit associé à ce colis.</p>
+        </div>
+
+        <!-- Message de suivi -->
+        <div style="background: #e7f3ff; border-radius: 8px; padding: 20px; margin: 25px 0; text-align: center;">
+            <p style="margin: 0; font-size: 15px; color: #0c5aa6;">
+                💡 <b>Astuce :</b> Vous pouvez suivre votre colis en temps réel dans votre tableau de bord SmartLogi !
+            </p>
+        </div>
+    </div>
+
+    <!-- Pied de page -->
+    <div style="background: #f8f9fa; padding: 20px; text-align: center; border-top: 1px solid #e9ecef;">
+        <p style="margin: 0 0 10px 0; font-size: 14px; color: #666;">
+            Merci de faire confiance à <b style="color: #2c7be5;">SmartLogi</b> !
+        </p>
+        <p style="margin: 0; font-size: 12px; color: #999;">
+            Nous apprécions votre partenariat et nous engageons à livrer votre colis dans les meilleurs délais.
+        </p>
+        <p style="margin: 15px 0 0 0; font-size: 11px; color: #aaa;">
+            © 2025 SmartLogi. Tous droits réservés.
+        </p>
     </div>
 </div>
 </body>
