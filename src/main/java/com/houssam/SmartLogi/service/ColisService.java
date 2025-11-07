@@ -11,6 +11,7 @@ import com.houssam.SmartLogi.model.Colis;
 import com.houssam.SmartLogi.model.ColisProduit;
 import com.houssam.SmartLogi.model.Produit;
 import com.houssam.SmartLogi.repository.*;
+import jakarta.transaction.Transactional;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
@@ -42,9 +43,7 @@ public class ColisService {
                         ZoneRepository zoneRepository,
                         ProduitRepository produitRepository,
                         ColisProduitRepository colisProduitRepository,
-                        EmailService emailService)
-
-    {
+                        EmailService emailService) {
         this.colisRepository = colisRepository;
         this.colisMapper = colisMapper;
         this.livreurRepository = livreurRepository;
@@ -56,87 +55,219 @@ public class ColisService {
         this.emailService = emailService;
     }
 
+    @Transactional
     public ColisDTO createColis(ColisDTO dto) {
         Colis colis = colisMapper.toEntity(dto);
-
-        colis.setLivreur(livreurRepository.findById(dto.getLivreurId())
-                .orElseThrow(() -> new ResourceNotFoundException("Livreur introuvable avec l'ID " + dto.getLivreurId())));
-
-        colis.setClientExpediteur(clientRepository.findById(dto.getClientExpediteurId())
-                .orElseThrow(() -> new ResourceNotFoundException("ClientExpediteur introuvable avec l'ID " + dto.getClientExpediteurId())));
-
-        colis.setDestinataire(destinataireRepository.findById(dto.getDestinataireId())
-                .orElseThrow(() -> new ResourceNotFoundException("Destinataire introuvable avec l'ID " + dto.getDestinataireId())));
-
-        colis.setZone(zoneRepository.findById(dto.getZoneId())
-                .orElseThrow(() -> new ResourceNotFoundException("Zone introuvable avec l'ID " + dto.getZoneId())));
+        validerEntites(colis, dto);
+        initialiserValeursParDefaut(colis);
 
         Colis saved = colisRepository.save(colis);
 
+        // 5. Traitement des produits (méthodes extraites)
         List<ColisProduit> colisProduits = new ArrayList<>();
+        colisProduits.addAll(traiterProduitsExistants(saved, dto.getProductIds()));
+        colisProduits.addAll(traiterNouveauxProduits(saved, dto.getNouveauxProduits()));
 
-        if (dto.getProductIds() != null && !dto.getProductIds().isEmpty()) {
-            List<Produit> produits = produitRepository.findAllById(dto.getProductIds());
-            if (produits.size() != dto.getProductIds().size()) {
-                throw new ResourceNotFoundException("Certains produits n'existent pas avec les IDs fournis");
-            }
-
-            for (Produit produit : produits) {
-                ColisProduit cp = new ColisProduit();
-                cp.setColis(saved);
-                cp.setProduit(produit);
-                cp.setQuantite(1);
-                cp.setPrix(produit.getPrix());
-                cp.setDateAjout(LocalDateTime.now());
-                colisProduitRepository.save(cp);
-                colisProduits.add(cp);
-            }
+        if (!colisProduits.isEmpty()) {
+            sauvegarderProduits(colisProduits);
+            saved.setProduits(colisProduits);
         }
-
-        if (dto.getNouveauxProduits() != null && !dto.getNouveauxProduits().isEmpty()) {
-            for (ProduitDTO pdto : dto.getNouveauxProduits()) {
-                Produit produit = new Produit();
-                produit.setNom(pdto.getNom());
-                produit.setCategorie(pdto.getCategorie());
-                produit.setPrix(pdto.getPrix());
-                produit.setPoids(pdto.getPoids());
-                produitRepository.save(produit);
-
-                ColisProduit cp = new ColisProduit();
-                cp.setColis(saved);
-                cp.setProduit(produit);
-                cp.setQuantite(1);
-                cp.setPrix(produit.getPrix());
-                cp.setDateAjout(LocalDateTime.now());
-                colisProduitRepository.save(cp);
-                colisProduits.add(cp);
-            }
-        }
-
-        saved.setProduits(colisProduits);
 
         ColisDTO resultDTO = colisMapper.toDTO(saved);
 
-        List<String> idsProduits = colisProduits.stream()
-                .map(cp -> cp.getProduit().getId())
-                .collect(Collectors.toList());
-        resultDTO.setProductIds(idsProduits);
+        // Remplir manuellement les productIds et nouveauxProduits
+        if (!colisProduits.isEmpty()) {
+            List<String> idsProduits = colisProduits.stream()
+                    .map(cp -> cp.getProduit().getId())
+                    .collect(Collectors.toList());
+            resultDTO.setProductIds(idsProduits);
 
-        List<ProduitDTO> tousProduitsDTO = colisProduits.stream()
-                .map(cp -> {
-                    Produit p = cp.getProduit();
-                    ProduitDTO pdto = new ProduitDTO();
-                    pdto.setNom(p.getNom());
-                    pdto.setCategorie(p.getCategorie());
-                    pdto.setPrix(p.getPrix());
-                    pdto.setPoids(p.getPoids());
-                    return pdto;
-                }).collect(Collectors.toList());
+            List<ProduitDTO> tousProduitsDTO = colisProduits.stream()
+                    .map(cp -> {
+                        Produit p = cp.getProduit();
+                        ProduitDTO pdto = new ProduitDTO();
+                        pdto.setNom(p.getNom());
+                        pdto.setCategorie(p.getCategorie());
+                        pdto.setPrix(p.getPrix());
+                        pdto.setPoids(p.getPoids());
+                        return pdto;
+                    }).collect(Collectors.toList());
 
-        resultDTO.setNouveauxProduits(tousProduitsDTO);
+            resultDTO.setNouveauxProduits(tousProduitsDTO);
+        }
 
         return resultDTO;
     }
+
+    private void validerEntites(Colis colis, ColisDTO dto) {
+        colis.setLivreur(livreurRepository.findById(dto.getLivreurId())
+                        .orElseThrow(() -> new ResourceNotFoundException("Livreur introuvable avec l'ID " + dto.getLivreurId())));
+
+        colis.setClientExpediteur(clientRepository.findById(dto.getClientExpediteurId())
+                        .orElseThrow(() -> new ResourceNotFoundException("ClientExpediteur introuvable avec l'ID " + dto.getClientExpediteurId())));
+
+        colis.setDestinataire(destinataireRepository.findById(dto.getDestinataireId())
+                        .orElseThrow(() -> new ResourceNotFoundException("Destinataire introuvable avec l'ID " + dto.getDestinataireId())));
+
+        colis.setZone(zoneRepository.findById(dto.getZoneId())
+                        .orElseThrow(() -> new ResourceNotFoundException("Zone introuvable avec l'ID " + dto.getZoneId())));
+    }
+
+    private void initialiserValeursParDefaut(Colis colis) {
+        if (colis.getStatut() == null) {
+            colis.setStatut(Statut.Creer);
+        }
+        if (colis.getCreatedAt() == null) {
+            colis.setCreatedAt(LocalDateTime.now());
+        }
+    }
+
+    private List<ColisProduit> traiterProduitsExistants(Colis colis, List<String> productIds) {
+        if (productIds == null || productIds.isEmpty()) {
+            return new ArrayList<>();
+        }
+
+        List<Produit> produits = produitRepository.findAllById(productIds);
+
+        if (produits.size() != productIds.size()) {
+            throw new ResourceNotFoundException("Certains produits n'existent pas avec les IDs fournis");}
+
+        return produits.stream()
+                .map(produit -> creerColisProduit(colis, produit))
+                .collect(Collectors.toList());
+    }
+
+    private List<ColisProduit> traiterNouveauxProduits(Colis colis, List<ProduitDTO> nouveauxProduits) {
+        if (nouveauxProduits == null || nouveauxProduits.isEmpty()) {
+            return new ArrayList<>();
+        }
+
+        return nouveauxProduits.stream()
+                .map(pdto -> {
+                    // Créer le nouveau produit
+                    Produit produit = new Produit();
+                    produit.setNom(pdto.getNom());
+                    produit.setCategorie(pdto.getCategorie());
+                    produit.setPrix(pdto.getPrix());
+                    produit.setPoids(pdto.getPoids());
+
+                    // Créer la relation ColisProduit
+                    return creerColisProduit(colis, produit);
+                })
+                .collect(Collectors.toList());
+    }
+
+    private ColisProduit creerColisProduit(Colis colis, Produit produit) {
+        ColisProduit cp = new ColisProduit();
+        cp.setColis(colis);
+        cp.setProduit(produit);
+        cp.setQuantite(1);
+        cp.setPrix(produit.getPrix());
+        cp.setDateAjout(LocalDateTime.now());
+        return cp;
+    }
+
+    private void sauvegarderProduits(List<ColisProduit> colisProduits) {
+
+        List<Produit> nouveauxProduits = colisProduits.stream()
+                .map(ColisProduit::getProduit)
+                .filter(p -> p.getId() == null)
+                .collect(Collectors.toList());
+
+        if (!nouveauxProduits.isEmpty()) {
+            produitRepository.saveAll(nouveauxProduits);
+        }
+
+        colisProduitRepository.saveAll(colisProduits);
+    }
+
+    private double calculerPoidsTotalProduits(List<ColisProduit> colisProduits) {
+        return colisProduits.stream()
+                .mapToDouble(cp -> cp.getProduit().getPoids() * cp.getQuantite())
+                .sum();
+    }
+
+//    public ColisDTO createColis(ColisDTO dto) {
+//        Colis colis = colisMapper.toEntity(dto);
+//
+//        colis.setLivreur(livreurRepository.findById(dto.getLivreurId())
+//                .orElseThrow(() -> new ResourceNotFoundException("Livreur introuvable avec l'ID " + dto.getLivreurId())));
+//
+//        colis.setClientExpediteur(clientRepository.findById(dto.getClientExpediteurId())
+//                .orElseThrow(() -> new ResourceNotFoundException("ClientExpediteur introuvable avec l'ID " + dto.getClientExpediteurId())));
+//
+//        colis.setDestinataire(destinataireRepository.findById(dto.getDestinataireId())
+//                .orElseThrow(() -> new ResourceNotFoundException("Destinataire introuvable avec l'ID " + dto.getDestinataireId())));
+//
+//        colis.setZone(zoneRepository.findById(dto.getZoneId())
+//                .orElseThrow(() -> new ResourceNotFoundException("Zone introuvable avec l'ID " + dto.getZoneId())));
+//
+//        Colis saved = colisRepository.save(colis);
+//
+//        List<ColisProduit> colisProduits = new ArrayList<>();
+//
+//        if (dto.getProductIds() != null && !dto.getProductIds().isEmpty()) {
+//            List<Produit> produits = produitRepository.findAllById(dto.getProductIds());
+//            if (produits.size() != dto.getProductIds().size()) {
+//                throw new ResourceNotFoundException("Certains produits n'existent pas avec les IDs fournis");
+//            }
+//
+//            for (Produit produit : produits) {
+//                ColisProduit cp = new ColisProduit();
+//                cp.setColis(saved);
+//                cp.setProduit(produit);
+//                cp.setQuantite(1);
+//                cp.setPrix(produit.getPrix());
+//                cp.setDateAjout(LocalDateTime.now());
+//                colisProduitRepository.save(cp);
+//                colisProduits.add(cp);
+//            }
+//        }
+//
+//        if (dto.getNouveauxProduits() != null && !dto.getNouveauxProduits().isEmpty()) {
+//            for (ProduitDTO pdto : dto.getNouveauxProduits()) {
+//                Produit produit = new Produit();
+//                produit.setNom(pdto.getNom());
+//                produit.setCategorie(pdto.getCategorie());
+//                produit.setPrix(pdto.getPrix());
+//                produit.setPoids(pdto.getPoids());
+//                produitRepository.save(produit);
+//
+//                ColisProduit cp = new ColisProduit();
+//                cp.setColis(saved);
+//                cp.setProduit(produit);
+//                cp.setQuantite(1);
+//                cp.setPrix(produit.getPrix());
+//                cp.setDateAjout(LocalDateTime.now());
+//                colisProduitRepository.save(cp);
+//                colisProduits.add(cp);
+//            }
+//        }
+//
+//        saved.setProduits(colisProduits);
+//
+//        ColisDTO resultDTO = colisMapper.toDTO(saved);
+//
+//        List<String> idsProduits = colisProduits.stream()
+//                .map(cp -> cp.getProduit().getId())
+//                .collect(Collectors.toList());
+//        resultDTO.setProductIds(idsProduits);
+//
+//        List<ProduitDTO> tousProduitsDTO = colisProduits.stream()
+//                .map(cp -> {
+//                    Produit p = cp.getProduit();
+//                    ProduitDTO pdto = new ProduitDTO();
+//                    pdto.setNom(p.getNom());
+//                    pdto.setCategorie(p.getCategorie());
+//                    pdto.setPrix(p.getPrix());
+//                    pdto.setPoids(p.getPoids());
+//                    return pdto;
+//                }).collect(Collectors.toList());
+//
+//        resultDTO.setNouveauxProduits(tousProduitsDTO);
+//
+//        return resultDTO;
+//    }
 
     public Page<ColisDTO> getAllColis(Pageable pageable) {
         return colisRepository.findAll(pageable)
