@@ -78,7 +78,7 @@ public class ColisService {
                 emailService.envoyerEmailColisCreer(saved);
             }
         } catch (Exception e) {
-            System.err.println("⚠️ Erreur envoi email : " + e.getMessage());
+            System.err.println("Erreur envoi email : " + e.getMessage());
         }
 
         ColisDTO resultDTO = colisMapper.toDTO(saved);
