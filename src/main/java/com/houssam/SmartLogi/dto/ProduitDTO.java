@@ -6,6 +6,8 @@ import jakarta.validation.constraints.Size;
 
 public class ProduitDTO {
 
+    private String id;
+
     @NotNull(message = "Le nom du produit est obligatoire")
     @Size(min = 2, max = 100)
     private String nom;
@@ -21,6 +23,14 @@ public class ProduitDTO {
     @NotNull(message = "Le prix est obligatoire")
     @Positive(message = "Le prix doit être positif")
     private double prix;
+
+    public String getId() {
+        return id;
+    }
+
+    public void setId(String id) {
+        this.id = id;
+    }
 
     public String getNom() {
         return nom;
