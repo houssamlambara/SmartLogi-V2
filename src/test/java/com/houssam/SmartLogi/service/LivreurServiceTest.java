@@ -20,7 +20,7 @@ import java.util.Optional;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
 
-public class LivreurServiceTest {
+ class LivreurServiceTest {
 
     @InjectMocks
     private LivreurService livreurService;
@@ -72,7 +72,6 @@ public class LivreurServiceTest {
         when(zoneRepository.findById("zone1")).thenReturn(Optional.empty());
         assertThrows(ResourceNotFoundException.class, ()
                 -> livreurService.createLivreur(livreurDTO));
-
     }
 
     @Test
@@ -99,23 +98,23 @@ public class LivreurServiceTest {
         Zone zoneMock = new Zone();
         LivreurDTO resultDTO = new LivreurDTO();
 
-        when(livreurRepository.findById(livreur.getId())).thenReturn(Optional.of(livreur));
+        when(livreurRepository.findById("livreur1")).thenReturn(Optional.of(livreur));
         when(zoneRepository.findById("zone1")).thenReturn(Optional.of(zoneMock));
         when(livreurRepository.save(livreur)).thenReturn(updated);
         when(mapper.toDTO(updated)).thenReturn(resultDTO);
 
         LivreurDTO result = livreurService.updateLivreur("livreur1", livreurDTO);
         assertNotNull(result);
-        verify(livreurRepository, times(1)).findById(livreur.getId());
+        verify(livreurRepository, times(1)).save(livreur);
         verify(mapper, times(1)).toDTO(updated);
     }
 
-        @Test
-        void updateLivreur_notFound(){
-            when(livreurRepository.findById("livreur1")).thenReturn(Optional.empty());
-            assertThrows(ResourceNotFoundException.class, () ->
-                    livreurService.updateLivreur("livreur1", new LivreurDTO()));
-        }
+    @Test
+    void updateLivreur_notFound(){
+        when(livreurRepository.findById("livreur1")).thenReturn(Optional.empty());
+        assertThrows(ResourceNotFoundException.class, () ->
+                livreurService.updateLivreur("livreur1", new LivreurDTO()));
+    }
 
     @Test
     void deleteLivreur_success(){
@@ -124,8 +123,31 @@ public class LivreurServiceTest {
         verify(livreurRepository, times(1)).deleteById("livreur1");
     }
 
+    @Test
+    void searchLivreurs_withKyword(){
+        Livreur livreur = new Livreur();
+        LivreurDTO livreurDTO = new LivreurDTO();
+        Page<Livreur> page = new PageImpl<>(List.of(livreur));
 
+        when(livreurRepository.searchLivreurs("Houssam", PageRequest.of(0,10))).thenReturn(page);
+        when(mapper.toDTO(livreur)).thenReturn(livreurDTO);
 
+        Page<LivreurDTO> result = livreurService.searchLivreurs("Houssam", PageRequest.of(0,10));
+        assertEquals(1, result.getContent().size());
+    }
+
+    @Test
+    void searchLivreurs_noKeyword(){
+        Livreur livreur = new Livreur();
+        LivreurDTO livreurDTO = new LivreurDTO();
+        Page<Livreur> page = new PageImpl<>(List.of(livreur));
+
+        when(livreurRepository.findAll(PageRequest.of(0,10))).thenReturn(page);
+        when(mapper.toDTO(livreur)).thenReturn(livreurDTO);
+
+        Page<LivreurDTO> result = livreurService.searchLivreurs("", PageRequest.of(0,10));
+        assertEquals(1, result.getContent().size());
+    }
 }
 
 
