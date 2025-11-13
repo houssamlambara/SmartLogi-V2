@@ -3,6 +3,7 @@ package com.houssam.SmartLogi.service;
 import com.houssam.SmartLogi.dto.ColisDTO;
 import com.houssam.SmartLogi.dto.ProduitDTO;
 import com.houssam.SmartLogi.email.EmailService;
+import com.houssam.SmartLogi.enums.Prioriter;
 import com.houssam.SmartLogi.enums.Statut;
 import com.houssam.SmartLogi.exception.ResourceNotFoundException;
 import com.houssam.SmartLogi.mapper.ColisMapper;
@@ -162,5 +163,144 @@ import static org.mockito.Mockito.*;
         colisService.deleteColis("colis1");
         verify(colisRepository, times(1)).deleteById("colis1");
     }
+
+    @Test
+     void getColisByLivreurId_success(){
+        String livreurId = "livreur1";
+        Livreur livreurMock = mock(Livreur.class);
+
+        when(livreurRepository.findById(livreurId)).thenReturn(Optional.of(livreurMock));
+
+        Colis colis = new Colis();
+        Page<Colis> page = new PageImpl<>(List.of(colis));
+        when(colisRepository.findByLivreurId(livreurId, PageRequest.of(0, 10))).thenReturn(page);
+        when(colisMapper.toDTO(colis)).thenReturn(new ColisDTO());
+
+        Page<ColisDTO> result = colisService.getColisByLivreurId(livreurId, PageRequest.of(0,10));
+        assertEquals(1,result.getContent().size());
+    }
+
+    @Test
+     void getColisByLivreurId_notFound(){
+        String livreurId = "livreur1";
+        when(livreurRepository.findById(livreurId)).thenReturn(Optional.empty());
+        assertThrows(ResourceNotFoundException.class, () -> colisService.getColisByLivreurId(livreurId, PageRequest.of(0,10)));
+    }
+
+    @Test
+     void getColisById_success(){
+        Colis colis = new Colis();
+        when(colisRepository.findById("colis1")).thenReturn(Optional.of(colis));
+        when(colisMapper.toDTO(colis)).thenReturn(new ColisDTO());
+
+        ColisDTO result = colisService.getColisById("colis1");
+        assertNotNull(result);
+    }
+
+    @Test
+     void getColisById_NotFound(){
+        when(colisRepository.findById("colis1")).thenReturn(Optional.empty());
+        assertNull(colisService.getColisById("colis1"));
+    }
+
+    @Test
+     void filterColis_success(){
+        Page<Colis> page = new PageImpl<>(List.of(new Colis()));
+        when(colisRepository.filterColis(any(), any(), any(), any(), any())).thenReturn(page);
+        when(colisMapper.toDTO(any())).thenReturn(new ColisDTO());
+
+        Page<ColisDTO> result = colisService.filterColis(null, null, null, null, PageRequest.of(0, 10));
+        assertEquals(1,result.getContent().size());
+    }
+
+    @Test
+     void searchColis_WithKeyword(){
+         Page<Colis> page = new PageImpl<>(List.of(new Colis()));
+         when(colisRepository.searchColis("abc", PageRequest.of(0,10))).thenReturn(page);
+         when(colisMapper.toDTO(any())).thenReturn(new ColisDTO());
+
+         Page<ColisDTO> result = colisService.searchColis("abc", PageRequest.of(0, 10));
+         assertEquals(1,result.getContent().size());
+     }
+
+     @Test
+        void searchColis_KeywordEmpty(){
+        Page<Colis> page = new PageImpl<>(List.of(new Colis()));
+        when(colisRepository.findAll(any(PageRequest.class))).thenReturn(page);
+        when(colisMapper.toDTO(any())).thenReturn(new ColisDTO());
+
+        Page<ColisDTO> result = colisService.searchColis(" ", PageRequest.of(0, 10));
+        assertEquals(1,result.getContent().size());
+    }
+
+    @Test
+        void getColisCountByZone_success(){
+        Zone zone = new Zone();
+        zone.setId("zone1");
+        zone.setNom("Zone Test");
+
+        Colis colis = new Colis();
+        colis.setZone(zone);
+
+        when(colisRepository.findAll()).thenReturn(List.of(colis));
+        Map<String, Long> result = colisService.getColisCountByZone();
+
+        assertTrue(result.containsKey("Zone Test"));
+        assertEquals(1L, result.get("Zone Test"));
+    }
+
+    @Test
+     void getColisCountByStatut_success() {
+        Colis colis = new Colis();
+        colis.setStatut(Statut.Creer);
+
+        when(colisRepository.findAll()).thenReturn(List.of(colis));
+        Map<String, Long> result = colisService.getColisCountByStatut();
+
+        assertTrue(result.containsKey(Statut.Creer.name()));
+        assertEquals(1L, result.get(Statut.Creer.name()));
+    }
+
+    @Test
+     void getColisCountByPriorite_success(){
+        Colis colis = new Colis();
+        colis.setPriorite(Prioriter.Normale);
+        when(colisRepository.findAll()).thenReturn(List.of(colis));
+
+        Map<String, Long> result = colisService.getColisCountByPriorite();
+
+        assertTrue(result.containsKey("Normale"));
+        assertEquals(1L, result.get("Normale"));
+    }
+
+    @Test
+     void getStatistiqueLivreur_success(){
+        String livreurId = "livreur1";
+        Colis colis = new Colis();
+        colis.setPoids(5.0);
+        when(colisRepository.findByLivreurId("livreur1")).thenReturn(List.of(colis));
+
+        Map<String, Object> result = colisService.getStatistiqueLivreur(livreurId);
+
+        assertNotNull(result);
+        assertEquals(1, result.get("NombreColis"));
+        assertEquals(5.0, result.get("PoidsTotal"));
+        verify(colisRepository).findByLivreurId("livreur1");
+    }
+
+     @Test
+     void getStatistiqueZone_success() {
+         Colis c1 = new Colis();
+         c1.setPoids(2.5);
+
+         when(colisRepository.findByZoneId("zone1")).thenReturn(List.of(c1));
+
+         Map<String, Object> stats = colisService.getStatistiqueZone("zone1");
+
+         assertEquals("zone1", stats.get("ZoneId"));
+         assertEquals(1, stats.get("NombreColis"));
+         assertEquals(2.5, (double) stats.get("PoidsTotal"));
+     }
+
 
 }
