@@ -68,6 +68,71 @@ public class ZoneServiceTest {
     }
 
     @Test
+    void getAllZones_list_success() {
+        Zone zone1 = new Zone();
+        zone1.setNom("Casablanca");
+        Zone zone2 = new Zone();
+        zone2.setNom("Rabat");
+
+        ZoneDTO dto1 = new ZoneDTO();
+        dto1.setNom("Casablanca");
+        ZoneDTO dto2 = new ZoneDTO();
+        dto2.setNom("Rabat");
+
+        when(zoneRepository.findAll()).thenReturn(List.of(zone1, zone2));
+        when(mapper.toDTO(zone1)).thenReturn(dto1);
+        when(mapper.toDTO(zone2)).thenReturn(dto2);
+
+        List<ZoneDTO> result = zoneService.getAllZones();
+
+        assertNotNull(result);
+        assertEquals(2, result.size());
+        assertEquals("Casablanca", result.get(0).getNom());
+        assertEquals("Rabat", result.get(1).getNom());
+
+        verify(zoneRepository, times(1)).findAll();
+        verify(mapper, times(1)).toDTO(zone1);
+        verify(mapper, times(1)).toDTO(zone2);
+    }
+
+    @Test
+    void updateZone_success() {
+        String id = "zone1";
+        Zone existingZone = new Zone();
+        existingZone.setId(id);
+        existingZone.setNom("AncienNom");
+        existingZone.setCodePostal("10000");
+
+        ZoneDTO dto = new ZoneDTO();
+        dto.setNom("NouveauNom");
+        dto.setCodePostal("20000");
+
+        Zone updatedZone = new Zone();
+        updatedZone.setId(id);
+        updatedZone.setNom("NouveauNom");
+        updatedZone.setCodePostal("20000");
+
+        ZoneDTO resultDTO = new ZoneDTO();
+        resultDTO.setNom("NouveauNom");
+        resultDTO.setCodePostal("20000");
+
+        when(zoneRepository.findById(id)).thenReturn(Optional.of(existingZone));
+        when(zoneRepository.save(existingZone)).thenReturn(updatedZone);
+        when(mapper.toDTO(updatedZone)).thenReturn(resultDTO);
+
+        ZoneDTO result = zoneService.updateZone(id, dto);
+
+        assertNotNull(result);
+        assertEquals("NouveauNom", result.getNom());
+        assertEquals("20000", result.getCodePostal());
+
+        verify(zoneRepository, times(1)).findById(id);
+        verify(zoneRepository, times(1)).save(existingZone);
+        verify(mapper, times(1)).toDTO(updatedZone);
+    }
+
+
+    @Test
     void getZoneById_notFound(){
         when(zoneRepository.findById("zone11")).thenReturn(Optional.empty());
 
