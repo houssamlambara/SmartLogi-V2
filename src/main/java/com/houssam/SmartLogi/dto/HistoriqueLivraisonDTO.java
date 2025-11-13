@@ -3,9 +3,11 @@ package com.houssam.SmartLogi.dto;
 import com.houssam.SmartLogi.enums.Statut;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
+import lombok.Data;
 
 import java.time.LocalDateTime;
 
+@Data
 public class HistoriqueLivraisonDTO {
     private String id;
 
@@ -20,44 +22,4 @@ public class HistoriqueLivraisonDTO {
 
     @Size(max = 500, message = "Le commentaire ne peut pas dépasser 500 caractères")
     private String commentaire;
-
-    public String getId() {
-        return id;
-    }
-
-    public void setId(String id) {
-        this.id = id;
-    }
-
-    public String getColisId() {
-        return colisId;
-    }
-
-    public void setColisId(String colisId) {
-        this.colisId = colisId;
-    }
-
-    public Statut getStatut() {
-        return statut;
-    }
-
-    public void setStatut(Statut statut) {
-        this.statut = statut;
-    }
-
-    public LocalDateTime getDateChangement() {
-        return dateChangement;
-    }
-
-    public void setDateChangement(LocalDateTime dateChangement) {
-        this.dateChangement = dateChangement;
-    }
-
-    public String getCommentaire() {
-        return commentaire;
-    }
-
-    public void setCommentaire(String commentaire) {
-        this.commentaire = commentaire;
-    }
 }

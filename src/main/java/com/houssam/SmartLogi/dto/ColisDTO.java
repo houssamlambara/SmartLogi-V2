@@ -5,10 +5,11 @@ import com.houssam.SmartLogi.enums.Statut;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Positive;
 import jakarta.validation.constraints.Size;
+import lombok.Data;
 
 import java.util.List;
 
-
+@Data
 public class ColisDTO {
 
     private String id;
@@ -44,101 +45,4 @@ public class ColisDTO {
     private List<String> productIds;
 
     private List<ProduitDTO> nouveauxProduits;
-
-    public String getId() {
-        return id;
-    }
-
-    public void setId(String id) {
-        this.id = id;
-    }
-
-    public String getDescription() {
-        return description;
-    }
-
-    public void setDescription(String description) {
-        this.description = description;
-    }
-
-    public double getPoids() {
-        return poids;
-    }
-
-    public void setPoids(double poids) {
-        this.poids = poids;
-    }
-
-    public Statut getStatut() {
-        return statut;
-    }
-
-    public void setStatut(Statut statut) {
-        this.statut = statut;
-    }
-
-    public Prioriter getPriorite() {
-        return priorite;
-    }
-
-    public void setPriorite(Prioriter priorite) {
-        this.priorite = priorite;
-    }
-
-    public String getVilleDestination() {
-        return villeDestination;
-    }
-
-    public void setVilleDestination(String villeDestination) {
-        this.villeDestination = villeDestination;
-    }
-
-    public String getLivreurId() {
-        return livreurId;
-    }
-
-    public void setLivreurId(String livreurId) {
-        this.livreurId = livreurId;
-    }
-
-    public String getClientExpediteurId() {
-        return clientExpediteurId;
-    }
-
-    public void setClientExpediteurId(String clientExpediteurId) {
-        this.clientExpediteurId = clientExpediteurId;
-    }
-
-    public String getDestinataireId() {
-        return destinataireId;
-    }
-
-    public void setDestinataireId(String destinataireId) {
-        this.destinataireId = destinataireId;
-    }
-
-    public String getZoneId() {
-        return zoneId;
-    }
-
-    public void setZoneId(String zoneId) {
-        this.zoneId = zoneId;
-    }
-
-    public List<String> getProductIds() {
-        return productIds;
-    }
-
-    public void setProductIds(List<String> productIds) {
-        this.productIds = productIds;
-    }
-
-    public List<ProduitDTO> getNouveauxProduits() {
-        return nouveauxProduits;
-    }
-
-    public void setNouveauxProduits(List<ProduitDTO> nouveauxProduits) {
-        this.nouveauxProduits = nouveauxProduits;
-    }
 }
-

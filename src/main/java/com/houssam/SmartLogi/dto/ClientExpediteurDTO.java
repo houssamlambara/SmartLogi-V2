@@ -4,7 +4,9 @@ package com.houssam.SmartLogi.dto;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
+import lombok.Data;
 
+@Data
 public class ClientExpediteurDTO {
 
     @NotNull(message = "Le nom est obligatoire")
@@ -26,45 +28,4 @@ public class ClientExpediteurDTO {
     @NotNull(message = "L'adresse est obligatoire")
     @Size(min = 5, max = 100, message = "L'adresse doit contenir entre 5 et 100 caractères")
     private String adresse;
-
-    public String getNom() {
-        return nom;
-    }
-
-    public void setNom(String nom) {
-        this.nom = nom;
-    }
-
-    public String getPrenom() {
-        return prenom;
-    }
-
-    public void setPrenom(String prenom) {
-        this.prenom = prenom;
-    }
-
-    public String getEmail() {
-        return email;
-    }
-
-    public void setEmail(String email) {
-        this.email = email;
-    }
-
-    public String getTelephone() {
-        return telephone;
-    }
-
-    public void setTelephone(String telephone) {
-        this.telephone = telephone;
-    }
-
-    public String getAdresse() {
-        return adresse;
-    }
-
-    public void setAdresse(String adresse) {
-        this.adresse = adresse;
-    }
-
 }
