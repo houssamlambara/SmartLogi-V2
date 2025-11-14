@@ -1,12 +1,20 @@
 package com.houssam.SmartLogi.model;
 
 import jakarta.persistence.*;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
+import lombok.ToString;
 import org.hibernate.annotations.GenericGenerator;
 
 import java.time.LocalDateTime;
 
 @Entity
 @Table(name = "colis_produit")
+@Getter
+@Setter
+@NoArgsConstructor
+@ToString(exclude = {"colis", "produit"})
 public class ColisProduit {
 
     @Id
@@ -25,53 +33,4 @@ public class ColisProduit {
     @ManyToOne
     @JoinColumn(name = "produit_id")
     private Produit produit;
-
-
-    public String getId() {
-        return id;
-    }
-
-    public void setId(String id) {
-        this.id = id;
-    }
-
-    public Integer getQuantite() {
-        return quantite;
-    }
-
-    public void setQuantite(Integer quantite) {
-        this.quantite = quantite;
-    }
-
-    public Double getPrix() {
-        return prix;
-    }
-
-    public void setPrix(Double prix) {
-        this.prix = prix;
-    }
-
-    public LocalDateTime getDateAjout() {
-        return dateAjout;
-    }
-
-    public void setDateAjout(LocalDateTime dateAjout) {
-        this.dateAjout = dateAjout;
-    }
-
-    public Colis getColis() {
-        return colis;
-    }
-
-    public void setColis(Colis colis) {
-        this.colis = colis;
-    }
-
-    public Produit getProduit() {
-        return produit;
-    }
-
-    public void setProduit(Produit produit) {
-        this.produit = produit;
-    }
 }

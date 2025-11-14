@@ -3,6 +3,10 @@ package com.houssam.SmartLogi.model;
 import com.houssam.SmartLogi.enums.Prioriter;
 import com.houssam.SmartLogi.enums.Statut;
 import jakarta.persistence.*;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
+import lombok.ToString;
 import org.hibernate.annotations.GenericGenerator;
 
 import java.time.LocalDateTime;
@@ -10,6 +14,10 @@ import java.util.List;
 
 @Entity
 @Table(name = "colis")
+@Getter
+@Setter
+@NoArgsConstructor
+@ToString(exclude = {"livreur", "clientExpediteur", "destinataire", "zone", "historiqueLivraisons", "produits"})
 public class Colis {
 
     @Id
@@ -52,108 +60,4 @@ public class Colis {
 
     @OneToMany(mappedBy = "colis", fetch = FetchType.EAGER)
     private List<ColisProduit> produits;
-
-    public String getId() {
-        return id;
-    }
-
-    public void setId(String id) {
-        this.id = id;
-    }
-
-    public String getDescription() {
-        return description;
-    }
-
-    public void setDescription(String description) {
-        this.description = description;
-    }
-
-    public double getPoids() {
-        return poids;
-    }
-
-    public void setPoids(double poids) {
-        this.poids = poids;
-    }
-
-    public Statut getStatut() {
-        return statut;
-    }
-
-    public void setStatut(Statut statut) {
-        this.statut = statut;
-    }
-
-    public Prioriter getPriorite() {
-        return priorite;
-    }
-
-    public void setPriorite(Prioriter priorite) {
-        this.priorite = priorite;
-    }
-
-    public String getVilleDestination() {
-        return villeDestination;
-    }
-
-    public void setVilleDestination(String villeDestination) {
-        this.villeDestination = villeDestination;
-    }
-
-    public Livreur getLivreur() {
-        return livreur;
-    }
-
-    public void setLivreur(Livreur livreur) {
-        this.livreur = livreur;
-    }
-
-    public ClientExpediteur getClientExpediteur() {
-        return clientExpediteur;
-    }
-
-    public void setClientExpediteur(ClientExpediteur clientExpediteur) {
-        this.clientExpediteur = clientExpediteur;
-    }
-
-    public Destinataire getDestinataire() {
-        return destinataire;
-    }
-
-    public void setDestinataire(Destinataire destinataire) {
-        this.destinataire = destinataire;
-    }
-
-    public Zone getZone() {
-        return zone;
-    }
-
-    public void setZone(Zone zone) {
-        this.zone = zone;
-    }
-
-    public List<HistoriqueLivraison> getHistoriqueLivraisons() {
-        return historiqueLivraisons;
-    }
-
-    public void setHistoriqueLivraisons(List<HistoriqueLivraison> historiqueLivraisons) {
-        this.historiqueLivraisons = historiqueLivraisons;
-    }
-
-    public List<ColisProduit> getProduits() {
-        return produits;
-    }
-
-    public void setProduits(List<ColisProduit> produits) {
-        this.produits = produits;
-    }
-
-    public LocalDateTime getCreatedAt() {
-        return createdAt;
-    }
-
-    public void setCreatedAt(LocalDateTime createdAt) {
-        this.createdAt = createdAt;
-    }}
-
+}

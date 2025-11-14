@@ -2,9 +2,11 @@ package com.houssam.SmartLogi.dto;
 
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Positive;
+import lombok.Data;
 
 import java.time.LocalDate;
 
+@Data
 public class ColisProduitDTO {
 
     @NotNull(message = "L'ID du colis est obligatoire")
@@ -22,44 +24,4 @@ public class ColisProduitDTO {
     private double prix;
 
     private LocalDate dateAjout;
-
-    public String getColisId() {
-        return colisId;
-    }
-
-    public void setColisId(String colisId) {
-        this.colisId = colisId;
-    }
-
-    public String getProduitId() {
-        return produitId;
-    }
-
-    public void setProduitId(String produitId) {
-        this.produitId = produitId;
-    }
-
-    public int getQuantite() {
-        return quantite;
-    }
-
-    public void setQuantite(int quantite) {
-        this.quantite = quantite;
-    }
-
-    public double getPrix() {
-        return prix;
-    }
-
-    public void setPrix(double prix) {
-        this.prix = prix;
-    }
-
-    public LocalDate getDateAjout() {
-        return dateAjout;
-    }
-
-    public void setDateAjout(LocalDate dateAjout) {
-        this.dateAjout = dateAjout;
-    }
 }
