@@ -4,6 +4,8 @@ SmartLogi est une application de gestion de colis et de livraison développée a
 
 ## 📊 Diagramme de Classe
 
+<img width="1175" height="692" alt="SmartDelivery Diagramme" src="https://github.com/user-attachments/assets/dc284920-eb66-4301-9fb7-c84b48698a70" />
+
 ![SmartDelivery Diagramme.png](../SmartDelivery%20Diagramme.png)
 
 > **Note** : Pour afficher le diagramme, placez votre image PNG du diagramme de classe à la racine du projet avec le nom `diagram-class.png`
