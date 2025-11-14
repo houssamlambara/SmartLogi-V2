@@ -2,32 +2,35 @@ package com.houssam.SmartLogi.controller;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.houssam.SmartLogi.dto.ZoneDTO;
-import com.houssam.SmartLogi.service.ZoneService;
+import com.houssam.SmartLogi.model.Zone;
+import com.houssam.SmartLogi.repository.ZoneRepository;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
-import org.springframework.data.domain.*;
+import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
+import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.MediaType;
-import org.springframework.test.context.bean.override.mockito.MockitoBean;
+import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
-import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.ArgumentMatchers.eq;
-import static org.mockito.Mockito.*;
+import static org.assertj.core.api.Assertions.assertThat;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
-@WebMvcTest(ZoneController.class)
+@SpringBootTest
+@AutoConfigureMockMvc
+@ActiveProfiles("test")
+@Transactional
 class ZoneControllerTest {
 
     @Autowired
     private MockMvc mockMvc;
 
-    @MockitoBean
-    private ZoneService zoneService;
+    @Autowired
+    private ZoneRepository zoneRepository;
 
     @Autowired
     private ObjectMapper objectMapper;
@@ -36,6 +39,8 @@ class ZoneControllerTest {
 
     @BeforeEach
     void setUp() {
+        zoneRepository.deleteAll();
+
         zoneDTO = new ZoneDTO();
         zoneDTO.setNom("Zone Nord");
         zoneDTO.setCodePostal("20000");
@@ -43,8 +48,6 @@ class ZoneControllerTest {
 
     @Test
     void createZone_success() throws Exception {
-        when(zoneService.createZone(any(ZoneDTO.class))).thenReturn(zoneDTO);
-
         mockMvc.perform(post("/api/zones")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(zoneDTO)))
@@ -52,71 +55,88 @@ class ZoneControllerTest {
                 .andExpect(jsonPath("$.message").value("Zone créée avec succès"))
                 .andExpect(jsonPath("$.data.nom").value("Zone Nord"));
 
-        verify(zoneService, times(1)).createZone(any(ZoneDTO.class));
+        List<Zone> zones = zoneRepository.findAll();
+        assertThat(zones).hasSize(1);
+        assertThat(zones.get(0).getNom()).isEqualTo("Zone Nord");
+        assertThat(zones.get(0).getCodePostal()).isEqualTo("20000");
     }
 
     @Test
     void getAllZones_success() throws Exception {
-        Page<ZoneDTO> page = new PageImpl<>(List.of(zoneDTO));
-        when(zoneService.getAllZones(any(Pageable.class))).thenReturn(page);
+        Zone zone1 = new Zone();
+        zone1.setNom("Zone Nord");
+        zone1.setCodePostal("20000");
+        zoneRepository.save(zone1);
+
+        Zone zone2 = new Zone();
+        zone2.setNom("Zone Sud");
+        zone2.setCodePostal("30000");
+        zoneRepository.save(zone2);
 
         mockMvc.perform(get("/api/zones"))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.message").value("Liste des zones récupérée avec succès"))
-                .andExpect(jsonPath("$.data.content[0].nom").value("Zone Nord"));
-
-        verify(zoneService, times(1)).getAllZones(any(Pageable.class));
+                .andExpect(jsonPath("$.data.content").isArray())
+                .andExpect(jsonPath("$.data.content.length()").value(2));
     }
 
     @Test
     void getZoneById_found() throws Exception {
-        when(zoneService.getZoneById("zone1")).thenReturn(zoneDTO);
+        Zone zone = new Zone();
+        zone.setNom("Zone Nord");
+        zone.setCodePostal("20000");
+        Zone savedZone = zoneRepository.save(zone);
 
-        mockMvc.perform(get("/api/zones/zone1"))
+        mockMvc.perform(get("/api/zones/" + savedZone.getId()))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.message").value("Zone trouvée"))
                 .andExpect(jsonPath("$.data.nom").value("Zone Nord"));
-
-        verify(zoneService, times(1)).getZoneById("zone1");
     }
 
     @Test
     void getZoneById_notFound() throws Exception {
-        when(zoneService.getZoneById("zone999")).thenReturn(null);
-
-        mockMvc.perform(get("/api/zones/zone999"))
+        mockMvc.perform(get("/api/zones/id-inexistant"))
                 .andExpect(status().isNotFound())
                 .andExpect(jsonPath("$.message").value("Zone non trouvée"));
-
-        verify(zoneService, times(1)).getZoneById("zone999");
     }
 
     @Test
     void updateZone_success() throws Exception {
-        ZoneDTO updatedZone = new ZoneDTO();
-        updatedZone.setNom("Zone Sud");
-        updatedZone.setCodePostal("30000");
+        Zone zone = new Zone();
+        zone.setNom("Zone Nord");
+        zone.setCodePostal("20000");
+        Zone savedZone = zoneRepository.save(zone);
 
-        when(zoneService.updateZone(eq("zone1"), any(ZoneDTO.class))).thenReturn(updatedZone);
+        ZoneDTO updatedDTO = new ZoneDTO();
+        updatedDTO.setNom("Zone Sud");
+        updatedDTO.setCodePostal("30000");
 
-        mockMvc.perform(put("/api/zones/zone1")
+        mockMvc.perform(put("/api/zones/" + savedZone.getId())
                         .contentType(MediaType.APPLICATION_JSON)
-                        .content(objectMapper.writeValueAsString(updatedZone)))
+                        .content(objectMapper.writeValueAsString(updatedDTO)))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.message").value("Zone mise à jour avec succès"))
                 .andExpect(jsonPath("$.data.nom").value("Zone Sud"));
 
-        verify(zoneService, times(1)).updateZone(eq("zone1"), any(ZoneDTO.class));
+        Zone updatedZone = zoneRepository.findById(savedZone.getId()).orElseThrow();
+        assertThat(updatedZone.getNom()).isEqualTo("Zone Sud");
+        assertThat(updatedZone.getCodePostal()).isEqualTo("30000");
     }
 
     @Test
     void deleteZone_success() throws Exception {
-        doNothing().when(zoneService).deleteZone("zone1");
+        Zone zone = new Zone();
+        zone.setNom("Zone à supprimer");
+        zone.setCodePostal("40000");
+        Zone savedZone = zoneRepository.save(zone);
 
-        mockMvc.perform(delete("/api/zones/zone1"))
+        assertThat(zoneRepository.findById(savedZone.getId())).isPresent();
+
+        mockMvc.perform(delete("/api/zones/" + savedZone.getId()))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.message").value("Zone supprimée avec succès"));
 
-        verify(zoneService, times(1)).deleteZone("zone1");
+        assertThat(zoneRepository.findById(savedZone.getId())).isEmpty();
+        assertThat(zoneRepository.count()).isEqualTo(0);
     }
 }
