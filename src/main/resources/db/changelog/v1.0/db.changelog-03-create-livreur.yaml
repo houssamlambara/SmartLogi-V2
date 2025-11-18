@@ -35,3 +35,23 @@ databaseChangeLog:
                   name: zone_assignee
                   type: VARCHAR(255)
 
+  - changeSet:
+      id: add-user-fk-to-livreur
+      author: houssam
+      changes:
+        - addColumn:
+            tableName: livreur
+            columns:
+              - column:
+                  name: user_id
+                  type: VARCHAR(36)
+                  constraints:
+                    nullable: true
+        - addForeignKeyConstraint:
+            baseTableName: livreur
+            baseColumnNames: user_id
+            referencedTableName: users
+            referencedColumnNames: id
+            constraintName: fk_livreur_user
+            onDelete: SET NULL
+            onUpdate: CASCADE
