@@ -18,12 +18,6 @@ public class User {
     @GeneratedValue(strategy = GenerationType.UUID)
     private String id;
 
-    @Column(nullable = false)
-    private String nom;
-
-    @Column(nullable = false)
-    private String prenom;
-
     @Column(unique = true, nullable = false)
     private String email;
 
@@ -34,9 +28,9 @@ public class User {
     @Column(nullable = false)
     private Role role;
 
-    @Column(name = "livreur_id")
-    private String livreurId;
+    @OneToOne(mappedBy = "user", cascade = CascadeType.ALL)
+    private Livreur livreur;
 
-    @Column(name = "client_expediteur_id")
-    private String clientExpediteurId;
+    @OneToOne(mappedBy = "user", cascade = CascadeType.ALL)
+    private ClientExpediteur clientExpediteur;
 }

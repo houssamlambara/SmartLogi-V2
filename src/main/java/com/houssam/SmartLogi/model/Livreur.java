@@ -27,6 +27,10 @@ public class Livreur {
     private String telephone;
     private String vehicule;
 
+    @OneToOne
+    @JoinColumn(name = "user_id")
+    private User user;
+
     @ManyToOne
     @JoinColumn(name = "zone_assignee_id")
     private Zone zoneAssignee;

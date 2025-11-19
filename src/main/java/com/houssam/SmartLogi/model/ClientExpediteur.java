@@ -24,9 +24,13 @@ public class ClientExpediteur {
 
     private String nom;
     private String prenom;
-    private String email;
+//    private String email;
     private String telephone;
     private String adresse;
+
+    @OneToOne
+    @JoinColumn(name = "user_id", nullable = false)
+    private User user;
 
     @OneToMany(mappedBy = "clientExpediteur")
     private List<Colis> colis;
