@@ -1,15 +1,19 @@
 package com.houssam.SmartLogi.service;
 
+import com.houssam.SmartLogi.config.SecurityConfig;
 import com.houssam.SmartLogi.dto.LivreurDTO;
+import com.houssam.SmartLogi.enums.Role;
 import com.houssam.SmartLogi.exception.ResourceNotFoundException;
 import com.houssam.SmartLogi.mapper.LivreurMapper;
 import com.houssam.SmartLogi.model.Livreur;
+import com.houssam.SmartLogi.model.User;
 import com.houssam.SmartLogi.model.Zone;
 import com.houssam.SmartLogi.repository.LivreurRepository;
 import com.houssam.SmartLogi.repository.ZoneRepository;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.stream.Collectors;
@@ -20,19 +24,31 @@ public class LivreurService {
     private final LivreurRepository repository;
     private final LivreurMapper mapper;
     private final ZoneRepository zoneRepository;
+    private final SecurityConfig securityConfig;
 
-    public LivreurService(LivreurRepository repository, LivreurMapper mapper, ZoneRepository zoneRepository) {
+    public LivreurService(LivreurRepository repository, LivreurMapper mapper, ZoneRepository zoneRepository, SecurityConfig securityConfig) {
         this.repository = repository;
         this.mapper = mapper;
         this.zoneRepository = zoneRepository;
+        this.securityConfig = securityConfig;
     }
 
+    @Transactional
     public LivreurDTO createLivreur(LivreurDTO dto) {
         Livreur entity = mapper.toEntity(dto);
 
         Zone zone = zoneRepository.findById(dto.getZoneAssigneeId())
                 .orElseThrow(() -> new ResourceNotFoundException("Zone introuvable avec l'ID " + dto.getZoneAssigneeId()));
         entity.setZoneAssignee(zone);
+
+        entity.setEmail(dto.getEmail());
+        User user = new User();
+        user.setEmail(dto.getEmail());
+
+        user.setPassword(securityConfig.passwordEncoder().encode(dto.getPassword()));
+        user.setRole(Role.LIVREUR);
+        entity.setUser(user);
+        user.setLivreur(entity);
 
         Livreur saved = repository.save(entity);
         return mapper.toDTO(saved);

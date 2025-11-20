@@ -74,7 +74,8 @@ public class ColisService {
         }
         try {
             if (saved.getClientExpediteur() != null &&
-                    saved.getClientExpediteur().getEmail() != null) {
+                    saved.getClientExpediteur().getUser() != null &&
+                    saved.getClientExpediteur().getUser().getEmail() != null) {
                 emailService.envoyerEmailColisCreer(saved);
             }
         } catch (Exception e) {

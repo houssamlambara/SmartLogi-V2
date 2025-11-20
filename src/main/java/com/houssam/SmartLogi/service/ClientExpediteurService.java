@@ -46,7 +46,9 @@ public class ClientExpediteurService {
         client.setNom(dto.getNom());
         client.setPrenom(dto.getPrenom());
         client.setTelephone(dto.getTelephone());
-        client.setEmail(dto.getEmail());
+        if (client.getUser() != null && dto.getEmail() != null) {
+            client.getUser().setEmail(dto.getEmail());
+        }
         client.setAdresse(dto.getAdresse());
 
         ClientExpediteur updated = repository.save(client);

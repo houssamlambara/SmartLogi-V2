@@ -109,7 +109,7 @@ public class EmailService {
 
             String htmlBody = templateEngine.process("email/colis-created", ctx);
 
-            return envoyerEmailHtml(colis.getClientExpediteur().getEmail(),
+            return envoyerEmailHtml(colis.getClientExpediteur().getUser().getEmail(),
                     "📦 Votre Colis a été Créé avec Succès — [ID de suivi: " + colis.getId() + "]",
                     htmlBody);
         } catch (Exception e) {
@@ -132,7 +132,7 @@ public class EmailService {
 
             String htmlBody = templateEngine.process("email/colis-assigned", ctx);
 
-            return envoyerEmailHtml(colis.getClientExpediteur().getEmail(),
+            return envoyerEmailHtml(colis.getClientExpediteur().getUser().getEmail(),
                     "🚚 Votre Colis a été Assigné à un Livreur — [ID de suivi: " + colis.getId() + "]",
                     htmlBody);
         } catch (Exception e) {
@@ -152,7 +152,7 @@ public class EmailService {
 
             String htmlBody = templateEngine.process("email/colis-status", ctx);
 
-            return envoyerEmailHtml(colis.getClientExpediteur().getEmail(),
+            return envoyerEmailHtml(colis.getClientExpediteur().getUser().getEmail(),
                     "🔄 Statut du Colis Mis à Jour — [ID de suivi: " + colis.getId() + "]",
                     htmlBody);
         } catch (Exception e) {

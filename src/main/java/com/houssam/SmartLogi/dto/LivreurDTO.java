@@ -1,5 +1,6 @@
 package com.houssam.SmartLogi.dto;
 
+import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
 import lombok.Data;
@@ -14,6 +15,13 @@ public class LivreurDTO {
     @NotNull(message = "Le prénom est obligatoire")
     @Size(min = 2, max = 50)
     private String prenom;
+
+    @Email
+    private String email;
+
+    @NotNull(message = "Le mot de passe est obligatoire")
+    @Size(min = 3, max = 20)
+    private String password;
 
     @NotNull(message = "Le téléphone est obligatoire")
     @Size(min = 8, max = 20)

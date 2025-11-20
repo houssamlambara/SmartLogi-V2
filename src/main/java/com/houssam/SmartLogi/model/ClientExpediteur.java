@@ -24,7 +24,7 @@ public class ClientExpediteur {
 
     private String nom;
     private String prenom;
-//    private String email;
+    private String email;
     private String telephone;
     private String adresse;
 

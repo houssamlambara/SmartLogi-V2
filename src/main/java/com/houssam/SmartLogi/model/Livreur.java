@@ -24,10 +24,11 @@ public class Livreur {
 
     private String nom;
     private String prenom;
+    private String email;
     private String telephone;
     private String vehicule;
 
-    @OneToOne
+    @OneToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "user_id")
     private User user;
 
