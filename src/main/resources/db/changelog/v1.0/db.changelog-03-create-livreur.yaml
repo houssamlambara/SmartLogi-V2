@@ -55,3 +55,25 @@ databaseChangeLog:
             constraintName: fk_livreur_user
             onDelete: SET NULL
             onUpdate: CASCADE
+  - changeSet:
+      id: add-email-to-livreur
+      author: houssam
+      changes:
+        - addColumn:
+            tableName: livreur
+            columns:
+              - column:
+                  name: email
+                  type: VARCHAR(255)
+                  constraints:
+                    nullable: true
+
+  - changeSet:
+            id: add-email-unique-livreur
+            author: houssam
+            changes:
+              - addUniqueConstraint:
+                  tableName: livreur
+                  columnNames: email
+                  constraintName: uk_livreur_email
+
