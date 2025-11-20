@@ -1,29 +1,43 @@
 package com.houssam.SmartLogi.service;
 
+import com.houssam.SmartLogi.security.config.SecurityConfig;
 import com.houssam.SmartLogi.dto.ClientExpediteurDTO;
+import com.houssam.SmartLogi.enums.Role;
 import com.houssam.SmartLogi.mapper.ClientExpediteurMapper;
 import com.houssam.SmartLogi.model.ClientExpediteur;
+import com.houssam.SmartLogi.model.User;
 import com.houssam.SmartLogi.repository.ClientExpediteurRepository;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
-
-import java.util.List;
-import java.util.stream.Collectors;
+import org.springframework.transaction.annotation.Transactional;
 
 @Service
 public class ClientExpediteurService {
 
     private final ClientExpediteurRepository repository;
     private final ClientExpediteurMapper mapper;
+    private final SecurityConfig securityConfig;
 
-    public ClientExpediteurService(ClientExpediteurRepository repository, ClientExpediteurMapper mapper) {
+    public ClientExpediteurService(ClientExpediteurRepository repository, ClientExpediteurMapper mapper, SecurityConfig securityConfig) {
         this.repository = repository;
         this.mapper = mapper;
+        this.securityConfig = securityConfig;
     }
 
+    @Transactional
     public ClientExpediteurDTO createClient(ClientExpediteurDTO dto) {
         ClientExpediteur entity = mapper.toEntity(dto);
+
+        entity.setEmail(dto.getEmail());
+        User user = new User();
+        user.setEmail(dto.getEmail());
+
+        user.setPassword(securityConfig.passwordEncoder().encode(dto.getPassword()));
+        user.setRole(Role.CLIENT);
+        entity.setUser(user);
+        user.setClientExpediteur(entity);
+
         ClientExpediteur saved = repository.save(entity);
         return mapper.toDTO(saved);
     }

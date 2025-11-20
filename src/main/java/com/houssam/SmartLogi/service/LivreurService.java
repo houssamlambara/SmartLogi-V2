@@ -1,6 +1,6 @@
 package com.houssam.SmartLogi.service;
 
-import com.houssam.SmartLogi.config.SecurityConfig;
+import com.houssam.SmartLogi.security.config.SecurityConfig;
 import com.houssam.SmartLogi.dto.LivreurDTO;
 import com.houssam.SmartLogi.enums.Role;
 import com.houssam.SmartLogi.exception.ResourceNotFoundException;
@@ -14,9 +14,6 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-
-import java.util.List;
-import java.util.stream.Collectors;
 
 @Service
 public class LivreurService {

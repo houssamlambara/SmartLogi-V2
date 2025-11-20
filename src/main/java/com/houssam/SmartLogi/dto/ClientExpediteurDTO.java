@@ -21,6 +21,10 @@ public class ClientExpediteurDTO {
     @Email(message = "Email invalide")
     private String email;
 
+    @NotNull(message = "Le mot de passe est obligatoire")
+    @Size(min = 3, max = 20, message = "Le mot de passe doit contenir entre 3 et 20 caractères")
+    private String password;
+
     @NotNull(message = "Le téléphone est obligatoire")
     @Size(min = 8, max = 20, message = "Le téléphone doit contenir entre 8 et 20 caractères")
     private String telephone;
