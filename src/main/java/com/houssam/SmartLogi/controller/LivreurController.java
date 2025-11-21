@@ -12,6 +12,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.web.PageableDefault;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import com.houssam.SmartLogi.response.ApiResponse;
 
@@ -31,6 +32,7 @@ public class LivreurController {
         this.colisService = colisService;
     }
 
+    @PreAuthorize("hasRole('GESTIONNAIRE')")
     @PostMapping
     @Operation(summary = "Créer un livreur", description = "Permet de créer un nouveau livreur")
 
@@ -39,6 +41,7 @@ public class LivreurController {
         return ResponseEntity.ok(new ApiResponse<>("Livreur créé avec succès", created));
     }
 
+    @PreAuthorize("hasAnyRole('GESTIONNAIRE','LIVREUR')")
     @GetMapping
     @Operation(summary = "Lister tous les livreurs", description = "Récupère la liste paginée des livreurs")
     public ResponseEntity<ApiResponse<Page<LivreurDTO>>> getAllLivreurs(
@@ -47,6 +50,7 @@ public class LivreurController {
         return ResponseEntity.ok(new ApiResponse<>("Liste des livreurs récupérée avec succès", liste));
     }
 
+    @PreAuthorize("hasAnyRole('GESTIONNAIRE','LIVREUR')")
     @GetMapping("/{id}")
     @Operation(summary = "Récupérer un livreur par ID", description = "Cherche un livreur par son ID")
 
@@ -59,6 +63,7 @@ public class LivreurController {
         }
     }
 
+    @PreAuthorize("hasRole('GESTIONNAIRE')")
     @GetMapping("/{id}/colis")
     @Operation(summary = "Récupérer les colis d'un livreur", description = "Liste tous les colis assignés à un livreur")
 
@@ -69,6 +74,7 @@ public class LivreurController {
         return ResponseEntity.ok(new ApiResponse<>("Liste des colis assignés au livreur récupérée avec succès", colis));
     }
 
+    @PreAuthorize("hasRole('GESTIONNAIRE')")
     @PutMapping("/{id}")
     @Operation(summary = "Mettre à jour un livreur", description = "Modifie les informations d'un livreur existant")
 
@@ -77,6 +83,7 @@ public class LivreurController {
         return ResponseEntity.ok(new ApiResponse<>("Livreur mis à jour avec succès", updated));
     }
 
+    @PreAuthorize("hasRole('GESTIONNAIRE')")
     @DeleteMapping("/{id}")
     @Operation(summary = "Supprimer un livreur", description = "Supprime un livreur par son ID")
 
@@ -85,6 +92,7 @@ public class LivreurController {
         return ResponseEntity.ok(new ApiResponse<>("Livreur supprimé avec succès", null));
     }
 
+    @PreAuthorize("hasAnyRole('GESTIONNAIRE','LIVREUR')")
     @GetMapping("/search")
     @Operation(summary = "Rechercher des livreurs", description = "Recherche des livreurs par mot-clé (nom, prénom, téléphone, véhicule)")
 
