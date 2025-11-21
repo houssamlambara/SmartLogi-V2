@@ -27,7 +27,6 @@ public class ClientExpediteurController {
 
     @PostMapping
     @Operation(summary = "Créer un client expéditeur", description = "Cette API permet de créer un nouveau client expéditeur")
-
     public ResponseEntity<ApiResponse<ClientExpediteurDTO>> createClient(@Valid @RequestBody ClientExpediteurDTO dto) {
         ClientExpediteurDTO created = clientService.createClient(dto);
         return ResponseEntity.ok(new ApiResponse<>("Client créé avec succès",created));
@@ -35,7 +34,6 @@ public class ClientExpediteurController {
 
     @GetMapping
     @Operation(summary = "Lister tous les clients", description = "Récupère la liste paginée des clients expéditeurs")
-
     public ResponseEntity<ApiResponse<Page<ClientExpediteurDTO>>> getAllClients(
             @PageableDefault(size = 20, sort = "nom") Pageable pageable) {
         Page<ClientExpediteurDTO> clients = clientService.getAllClients(pageable);
@@ -44,7 +42,6 @@ public class ClientExpediteurController {
 
     @GetMapping("/{id}")
     @Operation(summary = "Récupérer un client par ID", description = "Récupère les informations d'un client expéditeur selon son ID")
-
     public ResponseEntity<ApiResponse<ClientExpediteurDTO>> getClientById(@PathVariable String id) {
         ClientExpediteurDTO client = clientService.getClientById(id);
         if (client != null) {
@@ -55,7 +52,6 @@ public class ClientExpediteurController {
 
     @PutMapping("/{id}")
     @Operation(summary = "Mettre à jour un client", description = "Met à jour les informations d'un client existant")
-
     public ResponseEntity<ApiResponse<ClientExpediteurDTO>> updateClient(@PathVariable String id, @Valid @RequestBody ClientExpediteurDTO dto) {
         ClientExpediteurDTO updated = clientService.updateClient(id, dto);
         return ResponseEntity.ok(new ApiResponse<>("Client mis à jour avec succès", updated));
@@ -63,7 +59,6 @@ public class ClientExpediteurController {
 
     @DeleteMapping("/{id}")
     @Operation(summary = "Supprimer un client", description = "Supprime un client expéditeur selon son ID")
-
     public ResponseEntity<ApiResponse<Void>> deleteClient(@PathVariable String id) {
         clientService.deleteClient(id);
         return ResponseEntity.ok(new ApiResponse<>("Clinet supprimé avec succès", null));
