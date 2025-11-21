@@ -10,6 +10,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.PageableDefault;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 
@@ -25,6 +26,7 @@ public class ZoneController {
         this.service = service;
     }
 
+    @PreAuthorize("hasRole('GESTIONNAIRE')")
     @PostMapping
     @Operation(summary = "Créer une zone", description = "Permet de créer une nouvelle zone")
 
@@ -33,6 +35,7 @@ public class ZoneController {
         return ResponseEntity.ok(new ApiResponse<>("Zone créée avec succès", created));
     }
 
+    @PreAuthorize("hasAnyRole('GESTIONNAIRE','LIVREUR')")
     @GetMapping
     @Operation(summary = "Lister toutes les zones", description = "Récupère toutes les zones avec pagination")
 
@@ -42,6 +45,7 @@ public class ZoneController {
         return ResponseEntity.ok(new ApiResponse<>("Liste des zones récupérée avec succès", zones));
     }
 
+    @PreAuthorize("hasAnyRole('GESTIONNAIRE','LIVREUR')")
     @GetMapping("{id}")
     @Operation(summary = "Récupérer une zone par ID", description = "Cherche une zone par son ID")
 
@@ -54,6 +58,7 @@ public class ZoneController {
             }
     }
 
+    @PreAuthorize("hasRole('GESTIONNAIRE')")
     @PutMapping("/{id}")
     @Operation(summary = "Mettre à jour une zone", description = "Modifie les informations d'une zone existante")
 
@@ -62,6 +67,7 @@ public class ZoneController {
         return ResponseEntity.ok(new ApiResponse<>("Zone mise à jour avec succès", updated));
     }
 
+    @PreAuthorize("hasRole('GESTIONNAIRE')")
     @DeleteMapping("/{id}")
     @Operation(summary = "Supprimer une zone", description = "Supprime une zone par son ID")
 
