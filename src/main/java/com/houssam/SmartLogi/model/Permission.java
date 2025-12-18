@@ -1,6 +1,5 @@
 package com.houssam.SmartLogi.model;
 
-import com.houssam.SmartLogi.enums.Role;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
 import lombok.Getter;
@@ -20,11 +19,15 @@ public class Permission {
 
     @Id
     @GeneratedValue(generator = "UUID")
+    @Column(name = "id", updatable = false, nullable = false)
     private String id;
 
     @NotNull
-    @Column(unique = true, nullable = false)
+    @Column(name = "name", unique = true, nullable = false)
     private String name;
+
+    @Column(name = "description", length = 500)
+    private String description;
 
     @ManyToMany(mappedBy = "permissions")
     private Set<Role> roles = new HashSet<>();

@@ -1,11 +1,11 @@
 package com.houssam.SmartLogi.model;
 
 import jakarta.persistence.*;
+import jakarta.validation.constraints.NotNull;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
-import com.houssam.SmartLogi.enums.Role;
 
 @Entity
 @Table(name= "users")
@@ -24,8 +24,9 @@ public class User {
     @Column(nullable = false)
     private String password;
 
-    @Enumerated(EnumType.STRING)
-    @Column(nullable = false)
+    @NotNull
+    @ManyToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name = "role_id", nullable = false)
     private Role role;
 
     @OneToOne(mappedBy = "user", cascade = CascadeType.ALL)

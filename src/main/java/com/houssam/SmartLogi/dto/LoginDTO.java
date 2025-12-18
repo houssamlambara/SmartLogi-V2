@@ -1,6 +1,6 @@
 package com.houssam.SmartLogi.dto;
 
-import com.houssam.SmartLogi.enums.Role;
+import com.houssam.SmartLogi.model.Role;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
 import lombok.Data;
@@ -23,7 +23,7 @@ public class LoginDTO {
     public static class Response {
         private String token;
         private String email;
-        private Role role;
+        private String roleName;
         private String userId;
     }
 }

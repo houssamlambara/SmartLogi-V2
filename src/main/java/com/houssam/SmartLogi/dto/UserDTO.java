@@ -1,6 +1,6 @@
 package com.houssam.SmartLogi.dto;
 
-import com.houssam.SmartLogi.enums.Role;
+import com.houssam.SmartLogi.model.Role;
 import lombok.Data;
 
 @Data
