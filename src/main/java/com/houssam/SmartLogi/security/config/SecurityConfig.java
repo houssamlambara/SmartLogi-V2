@@ -90,6 +90,9 @@ public class SecurityConfig {
                         // ========== AUTH - REGISTER LIVREUR ==========
                         .requestMatchers("/api/auth/register/livreur").hasRole("GESTIONNAIRE")
 
+                        // ========== ADMIN - GESTION PERMISSIONS ==========
+                        .requestMatchers("/api/admin/**").hasRole("GESTIONNAIRE")
+
                         // ========== ZONES ==========
                         .requestMatchers(org.springframework.http.HttpMethod.POST, "/api/zones").hasRole("GESTIONNAIRE")
                         .requestMatchers(org.springframework.http.HttpMethod.GET, "/api/zones/**").hasAnyRole("GESTIONNAIRE", "LIVREUR")

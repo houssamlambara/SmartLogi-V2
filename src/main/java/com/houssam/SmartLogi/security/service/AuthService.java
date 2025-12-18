@@ -3,7 +3,6 @@ package com.houssam.SmartLogi.security.service;
 import com.houssam.SmartLogi.dto.LivreurDTO;
 import com.houssam.SmartLogi.dto.LoginDTO;
 import com.houssam.SmartLogi.dto.RegisterDTO;
-import com.houssam.SmartLogi.enums.Role;
 import com.houssam.SmartLogi.exception.ResourceNotFoundException;
 import com.houssam.SmartLogi.model.ClientExpediteur;
 import com.houssam.SmartLogi.model.Livreur;
@@ -23,6 +22,7 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import com.houssam.SmartLogi.repository.RoleRepository;
 
 @Service
 public class AuthService {
@@ -43,6 +43,8 @@ public class AuthService {
     private ZoneRepository zoneRepository;
     @Autowired
     private PasswordEncoder passwordEncoder;
+    @Autowired
+    private RoleRepository roleRepository;
 
     public LoginDTO.Response login(LoginDTO.Request request) {
         try {
@@ -61,7 +63,7 @@ public class AuthService {
             return new LoginDTO.Response(
                     token,
                     user.getEmail(),
-                    user.getRole(),
+                    user.getRole().getName(),
                     user.getId()
             );
 
@@ -79,7 +81,11 @@ public class AuthService {
         User user = new User();
         user.setEmail(request.getEmail());
         user.setPassword(passwordEncoder.encode(request.getPassword()));
-        user.setRole(Role.CLIENT);
+
+        // Récupérer le rôle CLIENT depuis la base de données
+        com.houssam.SmartLogi.model.Role clientRole = roleRepository.findByName("CLIENT")
+                .orElseThrow(() -> new RuntimeException("Rôle CLIENT non trouvé dans la base"));
+        user.setRole(clientRole);
 
         ClientExpediteur client = new ClientExpediteur();
         client.setNom(request.getNom());
@@ -99,7 +105,7 @@ public class AuthService {
         return new LoginDTO.Response(
                 token,
                 savedClient.getUser().getEmail(),
-                savedClient.getUser().getRole(),
+                savedClient.getUser().getRole().getName(),
                 savedClient.getUser().getId()
         );
     }
@@ -119,7 +125,11 @@ public class AuthService {
         User user = new User();
         user.setEmail(request.getEmail());
         user.setPassword(passwordEncoder.encode(request.getPassword()));
-        user.setRole(Role.LIVREUR);
+
+        // Récupérer le rôle LIVREUR depuis la base de données
+        com.houssam.SmartLogi.model.Role livreurRole = roleRepository.findByName("LIVREUR")
+                .orElseThrow(() -> new RuntimeException("Rôle LIVREUR non trouvé dans la base"));
+        user.setRole(livreurRole);
 
         // Créer le Livreur
         Livreur livreur = new Livreur();
@@ -145,7 +155,7 @@ public class AuthService {
         return new LoginDTO.Response(
                 token,
                 savedLivreur.getUser().getEmail(),
-                savedLivreur.getUser().getRole(),
+                savedLivreur.getUser().getRole().getName(),
                 savedLivreur.getUser().getId()
         );
     }
