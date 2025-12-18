@@ -2,18 +2,20 @@ package com.houssam.SmartLogi.service;
 
 import com.houssam.SmartLogi.security.config.SecurityConfig;
 import com.houssam.SmartLogi.dto.LivreurDTO;
-import com.houssam.SmartLogi.enums.Role;
 import com.houssam.SmartLogi.exception.ResourceNotFoundException;
 import com.houssam.SmartLogi.mapper.LivreurMapper;
 import com.houssam.SmartLogi.model.Livreur;
+import com.houssam.SmartLogi.model.Role;
 import com.houssam.SmartLogi.model.User;
 import com.houssam.SmartLogi.model.Zone;
 import com.houssam.SmartLogi.repository.LivreurRepository;
+import com.houssam.SmartLogi.repository.RoleRepository;
 import com.houssam.SmartLogi.repository.ZoneRepository;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import com.houssam.SmartLogi.service.SecurityContextService;
 
 @Service
 public class LivreurService {
@@ -22,12 +24,16 @@ public class LivreurService {
     private final LivreurMapper mapper;
     private final ZoneRepository zoneRepository;
     private final SecurityConfig securityConfig;
+    private final SecurityContextService securityContextService;
+    private final RoleRepository roleRepository;
 
-    public LivreurService(LivreurRepository repository, LivreurMapper mapper, ZoneRepository zoneRepository, SecurityConfig securityConfig) {
+    public LivreurService(LivreurRepository repository, LivreurMapper mapper, ZoneRepository zoneRepository, SecurityConfig securityConfig, SecurityContextService securityContextService, RoleRepository roleRepository) {
         this.repository = repository;
         this.mapper = mapper;
         this.zoneRepository = zoneRepository;
+        this.roleRepository = roleRepository;
         this.securityConfig = securityConfig;
+        this.securityContextService = securityContextService;
     }
 
     @Transactional
@@ -43,7 +49,12 @@ public class LivreurService {
         user.setEmail(dto.getEmail());
 
         user.setPassword(securityConfig.passwordEncoder().encode(dto.getPassword()));
-        user.setRole(Role.LIVREUR);
+
+        // Récupérer le rôle LIVREUR depuis la base de données
+        Role livreurRole = roleRepository.findByName("LIVREUR")
+                .orElseThrow(() -> new RuntimeException("Rôle LIVREUR non trouvé dans la base"));
+        user.setRole(livreurRole);
+
         entity.setUser(user);
         user.setLivreur(entity);
 
@@ -60,6 +71,13 @@ public class LivreurService {
         Livreur livreur = repository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("Livreur introuvable avec l'ID " + id));
 
+        if (securityContextService.isLivreur()) {
+            String currentUserId = securityContextService.getCurrentUserId();
+            if (!livreur.getUser().getId().equals(currentUserId)) {
+                throw new RuntimeException("Accès refusé : vous ne pouvez modifier que votre propre profil");
+            }
+        }
+
         livreur.setNom(dto.getNom());
         livreur.setPrenom(dto.getPrenom());
         livreur.setTelephone(dto.getTelephone());
@@ -75,9 +93,18 @@ public class LivreurService {
     }
 
     public LivreurDTO getLivreurById(String id) {
-        return repository.findById(id)
-                .map(mapper::toDTO)
-                .orElse(null);
+        Livreur livreur = repository.findById(id)
+                .orElseThrow(() -> new ResourceNotFoundException("Livreur introuvable avec l'ID " + id));
+
+        // Si l'utilisateur est un LIVREUR, il ne peut voir que son propre profil
+        if (securityContextService.isLivreur()) {
+            String currentUserId = securityContextService.getCurrentUserId();
+            if (!livreur.getUser().getId().equals(currentUserId)) {
+                throw new RuntimeException("Accès refusé : vous ne pouvez consulter que votre propre profil");
+            }
+        }
+
+        return mapper.toDTO(livreur);
     }
 
     public void deleteLivreur(String id) {

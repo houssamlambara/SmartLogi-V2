@@ -15,6 +15,7 @@ import jakarta.transaction.Transactional;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
+import com.houssam.SmartLogi.service.SecurityContextService;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
@@ -35,6 +36,8 @@ public class ColisService {
     private final ProduitRepository produitRepository;
     private final ColisProduitRepository colisProduitRepository;
     private final EmailService emailService;
+    private final SecurityContextService securityContextService;
+
 
     public ColisService(ColisRepository colisRepository, ColisMapper colisMapper,
                         LivreurRepository livreurRepository,
@@ -43,7 +46,8 @@ public class ColisService {
                         ZoneRepository zoneRepository,
                         ProduitRepository produitRepository,
                         ColisProduitRepository colisProduitRepository,
-                        EmailService emailService) {
+                        EmailService emailService,
+                        SecurityContextService securityContextService) {
         this.colisRepository = colisRepository;
         this.colisMapper = colisMapper;
         this.livreurRepository = livreurRepository;
@@ -53,6 +57,8 @@ public class ColisService {
         this.produitRepository = produitRepository;
         this.colisProduitRepository = colisProduitRepository;
         this.emailService = emailService;
+        this.securityContextService = securityContextService;
+
     }
 
     @Transactional
@@ -279,8 +285,24 @@ public class ColisService {
 //    }
 
     public Page<ColisDTO> getAllColis(Pageable pageable) {
-        return colisRepository.findAll(pageable)
-                .map(colisMapper::toDTO);
+        String userId = securityContextService.getCurrentUserId();
+        String roleName = securityContextService.getCurrentUserRoleName();
+
+        switch (roleName) {
+            case "GESTIONNAIRE":
+                return colisRepository.findAll(pageable).map(colisMapper::toDTO);
+
+            case "CLIENT":
+                return colisRepository.findByClientExpediteur_User_Id(userId, pageable)
+                        .map(colisMapper::toDTO);
+
+            case "LIVREUR":
+                return colisRepository.findByLivreur_User_Id(userId, pageable)
+                        .map(colisMapper::toDTO);
+
+            default:
+                throw new RuntimeException("Rôle non supporté : " + roleName);
+        }
     }
 
     public Page<ColisDTO> getColisByDestinataireId(String destinataireId, Pageable pageable) {
@@ -306,16 +328,81 @@ public class ColisService {
     }
 
     public ColisDTO getColisById(String id) {
-        return colisRepository.findById(id)
-                .map(colisMapper::toDTO)
-                .orElse(null);
+        String userId = securityContextService.getCurrentUserId();
+        String roleName = securityContextService.getCurrentUserRoleName();
+        Colis colis;
+
+        switch (roleName) {
+            case "GESTIONNAIRE":
+                // Le gestionnaire peut voir n'importe quel colis
+                colis = colisRepository.findById(id)
+                        .orElseThrow(() -> new ResourceNotFoundException("Colis introuvable avec l'ID " + id));
+                break;
+
+            case "CLIENT":
+                // Le client ne peut voir que SES colis
+                colis = colisRepository.findByIdAndClientExpediteur_User_Id(id, userId)
+                        .orElseThrow(() -> new ResourceNotFoundException(
+                                "Colis introuvable ou vous n'avez pas accès à ce colis"));
+                break;
+
+            case "LIVREUR":
+                // Le livreur ne peut voir que les colis qui LUI sont assignés
+                colis = colisRepository.findByIdAndLivreur_User_Id(id, userId)
+                        .orElseThrow(() -> new ResourceNotFoundException(
+                                "Colis introuvable ou non assigné à vous"));
+                break;
+
+            default:
+                throw new RuntimeException("Rôle non supporté : " + roleName);
+        }
+
+        return colisMapper.toDTO(colis);
     }
 
     public ColisDTO updateStatut(String colisId, Statut nouveauStatut) {
-        Colis colis = colisRepository.findById(colisId)
-                .orElseThrow(() -> new ResourceNotFoundException("Colis introuvable avec l'ID " + colisId));
+        String userId = securityContextService.getCurrentUserId();
+        String roleName = securityContextService.getCurrentUserRoleName();
+        Colis colis;
+
+        switch (roleName) {
+            case "GESTIONNAIRE":
+                // Le gestionnaire peut modifier n'importe quel colis
+                colis = colisRepository.findById(colisId)
+                        .orElseThrow(() -> new ResourceNotFoundException("Colis introuvable avec l'ID " + colisId));
+                break;
+
+            case "LIVREUR":
+                // Le livreur ne peut modifier que les colis qui LUI sont assignés
+                colis = colisRepository.findByIdAndLivreur_User_Id(colisId, userId)
+                        .orElseThrow(() -> new ResourceNotFoundException(
+                                "Colis introuvable ou non assigné à vous"));
+                break;
+
+            case "CLIENT":
+                // Les clients ne peuvent PAS modifier le statut
+                throw new RuntimeException("Les clients ne peuvent pas modifier le statut des colis");
+
+            default:
+                throw new RuntimeException("Rôle non supporté : " + roleName);
+        }
+
+        // Mise à jour du statut
+        Statut ancienStatut = colis.getStatut();
         colis.setStatut(nouveauStatut);
         Colis updated = colisRepository.save(colis);
+
+        // Envoi d'email de notification
+        try {
+            if (updated.getLivreur() != null && updated.getClientExpediteur() != null
+                && updated.getClientExpediteur().getUser() != null
+                && updated.getClientExpediteur().getUser().getEmail() != null) {
+                emailService.envoyerEmailStatutMisAJour(updated, updated.getLivreur(), ancienStatut, nouveauStatut);
+            }
+        } catch (Exception e) {
+            System.err.println("Erreur envoi email : " + e.getMessage());
+        }
+
         return colisMapper.toDTO(updated);
     }
 
