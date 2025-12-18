@@ -62,7 +62,6 @@ public class ClientExpediteurService {
         ClientExpediteur client = repository.findById(id)
                 .orElseThrow(() -> new RuntimeException("Client introuvable avec l'ID " + id));
 
-        // Si l'utilisateur est un CLIENT, il ne peut voir que son propre profil
         if (securityContextService.isClient()) {
             String currentUserId = securityContextService.getCurrentUserId();
             if (!client.getUser().getId().equals(currentUserId)) {
