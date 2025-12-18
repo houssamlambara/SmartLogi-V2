@@ -12,6 +12,7 @@ import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
+import java.util.Optional;
 
 @Repository
 public interface ColisRepository extends JpaRepository<Colis, String>, JpaSpecificationExecutor<Colis> {
@@ -68,4 +69,12 @@ WHERE
 """)
     Page<Colis> searchColis(@Param("keyword") String keyword, Pageable pageable);
 
-}
+
+
+    Page<Colis> findByClientExpediteur_User_Id(String userId, Pageable pageable);
+
+    Page<Colis> findByLivreur_User_Id(String userId, Pageable pageable);
+
+    Optional<Colis> findByIdAndClientExpediteur_User_Id(String colisId, String userId);
+
+    Optional<Colis> findByIdAndLivreur_User_Id(String colisId, String userId);}
