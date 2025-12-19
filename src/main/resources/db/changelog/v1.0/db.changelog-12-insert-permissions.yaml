@@ -1,0 +1,270 @@
+databaseChangeLog:
+  - changeSet:
+      id: insert-permissions
+      author: smartlogi
+      changes:
+
+        # ========== PERMISSIONS ZONES ==========
+        - insert:
+            tableName: permissions
+            columns:
+              - column:
+                  name: id
+                  value: "b1a2c3d4-1111-4aaa-8bbb-000000000001"
+              - column:
+                  name: name
+                  value: "ZONE_CREATE"
+              - column:
+                  name: description
+                  value: "Créer une zone"
+
+        - insert:
+            tableName: permissions
+            columns:
+              - column:
+                  name: id
+                  value: "b1a2c3d4-1111-4aaa-8bbb-000000000002"
+              - column:
+                  name: name
+                  value: "ZONE_READ"
+              - column:
+                  name: description
+                  value: "Consulter les zones"
+
+        - insert:
+            tableName: permissions
+            columns:
+              - column:
+                  name: id
+                  value: "b1a2c3d4-1111-4aaa-8bbb-000000000003"
+              - column:
+                  name: name
+                  value: "ZONE_UPDATE"
+              - column:
+                  name: description
+                  value: "Modifier une zone"
+
+        - insert:
+            tableName: permissions
+            columns:
+              - column:
+                  name: id
+                  value: "b1a2c3d4-1111-4aaa-8bbb-000000000004"
+              - column:
+                  name: name
+                  value: "ZONE_DELETE"
+              - column:
+                  name: description
+                  value: "Supprimer une zone"
+
+        # ========== PERMISSIONS COLIS ==========
+        - insert:
+            tableName: permissions
+            columns:
+              - column:
+                  name: id
+                  value: "b1a2c3d4-2222-4aaa-8bbb-000000000005"
+              - column:
+                  name: name
+                  value: "COLIS_CREATE"
+              - column:
+                  name: description
+                  value: "Créer un colis"
+
+        - insert:
+            tableName: permissions
+            columns:
+              - column:
+                  name: id
+                  value: "b1a2c3d4-2222-4aaa-8bbb-000000000006"
+              - column:
+                  name: name
+                  value: "COLIS_READ"
+              - column:
+                  name: description
+                  value: "Consulter les colis"
+
+        - insert:
+            tableName: permissions
+            columns:
+              - column:
+                  name: id
+                  value: "b1a2c3d4-2222-4aaa-8bbb-000000000007"
+              - column:
+                  name: name
+                  value: "COLIS_UPDATE"
+              - column:
+                  name: description
+                  value: "Modifier un colis"
+
+        - insert:
+            tableName: permissions
+            columns:
+              - column:
+                  name: id
+                  value: "b1a2c3d4-2222-4aaa-8bbb-000000000008"
+              - column:
+                  name: name
+                  value: "COLIS_DELETE"
+              - column:
+                  name: description
+                  value: "Supprimer un colis"
+
+        # ========== PERMISSIONS PRODUITS ==========
+        - insert:
+            tableName: permissions
+            columns:
+              - column:
+                  name: id
+                  value: "b1a2c3d4-3333-4aaa-8bbb-000000000009"
+              - column:
+                  name: name
+                  value: "PRODUIT_CREATE"
+              - column:
+                  name: description
+                  value: "Créer un produit"
+
+        - insert:
+            tableName: permissions
+            columns:
+              - column:
+                  name: id
+                  value: "b1a2c3d4-3333-4aaa-8bbb-000000000010"
+              - column:
+                  name: name
+                  value: "PRODUIT_READ"
+              - column:
+                  name: description
+                  value: "Consulter les produits"
+
+        - insert:
+            tableName: permissions
+            columns:
+              - column:
+                  name: id
+                  value: "b1a2c3d4-3333-4aaa-8bbb-000000000011"
+              - column:
+                  name: name
+                  value: "PRODUIT_UPDATE"
+              - column:
+                  name: description
+                  value: "Modifier un produit"
+
+        - insert:
+            tableName: permissions
+            columns:
+              - column:
+                  name: id
+                  value: "b1a2c3d4-3333-4aaa-8bbb-000000000012"
+              - column:
+                  name: name
+                  value: "PRODUIT_DELETE"
+              - column:
+                  name: description
+                  value: "Supprimer un produit"
+
+        # ========== PERMISSIONS LIVREURS ==========
+        - insert:
+            tableName: permissions
+            columns:
+              - column:
+                  name: id
+                  value: "b1a2c3d4-4444-4aaa-8bbb-000000000013"
+              - column:
+                  name: name
+                  value: "LIVREUR_CREATE"
+              - column:
+                  name: description
+                  value: "Créer un livreur"
+
+        - insert:
+            tableName: permissions
+            columns:
+              - column:
+                  name: id
+                  value: "b1a2c3d4-4444-4aaa-8bbb-000000000014"
+              - column:
+                  name: name
+                  value: "LIVREUR_READ"
+              - column:
+                  name: description
+                  value: "Consulter les livreurs"
+
+        - insert:
+            tableName: permissions
+            columns:
+              - column:
+                  name: id
+                  value: "b1a2c3d4-4444-4aaa-8bbb-000000000015"
+              - column:
+                  name: name
+                  value: "LIVREUR_UPDATE"
+              - column:
+                  name: description
+                  value: "Modifier un livreur"
+
+        - insert:
+            tableName: permissions
+            columns:
+              - column:
+                  name: id
+                  value: "b1a2c3d4-4444-4aaa-8bbb-000000000016"
+              - column:
+                  name: name
+                  value: "LIVREUR_DELETE"
+              - column:
+                  name: description
+                  value: "Supprimer un livreur"
+
+        # ========== PERMISSIONS CLIENTS ==========
+        - insert:
+            tableName: permissions
+            columns:
+              - column:
+                  name: id
+                  value: "b1a2c3d4-5555-4aaa-8bbb-000000000017"
+              - column:
+                  name: name
+                  value: "CLIENT_CREATE"
+              - column:
+                  name: description
+                  value: "Créer un client"
+
+        - insert:
+            tableName: permissions
+            columns:
+              - column:
+                  name: id
+                  value: "b1a2c3d4-5555-4aaa-8bbb-000000000018"
+              - column:
+                  name: name
+                  value: "CLIENT_READ"
+              - column:
+                  name: description
+                  value: "Consulter les clients"
+
+        - insert:
+            tableName: permissions
+            columns:
+              - column:
+                  name: id
+                  value: "b1a2c3d4-5555-4aaa-8bbb-000000000019"
+              - column:
+                  name: name
+                  value: "CLIENT_UPDATE"
+              - column:
+                  name: description
+                  value: "Modifier un client"
+
+        - insert:
+            tableName: permissions
+            columns:
+              - column:
+                  name: id
+                  value: "b1a2c3d4-5555-4aaa-8bbb-000000000020"
+              - column:
+                  name: name
+                  value: "CLIENT_DELETE"
+              - column:
+                  name: description
+                  value: "Supprimer un client"
