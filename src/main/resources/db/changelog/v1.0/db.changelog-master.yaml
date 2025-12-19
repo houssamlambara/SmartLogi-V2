@@ -39,3 +39,28 @@ databaseChangeLog:
   - include:
       file: db/changelog/v1.0/db.changelog-11-add-created-at-column.yaml
 
+  # ========== SYSTÈME DE PERMISSIONS ==========
+  # Créer la table roles
+  - include:
+      file: db/changelog/v1.0/db.changelog-13-create-roles-table.yaml
+
+  # Insérer les rôles par défaut (GESTIONNAIRE, LIVREUR, CLIENT)
+  - include:
+      file: db/changelog/v1.0/db.changelog-09-insert-roles.yaml
+
+  # Créer la table permissions
+  - include:
+      file: db/changelog/v1.0/db.changelog-14-create-permissions-table.yaml
+
+  # Insérer les permissions de base
+  - include:
+      file: db/changelog/v1.0/db.changelog-12-insert-permissions.yaml
+
+  # Créer la table de liaison role_permissions
+  - include:
+      file: db/changelog/v1.0/db.changelog-15-create-role-permissions-table.yaml
+
+  # Migrer users.role (VARCHAR) vers users.role_id (FK) SANS PERDRE LES DONNÉES
+  - include:
+      file: db/changelog/v1.0/db.changelog-16-migrate-users-role-to-fk.yaml
+
