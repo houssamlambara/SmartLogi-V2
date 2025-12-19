@@ -1,0 +1,32 @@
+databaseChangeLog:
+  - changeSet:
+      id: insert-roles
+      author: houssam
+      changes:
+        - insert:
+            tableName: roles
+            columns:
+              - column:
+                  name: id
+                  value: "550e8400-e29b-41d4-a716-446655440001"
+              - column:
+                  name: name
+                  value: "GESTIONNAIRE"
+        - insert:
+            tableName: roles
+            columns:
+              - column:
+                  name: id
+                  value: "550e8400-e29b-41d4-a716-446655440002"
+              - column:
+                  name: name
+                  value: "LIVREUR"
+        - insert:
+            tableName: roles
+            columns:
+              - column:
+                  name: id
+                  value: "550e8400-e29b-41d4-a716-446655440003"
+              - column:
+                  name: name
+                  value: "CLIENT"
