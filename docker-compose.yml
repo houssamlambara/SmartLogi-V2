@@ -1,0 +1,27 @@
+
+services:
+
+  postgres:
+    image: postgres:15
+    environment:
+      POSTGRES_DB: smartlogi
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+    ports:
+      - "5432:5432"
+
+  api:
+    build: .
+    ports:
+      - "8081:8081"
+    depends_on:
+      - postgres
+    environment:
+      SPRING_DATASOURCE_URL: jdbc:postgresql://postgres:5432/smartlogi
+      SPRING_DATASOURCE_USERNAME: postgres
+      SPRING_DATASOURCE_PASSWORD: postgres
+
+      JWT_SECRET: simple-secret-key
+      JWT_EXPIRATION: 86400000
+
+      SPRING_PROFILES_ACTIVE: docker
