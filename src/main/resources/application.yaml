@@ -22,21 +22,27 @@ spring:
     change-log: classpath:db/changelog/v1.0/db.changelog-master.yaml
     enabled: true
 
+  security:
+    oauth2:
+      resourceserver:
+        jwt:
+          issuer-uri: https://my-auth-server.com
+
+  mail:
+    host: smtp.gmail.com
+    port: 587
+    username: ${SMTP_USERNAME}
+    password: ${SMTP_PASSWORD}
+    properties:
+      mail.smtp.auth: true
+      mail.smtp.starttls.enable: true
+      mail.smtp.starttls.required: true
+      mail.smtp.connectiontimeout: 5000
+      mail.smtp.timeout: 5000
+      mail.smtp.writetimeout: 5000
+
 server:
   port: 8081
-
-mail:
-  host: smtp.gmail.com
-  port: 587
-  username: ${SMTP_USERNAME}
-  password: ${SMTP_PASSWORD}
-  properties:
-    mail.smtp.auth: true
-    mail.smtp.starttls.enable: true
-    mail.smtp.starttls.required: true
-    mail.smtp.connectiontimeout: 5000
-    mail.smtp.timeout: 5000
-    mail.smtp.writetimeout: 5000
 
 logging:
   level:
