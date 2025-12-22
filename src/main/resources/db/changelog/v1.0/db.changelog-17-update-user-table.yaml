@@ -1,0 +1,36 @@
+databaseChangeLog:
+  - changeSet:
+        id: 17-update-user-table
+        author: oAuth2
+        changes:
+          - dropNotNullConstraint:
+              tableName: users
+              columnName: password
+              columnDataType: VARCHAR(255)
+
+          - addColumn:
+              tableName: users
+              columns:
+                - column:
+                    name: provider
+                    type: VARCHAR(255)
+                    constraints:
+                      nullable: true
+
+          - addColumn:
+              tableName: users
+              columns:
+                - column:
+                    name: provider_id
+                    type: VARCHAR(255)
+                    constraints:
+                      nullable: true
+          - addColumn:
+              tableName: users
+              columns:
+                - column:
+                    name: enabled
+                    type: BOOLEAN
+                    defaultValueBoolean: true
+                    constraints:
+                      nullable: false
