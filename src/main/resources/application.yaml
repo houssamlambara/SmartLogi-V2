@@ -22,11 +22,44 @@ spring:
     change-log: classpath:db/changelog/v1.0/db.changelog-master.yaml
     enabled: true
 
+  # ✅ Configuration OAuth2 correcte
   security:
     oauth2:
-      resourceserver:
-        jwt:
-          issuer-uri: https://my-auth-server.com
+      client:
+        registration:
+          google:
+            client-id: 751976708280-5i895ogooptecespug0re1dvatqki8o9.apps.googleusercontent.com
+            client-secret: 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
+            scope:
+              - email
+              - profile
+            redirect-uri: "{baseUrl}/login/oauth2/code/{registrationId}"
+
+          facebook:
+            client-id: 633061504574817
+            client-secret: 5051b93306709faeeae774b592390682
+            scope:
+              - email
+              - public_profile
+            redirect-uri: "{baseUrl}/login/oauth2/code/{registrationId}"
+
+          apple:
+            client-id: ${APPLE_CLIENT_ID:votre-apple-service-id}
+            client-secret: ${APPLE_CLIENT_SECRET:votre-apple-secret}
+            scope:
+              - email
+              - name
+            authorization-grant-type: authorization_code
+            redirect-uri: "{baseUrl}/login/oauth2/code/{registrationId}"
+            client-authentication-method: client_secret_post
+
+        provider:
+          apple:
+            authorization-uri: https://appleid.apple.com/auth/authorize
+            token-uri: https://appleid.apple.com/auth/token
+            user-info-uri: https://appleid.apple.com/auth/userinfo
+            jwk-set-uri: https://appleid.apple.com/auth/keys
+            user-name-attribute: sub
 
   mail:
     host: smtp.gmail.com
