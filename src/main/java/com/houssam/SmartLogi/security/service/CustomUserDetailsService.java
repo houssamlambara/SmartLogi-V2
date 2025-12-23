@@ -40,10 +40,17 @@ public class CustomUserDetailsService implements UserDetailsService {
             }
         }
 
+        // Pour les utilisateurs OAuth2, le password peut être null
+        String password = user.getPassword() != null ? user.getPassword() : "";
+
         return org.springframework.security.core.userdetails.User
                 .withUsername(user.getEmail())
-                .password(user.getPassword())
+                .password(password)
                 .authorities(authorities)
+                .accountLocked(false)
+                .accountExpired(false)
+                .credentialsExpired(false)
+                .disabled(!user.getEnabled())
                 .build();
     }
 

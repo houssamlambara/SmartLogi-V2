@@ -3,6 +3,7 @@ package com.houssam.SmartLogi.security.service;
 import com.houssam.SmartLogi.dto.LivreurDTO;
 import com.houssam.SmartLogi.dto.LoginDTO;
 import com.houssam.SmartLogi.dto.RegisterDTO;
+import com.houssam.SmartLogi.enums.Provider;
 import com.houssam.SmartLogi.exception.ResourceNotFoundException;
 import com.houssam.SmartLogi.model.ClientExpediteur;
 import com.houssam.SmartLogi.model.Livreur;
@@ -23,6 +24,8 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import com.houssam.SmartLogi.repository.RoleRepository;
+
+import java.util.Optional;
 
 @Service
 public class AuthService {
@@ -158,6 +161,48 @@ public class AuthService {
                 savedLivreur.getUser().getRole().getName(),
                 savedLivreur.getUser().getId()
         );
+    }
+
+    @Transactional
+    public UserDetails loginWithOAuth2(
+            String email,
+            String name,
+            Provider provider,
+            String providerId
+    ) {
+
+        Optional<User> optionalUser = userRepository.findByEmail(email);
+        User user;
+
+        if (optionalUser.isEmpty()) {
+
+            user = new User();
+            user.setEmail(email);
+            user.setProvider(provider);
+            user.setProviderId(providerId);
+            user.setEnabled(true);
+            user.setPassword(null);
+
+            user.setRole(
+                    roleRepository.findByName("CLIENT")
+                            .orElseThrow(() -> new RuntimeException("Rôle CLIENT introuvable"))
+            );
+
+            // Créer le ClientExpediteur et établir la relation bidirectionnelle
+            ClientExpediteur client = new ClientExpediteur();
+            client.setNom(name);
+            client.setEmail(email);
+            client.setUser(user);
+            user.setClientExpediteur(client);
+
+            // Sauvegarder uniquement le client (cascade sauvegarde le User)
+            clientExpediteurRepository.save(client);
+
+        } else {
+            user = optionalUser.get();
+        }
+
+        return userDetailsService.loadUserByUsername(user.getEmail());
     }
 }
 
