@@ -23,7 +23,7 @@ public class OAuth2LoginSuccessHandler implements AuthenticationSuccessHandler {
     @Autowired
     private JwtService jwtService;
 
-    private static final String FRONT_URL = "http://localhost:8081/oauth2/success";
+//    private static final String FRONT_URL = "http://localhost:8081/oauth2/success";
 
     @Override
     public void onAuthenticationSuccess(
