@@ -2,6 +2,7 @@ package com.houssam.SmartLogi.security.config;
 
 import com.houssam.SmartLogi.security.filter.JwtAuthFilter;
 import com.houssam.SmartLogi.security.handler.OAuth2LoginSuccessHandler;
+import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -144,6 +145,18 @@ public class SecurityConfig {
 
                         // Tout le reste requiert authentification
                         .anyRequest().authenticated()
+                )
+
+                .exceptionHandling(ex -> ex
+                        .authenticationEntryPoint((request, response, authException) -> {
+                            if (request.getRequestURI().startsWith("/api/")) {
+                                response.setContentType("application/json");
+                                response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
+                                response.getWriter().write("{\"error\":\"Non autorisé\"}");
+                            } else {
+                                response.sendRedirect("/login");
+                            }
+                        })
                 )
 
                 // Activation OAuth2 Login
