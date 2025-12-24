@@ -188,10 +188,23 @@ public class AuthService {
                             .orElseThrow(() -> new RuntimeException("Rôle CLIENT introuvable"))
             );
 
-            // Créer le ClientExpediteur et établir la relation bidirectionnelle
+            String prenom = name;
+            String nom = name;
+
+            if (name != null && name.contains(" ")) {
+                String[] parts = name.split(" ", 2);
+                prenom = parts[0];
+                nom = parts[1];
+            }
+
+            // relation bidirectionnelle
             ClientExpediteur client = new ClientExpediteur();
-            client.setNom(name);
+            client.setPrenom(prenom);
+            client.setNom(nom);
             client.setEmail(email);
+            client.setTelephone("0000000000");
+            client.setAdresse("À compléter");
+
             client.setUser(user);
             user.setClientExpediteur(client);
 

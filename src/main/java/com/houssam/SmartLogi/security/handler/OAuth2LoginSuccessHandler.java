@@ -23,7 +23,7 @@ public class OAuth2LoginSuccessHandler implements AuthenticationSuccessHandler {
     @Autowired
     private JwtService jwtService;
 
-//    private static final String FRONT_URL = "http://localhost:8081/oauth2/success";
+    private static final String FRONT_URL = "http://localhost:8081/oauth2/success";
 
     @Override
     public void onAuthenticationSuccess(
@@ -43,7 +43,7 @@ public class OAuth2LoginSuccessHandler implements AuthenticationSuccessHandler {
 
         Provider provider = Provider.valueOf(registrationId.toUpperCase());
 
-        String providerId = oAuth2User.getAttribute("sub");
+        String providerId = extractProviderId(provider, oAuth2User);
 
         UserDetails userDetails =
                 authService.loginWithOAuth2(email, name, provider, providerId);
@@ -55,5 +55,13 @@ public class OAuth2LoginSuccessHandler implements AuthenticationSuccessHandler {
         response.setCharacterEncoding("UTF-8");
         response.getWriter().write("{\"token\":\"" + jwt + "\"}");
         response.getWriter().flush();
+    }
+
+    private String extractProviderId(Provider provider, OAuth2User oAuth2User) {
+        return switch (provider) {
+            case GOOGLE -> oAuth2User.getAttribute("sub");
+            case FACEBOOK -> oAuth2User.getAttribute("id");
+            default -> oAuth2User.getAttribute("sub");
+        };
     }
 }

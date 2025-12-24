@@ -36,8 +36,8 @@ spring:
             redirect-uri: "{baseUrl}/login/oauth2/code/{registrationId}"
 
           facebook:
-            client-id: 633061504574817
-            client-secret: 5051b93306709faeeae774b592390682
+            client-id: 893322460047625
+            client-secret: 5d888c0b879a7ead91cc62280133be34
             scope:
               - email
               - public_profile
