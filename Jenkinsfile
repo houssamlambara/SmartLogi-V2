@@ -15,15 +15,37 @@ pipeline {
             }
         }
 
+        stage('Verify Docker') {
+            steps {
+                sh '''
+                    echo "Vérification de Docker..."
+                    docker --version
+                    docker ps
+                '''
+            }
+        }
+
         stage('Build & Package') {
             steps {
-                sh 'docker run --rm -v $PWD:/app -w /app maven:3.9-eclipse-temurin-17 mvn clean package -DskipTests=false'
+                sh '''
+                    docker run --rm \
+                    -v "$PWD":/app \
+                    -w /app \
+                    maven:3.9-eclipse-temurin-17 \
+                    mvn clean package -DskipTests=false
+                '''
             }
         }
 
         stage('Run Tests') {
             steps {
-                sh 'docker run --rm -v $PWD:/app -w /app maven:3.9-eclipse-temurin-17 mvn test'
+                sh '''
+                    docker run --rm \
+                    -v "$PWD":/app \
+                    -w /app \
+                    maven:3.9-eclipse-temurin-17 \
+                    mvn test
+                '''
             }
             post {
                 always {
@@ -36,7 +58,13 @@ pipeline {
         stage('SonarQube Analysis') {
             steps {
                 withSonarQubeEnv('SonarSmartLogi') {
-                    sh 'docker run --rm -v $PWD:/app -w /app maven:3.9-eclipse-temurin-17 mvn sonar:sonar'
+                    sh '''
+                        docker run --rm \
+                        -v "$PWD":/app \
+                        -w /app \
+                        maven:3.9-eclipse-temurin-17 \
+                        mvn sonar:sonar
+                    '''
                 }
             }
         }
