@@ -1,16 +1,22 @@
+version: "3.9"
 
 services:
 
   postgres:
     image: postgres:15
+    container_name: smartlogi-postgres
     environment:
       POSTGRES_DB: smartlogi_db
       POSTGRES_USER: postgres
       POSTGRES_PASSWORD: root
     ports:
       - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    restart: unless-stopped
 
   api:
+    container_name: smartlogi-api
     build: .
     ports:
       - "8081:8081"
@@ -25,3 +31,21 @@ services:
       JWT_EXPIRATION: 86400000
 
       SPRING_PROFILES_ACTIVE: docker
+    restart: unless-stopped
+
+  jenkins:
+    image: jenkins/jenkins:lts
+    container_name: smartlogi-jenkins
+    ports:
+      - "8080:8080"
+      - "50000:50000"
+    volumes:
+      - jenkins_home:/var/jenkins_home
+      - /var/run/docker.sock:/var/run/docker.sock
+    restart: unless-stopped
+
+volumes:
+  postgres_data:
+    driver: local
+  jenkins_home:
+    driver: local

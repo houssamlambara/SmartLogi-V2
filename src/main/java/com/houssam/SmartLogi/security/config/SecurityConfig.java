@@ -1,9 +1,12 @@
 package com.houssam.SmartLogi.security.config;
 
 import com.houssam.SmartLogi.security.filter.JwtAuthFilter;
+import com.houssam.SmartLogi.security.handler.OAuth2LoginSuccessHandler;
+import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.Lazy;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
 import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
@@ -27,6 +30,10 @@ public class SecurityConfig {
 
     @Autowired
     private JwtAuthFilter jwtAuthFilter;
+
+    @Autowired
+    @Lazy
+    private OAuth2LoginSuccessHandler oAuth2LoginSuccessHandler;
 
     @Bean
     public PasswordEncoder passwordEncoder() {
@@ -79,65 +86,89 @@ public class SecurityConfig {
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http
+                // CORS et CSRF
                 .cors(cors -> cors.configurationSource(corsConfigurationSource()))
                 .csrf(csrf -> csrf.disable())
+
+                // Gestion des URL publiques
                 .authorizeHttpRequests(auth -> auth
-                        // ========== ROUTES PUBLIQUES ==========
-                        .requestMatchers("/api/auth/register/client").permitAll()
-                        .requestMatchers("/api/auth/login").permitAll()
-                        .requestMatchers("/swagger-ui/**", "/v3/api-docs/**").permitAll()
+                        .requestMatchers(
+                                "/oauth2/**",
+                                "/login/**",
+                                "/api/auth/**",
+                                "/swagger-ui/**",
+                                "/v3/api-docs/**"
+                        ).permitAll()
 
-                        // ========== AUTH - REGISTER LIVREUR ==========
+                        // Routes réservées aux gestionnaires
                         .requestMatchers("/api/auth/register/livreur").hasRole("GESTIONNAIRE")
-
-                        // ========== ADMIN - GESTION PERMISSIONS ==========
                         .requestMatchers("/api/admin/**").hasRole("GESTIONNAIRE")
 
-                        // ========== ZONES ==========
+                        // Zones
                         .requestMatchers(org.springframework.http.HttpMethod.POST, "/api/zones").hasRole("GESTIONNAIRE")
                         .requestMatchers(org.springframework.http.HttpMethod.GET, "/api/zones/**").hasAnyRole("GESTIONNAIRE", "LIVREUR")
                         .requestMatchers(org.springframework.http.HttpMethod.PUT, "/api/zones/**").hasRole("GESTIONNAIRE")
                         .requestMatchers(org.springframework.http.HttpMethod.DELETE, "/api/zones/**").hasRole("GESTIONNAIRE")
 
-                        // ========== PRODUITS ==========
+                        // Produits
                         .requestMatchers(org.springframework.http.HttpMethod.POST, "/api/produits").hasRole("GESTIONNAIRE")
                         .requestMatchers(org.springframework.http.HttpMethod.GET, "/api/produits/**").hasAnyRole("GESTIONNAIRE", "LIVREUR")
                         .requestMatchers(org.springframework.http.HttpMethod.PUT, "/api/produits/**").hasRole("GESTIONNAIRE")
                         .requestMatchers(org.springframework.http.HttpMethod.DELETE, "/api/produits/**").hasRole("GESTIONNAIRE")
 
-                        // ========== LIVREURS ==========
+                        // Livreurs
                         .requestMatchers(org.springframework.http.HttpMethod.POST, "/api/livreurs").hasRole("GESTIONNAIRE")
                         .requestMatchers(org.springframework.http.HttpMethod.GET, "/api/livreurs/**").hasAnyRole("GESTIONNAIRE", "LIVREUR")
                         .requestMatchers(org.springframework.http.HttpMethod.PUT, "/api/livreurs/**").hasRole("GESTIONNAIRE")
                         .requestMatchers(org.springframework.http.HttpMethod.DELETE, "/api/livreurs/**").hasRole("GESTIONNAIRE")
 
-                        // ========== CLIENTS EXPÉDITEURS ==========
+                        // Clients
                         .requestMatchers(org.springframework.http.HttpMethod.POST, "/api/clients").hasRole("GESTIONNAIRE")
                         .requestMatchers(org.springframework.http.HttpMethod.GET, "/api/clients/**").hasAnyRole("GESTIONNAIRE", "LIVREUR")
                         .requestMatchers(org.springframework.http.HttpMethod.PUT, "/api/clients/**").hasRole("GESTIONNAIRE")
                         .requestMatchers(org.springframework.http.HttpMethod.DELETE, "/api/clients/**").hasRole("GESTIONNAIRE")
 
-                        // ========== DESTINATAIRES ==========
+                        // Destinataires
                         .requestMatchers(org.springframework.http.HttpMethod.POST, "/api/destinations").hasRole("GESTIONNAIRE")
                         .requestMatchers(org.springframework.http.HttpMethod.GET, "/api/destinations/**").hasAnyRole("GESTIONNAIRE", "LIVREUR")
                         .requestMatchers(org.springframework.http.HttpMethod.PUT, "/api/destinations/**").hasRole("GESTIONNAIRE")
                         .requestMatchers(org.springframework.http.HttpMethod.DELETE, "/api/destinations/**").hasRole("GESTIONNAIRE")
 
-                        // ========== COLIS ==========
+                        // Colis
                         .requestMatchers(org.springframework.http.HttpMethod.POST, "/api/colis").hasAnyRole("CLIENT", "GESTIONNAIRE")
                         .requestMatchers(org.springframework.http.HttpMethod.GET, "/api/colis/**").hasAnyRole("CLIENT", "GESTIONNAIRE", "LIVREUR")
                         .requestMatchers(org.springframework.http.HttpMethod.PATCH, "/api/colis/*/statut").hasAnyRole("GESTIONNAIRE", "LIVREUR")
                         .requestMatchers(org.springframework.http.HttpMethod.DELETE, "/api/colis/**").hasRole("GESTIONNAIRE")
 
-                        // ========== TEST EMAIL ==========
+                        // Test email
                         .requestMatchers("/api/test-email/**").hasRole("GESTIONNAIRE")
 
-                        // ========== TOUT LE RESTE ==========
+                        // Tout le reste requiert authentification
                         .anyRequest().authenticated()
                 )
-                .sessionManagement(session ->
-                        session.sessionCreationPolicy(SessionCreationPolicy.STATELESS)
+
+                .exceptionHandling(ex -> ex
+                        .authenticationEntryPoint((request, response, authException) -> {
+                            if (request.getRequestURI().startsWith("/api/")) {
+                                response.setContentType("application/json");
+                                response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
+                                response.getWriter().write("{\"error\":\"Non autorisé\"}");
+                            } else {
+                                response.sendRedirect("/login");
+                            }
+                        })
                 )
+
+                // Activation OAuth2 Login
+                .oauth2Login(oauth2 -> oauth2
+                        .successHandler(oAuth2LoginSuccessHandler)
+                )
+
+                // Sessions Stateless
+                .sessionManagement(session ->
+                        session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
+
+                // JWT Filter
                 .addFilterBefore(jwtAuthFilter, UsernamePasswordAuthenticationFilter.class);
 
         return http.build();
