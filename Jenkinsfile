@@ -1,8 +1,8 @@
 pipeline {
     agent {
         docker {
-            image 'maven:3.9-eclipse-temurin-17'  // Maven + JDK
-            args '-v /var/run/docker.sock:/var/run/docker.sock' // accès Docker
+            image 'maven:3.9-eclipse-temurin-17'
+            args '-v /var/run/docker.sock:/var/run/docker.sock'
         }
     }
 
@@ -55,10 +55,10 @@ pipeline {
 
     post {
         success {
-            echo '✅ Build CI/CD réussi !'
+            echo 'Build CI/CD réussi !'
         }
         failure {
-            echo '❌ Le build a échoué. Vérifie les logs !'
+            echo 'Le build a échoué. Vérifie les logs !'
         }
     }
 }
