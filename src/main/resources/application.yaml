@@ -28,16 +28,16 @@ spring:
       client:
         registration:
           google:
-            client-id: 751976708280-5i895ogooptecespug0re1dvatqki8o9.apps.googleusercontent.com
-            client-secret: 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
+            client-id: ${GOOGLE_CLIENT_ID:your-google-client-id}
+            client-secret: ${GOOGLE_CLIENT_SECRET:your-google-client-secret}
             scope:
               - email
               - profile
             redirect-uri: "{baseUrl}/login/oauth2/code/{registrationId}"
 
           facebook:
-            client-id: 893322460047625
-            client-secret: 5d888c0b879a7ead91cc62280133be34
+            client-id: ${FACEBOOK_CLIENT_ID:your-facebook-client-id}
+            client-secret: ${FACEBOOK_CLIENT_SECRET:your-facebook-client-secret}
             scope:
               - email
               - public_profile
