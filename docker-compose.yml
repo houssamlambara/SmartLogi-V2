@@ -1,5 +1,3 @@
-version: "3.9"
-
 services:
 
   postgres:
@@ -26,16 +24,17 @@ services:
       SPRING_DATASOURCE_URL: jdbc:postgresql://postgres:5432/smartlogi_db
       SPRING_DATASOURCE_USERNAME: postgres
       SPRING_DATASOURCE_PASSWORD: root
-
       JWT_SECRET: simple-secret-key
       JWT_EXPIRATION: 86400000
-
       SPRING_PROFILES_ACTIVE: docker
     restart: unless-stopped
 
   jenkins:
-    image: jenkins/jenkins:lts-jdk17
+    build:
+      context: .
+      dockerfile: Dockerfile-jenkins
     container_name: smartlogi-jenkins
+    user: root
     ports:
       - "8080:8080"
       - "50000:50000"

@@ -1,10 +1,5 @@
 pipeline {
-    agent {
-        docker {
-            image 'maven:3.9-eclipse-temurin-17'
-            args '-v /var/run/docker.sock:/var/run/docker.sock'
-        }
-    }
+    agent any
 
     environment {
         DOCKER_IMAGE = "smartlogi-api:latest"
@@ -22,13 +17,13 @@ pipeline {
 
         stage('Build & Package') {
             steps {
-                sh 'mvn clean package -DskipTests=false'
+                sh 'docker run --rm -v $PWD:/app -w /app maven:3.9-eclipse-temurin-17 mvn clean package -DskipTests=false'
             }
         }
 
         stage('Run Tests') {
             steps {
-                sh 'mvn test'
+                sh 'docker run --rm -v $PWD:/app -w /app maven:3.9-eclipse-temurin-17 mvn test'
             }
             post {
                 always {
@@ -41,7 +36,7 @@ pipeline {
         stage('SonarQube Analysis') {
             steps {
                 withSonarQubeEnv('SonarSmartLogi') {
-                    sh 'mvn sonar:sonar'
+                    sh 'docker run --rm -v $PWD:/app -w /app maven:3.9-eclipse-temurin-17 mvn sonar:sonar'
                 }
             }
         }
