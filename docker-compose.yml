@@ -34,7 +34,7 @@ services:
     restart: unless-stopped
 
   jenkins:
-    image: jenkins/jenkins:lts
+    image: jenkins/jenkins:lts-jdk17
     container_name: smartlogi-jenkins
     ports:
       - "8080:8080"

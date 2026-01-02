@@ -1,8 +1,12 @@
 pipeline {
-    agent any
+    agent {
+        docker {
+            image 'maven:3.9-eclipse-temurin-17'
+            args '-v /var/run/docker.sock:/var/run/docker.sock'
+        }
+    }
 
     environment {
-        MVN_HOME = '/usr/share/maven'
         DOCKER_IMAGE = "smartlogi-api:latest"
         SONARQUBE_SERVER = "SonarSmartLogi"
     }
@@ -11,14 +15,14 @@ pipeline {
         stage('Checkout') {
             steps {
                 git branch: 'CI-CD',
-                    url: 'https://github.com/houssamlambara/SmartLogi-V2',
-                    credentialsId: 'github-token'
+                url: 'https://github.com/houssamlambara/SmartLogi-V2',
+                credentialsId: 'github-token'
             }
         }
 
-        stage('Build Maven') {
+        stage('Build & Package') {
             steps {
-                sh 'mvn clean install -DskipTests=false'
+                sh 'mvn clean package -DskipTests=false'
             }
         }
 
