@@ -35,12 +35,18 @@ services:
       dockerfile: Dockerfile-jenkins
     container_name: smartlogi-jenkins
     user: root
+    privileged: true
     ports:
       - "8080:8080"
       - "50000:50000"
     volumes:
       - jenkins_home:/var/jenkins_home
       - /var/run/docker.sock:/var/run/docker.sock
+    environment:
+      - DOCKER_HOST=unix:///var/run/docker.sock
+    command: >
+      sh -c "chmod 666 /var/run/docker.sock || true && 
+             /usr/local/bin/jenkins.sh"
     restart: unless-stopped
 
 volumes:

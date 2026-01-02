@@ -2,11 +2,13 @@ FROM jenkins/jenkins:lts-jdk17
 
 USER root
 
+# Installer Docker CLI
 RUN apt-get update && \
     apt-get install -y docker.io && \
     rm -rf /var/lib/apt/lists/*
 
-RUN groupadd -f docker && \
-    usermod -aG docker jenkins
+# Ajouter jenkins au groupe docker existant
+RUN usermod -aG docker jenkins
 
 USER jenkins
+
