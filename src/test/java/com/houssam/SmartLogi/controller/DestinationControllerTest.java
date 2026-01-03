@@ -8,9 +8,11 @@ import com.houssam.SmartLogi.service.DestinataireService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.data.domain.*;
 import org.springframework.http.MediaType;
+import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.context.bean.override.mockito.MockitoBean;
 import org.springframework.test.web.servlet.MockMvc;
 
@@ -23,6 +25,8 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 @WebMvcTest(DestinationController.class)
+@AutoConfigureMockMvc(addFilters = false)
+@WithMockUser
 class DestinationControllerTest {
 
     @Autowired
@@ -154,4 +158,3 @@ class DestinationControllerTest {
         verify(destinataireService, times(1)).deleteDestinataire("dest1");
     }
 }
-

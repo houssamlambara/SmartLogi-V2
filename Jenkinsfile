@@ -29,7 +29,7 @@ pipeline {
             steps {
                 sh '''
                     echo "Compilation du projet..."
-                    mvn clean package -DskipTests=true
+                    mvn clean package -DskipTests=false
                 '''
             }
         }
