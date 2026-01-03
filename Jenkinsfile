@@ -19,6 +19,8 @@ pipeline {
                     echo "Vérification de Docker..."
                     docker --version
                     docker ps
+                    echo "Workspace: $WORKSPACE"
+                    ls -la
                 '''
             }
         }
@@ -27,7 +29,7 @@ pipeline {
             steps {
                 sh '''
                     docker run --rm \
-                    -v "$PWD":/app \
+                    -v "$WORKSPACE":/app \
                     -w /app \
                     maven:3.9-eclipse-temurin-17 \
                     mvn clean package -DskipTests=false
