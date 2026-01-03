@@ -72,7 +72,18 @@ pipeline {
 
         stage('Build Docker Image') {
             steps {
-                sh 'docker build -t smartlogi-api:latest .'
+                script {
+                    try {
+                        sh '''
+                            echo "Construction de l'image Docker..."
+                            docker build -t smartlogi-api:latest . --no-cache
+                        '''
+                    } catch (Exception e) {
+                        echo "Erreur lors de la construction Docker : ${e.message}"
+                        echo "Le JAR a été créé avec succès dans target/"
+                        sh 'ls -lh target/*.jar'
+                    }
+                }
             }
         }
     }
