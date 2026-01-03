@@ -9,9 +9,7 @@ pipeline {
     stages {
         stage('Checkout') {
             steps {
-                git branch: 'CI-CD',
-                url: 'https://github.com/houssamlambara/SmartLogi-V2',
-                credentialsId: 'github-token'
+                checkout scm
             }
         }
 
