@@ -28,10 +28,6 @@ pipeline {
         stage('Build & Package') {
             steps {
                 sh '''
-                    docker run --rm \
-                    -v "$WORKSPACE":/app \
-                    -w /app \
-                    maven:3.9-eclipse-temurin-17 \
                     mvn clean package -DskipTests=false
                 '''
             }
@@ -40,10 +36,6 @@ pipeline {
         stage('Run Tests') {
             steps {
                 sh '''
-                    docker run --rm \
-                    -v "$WORKSPACE":/app \
-                    -w /app \
-                    maven:3.9-eclipse-temurin-17 \
                     mvn test
                 '''
             }
@@ -59,10 +51,6 @@ pipeline {
             steps {
                 withSonarQubeEnv('SonarSmartLogi') {
                     sh '''
-                        docker run --rm \
-                        -v "$WORKSPACE":/app \
-                        -w /app \
-                        maven:3.9-eclipse-temurin-17 \
                         mvn sonar:sonar
                     '''
                 }
