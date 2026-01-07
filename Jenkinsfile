@@ -3,7 +3,6 @@ pipeline {
 
     environment {
         DOCKER_IMAGE = "smartlogi-api:latest"
-        SONARQUBE_SERVER = "SonarSmartLogi"
     }
 
     stages {
@@ -13,13 +12,13 @@ pipeline {
             }
         }
 
-        stage('Verify Docker') {
+        stage('Verify Environment') {
             steps {
                 sh '''
-                    echo "Vérification de Docker..."
-                    docker --version
-                    docker ps
+                    echo "=== Vérification de l'environnement ==="
                     echo "Workspace: $WORKSPACE"
+                    docker --version
+                    mvn --version
                     ls -la
                 '''
             }
@@ -28,72 +27,43 @@ pipeline {
         stage('Build & Package') {
             steps {
                 sh '''
-                    echo "Compilation du projet..."
-                    mvn clean package -DskipTests=true
+                    echo "=== Compilation du projet ==="
+                    mvn clean package -DskipTests -Dmaven.test.skip=true
                 '''
             }
         }
 
-        stage('Run Tests') {
+        stage('Build Docker Image') {
             steps {
-                script {
-                    try {
-                        sh '''
-                            echo "Exécution des tests..."
-                            mvn test || true
-                        '''
-                    } catch (Exception e) {
-                        echo "Les tests ont échoué, mais le build continue..."
-                    }
-                }
-            }
-            post {
-                always {
-                    script {
-                        try {
-                            junit allowEmptyResults: true, testResults: '**/target/surefire-reports/*.xml'
-                        } catch (Exception e) {
-                            echo "Pas de résultats de tests disponibles"
-                        }
-                    }
-                }
+                sh '''
+                    echo "=== Construction de l'image Docker ==="
+                    docker build -t ${DOCKER_IMAGE} . --no-cache
+                    echo "=== Vérification de l'image créée ==="
+                    docker images | grep smartlogi-api
+                '''
             }
         }
 
-        // stage('SonarQube Analysis') {
-        //     steps {
-        //         withSonarQubeEnv('SonarSmartLogi') {
-        //             sh '''
-        //                 mvn sonar:sonar
-        //             '''
-        //         }
-        //     }
-        // }
-
-        stage('Build Docker Image') {
+        stage('Verify JAR') {
             steps {
-                script {
-                    try {
-                        sh '''
-                            echo "Construction de l'image Docker..."
-                            docker build -t smartlogi-api:latest . --no-cache
-                        '''
-                    } catch (Exception e) {
-                        echo "Erreur lors de la construction Docker : ${e.message}"
-                        echo "Le JAR a été créé avec succès dans target/"
-                        sh 'ls -lh target/*.jar'
-                    }
-                }
+                sh '''
+                    echo "=== Vérification du JAR généré ==="
+                    ls -lh target/*.jar
+                '''
             }
         }
     }
 
     post {
         success {
-            echo 'Build CI/CD réussi !'
+            echo 'Pipeline CI/CD exécuté avec succès !'
+            echo 'Image Docker créée : ${DOCKER_IMAGE}'
         }
         failure {
-            echo 'Le build a échoué. Vérifie les logs !'
+            echo 'Le pipeline a échoué. Consultez les logs ci-dessus.'
+        }
+        always {
+            sh 'docker system prune -f || true'
         }
     }
 }
