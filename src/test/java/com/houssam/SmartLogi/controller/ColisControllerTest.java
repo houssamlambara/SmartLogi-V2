@@ -28,14 +28,10 @@ import static org.mockito.Mockito.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
-@ActiveProfiles("test")
-@WebMvcTest(
-    controllers = ColisController.class,
-    excludeAutoConfiguration = {
-        DataSourceAutoConfiguration.class,
-        HibernateJpaAutoConfiguration.class
-    }
-)
+@WebMvcTest(controllers = ColisController.class, excludeAutoConfiguration = {
+    DataSourceAutoConfiguration.class,
+    HibernateJpaAutoConfiguration.class
+})
 @AutoConfigureMockMvc(addFilters = false)
 @WithMockUser
 class ColisControllerTest {

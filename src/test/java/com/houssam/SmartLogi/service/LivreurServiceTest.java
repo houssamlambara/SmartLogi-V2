@@ -6,7 +6,9 @@ import com.houssam.SmartLogi.mapper.LivreurMapper;
 import com.houssam.SmartLogi.model.Livreur;
 import com.houssam.SmartLogi.model.Zone;
 import com.houssam.SmartLogi.repository.LivreurRepository;
+import com.houssam.SmartLogi.repository.RoleRepository;
 import com.houssam.SmartLogi.repository.ZoneRepository;
+import com.houssam.SmartLogi.security.config.SecurityConfig;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.*;
@@ -34,9 +36,24 @@ import static org.mockito.Mockito.*;
     @Mock
     private ZoneRepository zoneRepository;
 
+    @Mock
+    private SecurityConfig securityConfig;
+
+    @Mock
+    private SecurityContextService securityContextService;
+
+    @Mock
+    private RoleRepository roleRepository;
+
+    @Mock
+    private org.springframework.security.crypto.password.PasswordEncoder passwordEncoder;
+
     @BeforeEach
     void setUp(){
         MockitoAnnotations.openMocks(this);
+        // Configure le mock du passwordEncoder
+        when(securityConfig.passwordEncoder()).thenReturn(passwordEncoder);
+        when(passwordEncoder.encode(anyString())).thenReturn("encodedPassword");
     }
 
     @Test
@@ -44,12 +61,14 @@ import static org.mockito.Mockito.*;
         LivreurDTO livreurDTO = new LivreurDTO();
         livreurDTO.setNom("Houssam");
         livreurDTO.setZoneAssigneeId("zone1");
+        livreurDTO.setMotDePasse("password123");
 
         Livreur entity = new Livreur();
         Livreur SavedEntity = new Livreur();
         LivreurDTO resultDTO = new LivreurDTO();
 
         Zone zoneMock = new Zone();
+
 
         when(mapper.toEntity(livreurDTO)).thenReturn(entity);
         when(zoneRepository.findById("zone1")).thenReturn(Optional.of(zoneMock));
@@ -89,6 +108,10 @@ import static org.mockito.Mockito.*;
 
     @Test
     void updateLivreur_success() {
+        // Mock SecurityContextService
+        when(securityContextService.isLivreur()).thenReturn(true);
+        when(securityContextService.getCurrentUserId()).thenReturn("livreur1");
+
         LivreurDTO livreurDTO = new LivreurDTO();
         livreurDTO.setNom("Hamid");
         livreurDTO.setZoneAssigneeId("zone1");

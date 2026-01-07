@@ -45,10 +45,17 @@ import static org.mockito.Mockito.*;
     ColisProduitRepository colisProduitRepository;
     @Mock
     private EmailService emailService;
+    @Mock
+    private SecurityContextService securityContextService;
 
     @BeforeEach
     void setUp(){
         MockitoAnnotations.openMocks(this);
+        // Configure les mocks par défaut pour SecurityContextService
+        when(securityContextService.getCurrentUserId()).thenReturn("user1");
+        when(securityContextService.isAdmin()).thenReturn(true);
+        when(securityContextService.isClient()).thenReturn(false);
+        when(securityContextService.isLivreur()).thenReturn(false);
     }
 
     @Test
@@ -100,6 +107,7 @@ import static org.mockito.Mockito.*;
 
     @Test
     void getAllColis_succes(){
+
         Colis colis = new Colis();
         List<Colis> colisList = Arrays.asList(colis);
         Page<Colis> page = new PageImpl<>(colisList);
@@ -134,6 +142,7 @@ import static org.mockito.Mockito.*;
 
     @Test
     void updateStatut_success() {
+
         Colis colis = new Colis();
         colis.setStatut(Statut.Creer);
 
@@ -199,6 +208,7 @@ import static org.mockito.Mockito.*;
 
     @Test
      void getColisById_NotFound(){
+
         when(colisRepository.findById("colis1")).thenReturn(Optional.empty());
         assertNull(colisService.getColisById("colis1"));
     }
