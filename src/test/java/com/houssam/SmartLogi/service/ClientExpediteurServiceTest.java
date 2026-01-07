@@ -4,6 +4,8 @@ import com.houssam.SmartLogi.dto.ClientExpediteurDTO;
 import com.houssam.SmartLogi.mapper.ClientExpediteurMapper;
 import com.houssam.SmartLogi.model.ClientExpediteur;
 import com.houssam.SmartLogi.repository.ClientExpediteurRepository;
+import com.houssam.SmartLogi.repository.RoleRepository;
+import com.houssam.SmartLogi.security.config.SecurityConfig;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.*;
@@ -25,21 +27,39 @@ import static org.mockito.Mockito.*;
     @Mock
     private ClientExpediteurMapper mapper;
 
+    @Mock
+    private SecurityConfig securityConfig;
+
+    @Mock
+    private SecurityContextService securityContextService;
+
+    @Mock
+    private RoleRepository roleRepository;
+
+    @Mock
+    private org.springframework.security.crypto.password.PasswordEncoder passwordEncoder;
+
     @BeforeEach
     void setUp() {
         MockitoAnnotations.openMocks(this);
+        // Configure le mock du passwordEncoder
+        when(securityConfig.passwordEncoder()).thenReturn(passwordEncoder);
+        when(passwordEncoder.encode(anyString())).thenReturn("encodedPassword");
     }
 
     @Test
     void createClientExpediteur_success() {
         ClientExpediteurDTO dto = new ClientExpediteurDTO();
         dto.setNom("Houssam");
+        dto.setMotDePasse("password123");
+
         ClientExpediteur entity = new ClientExpediteur();
         entity.setNom("Houssam");
         ClientExpediteur savedEntity = new ClientExpediteur();
         savedEntity.setNom("Houssam");
         ClientExpediteurDTO resultDTO = new ClientExpediteurDTO();
         resultDTO.setNom("Houssam");
+
 
         when(mapper.toEntity(dto)).thenReturn(entity);
         when(clientExpediteurRepository.save(entity)).thenReturn(savedEntity);
@@ -72,6 +92,10 @@ import static org.mockito.Mockito.*;
 
     @Test
     void getClientById_found(){
+        // Mock SecurityContextService
+        when(securityContextService.isClient()).thenReturn(true);
+        when(securityContextService.getCurrentUserId()).thenReturn("1");
+
         ClientExpediteur entity = new ClientExpediteur();
         ClientExpediteurDTO dto = new ClientExpediteurDTO();
 
@@ -93,6 +117,10 @@ import static org.mockito.Mockito.*;
 
     @Test
     void updateClient_success(){
+        // Mock SecurityContextService
+        when(securityContextService.isClient()).thenReturn(true);
+        when(securityContextService.getCurrentUserId()).thenReturn("1");
+
         ClientExpediteur entity =  new ClientExpediteur();
         ClientExpediteurDTO dto = new ClientExpediteurDTO();
         dto.setNom("Houssam");
