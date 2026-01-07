@@ -1,0 +1,103 @@
+[INFO] Scanning for projects...
+[INFO] 
+[INFO] -----------------------< com.houssam:SmartLogi >------------------------
+[INFO] Building SmartLogi 0.0.1-SNAPSHOT
+[INFO]   from pom.xml
+[INFO] --------------------------------[ jar ]---------------------------------
+[INFO] 
+[INFO] --- clean:3.4.1:clean (default-clean) @ SmartLogi ---
+[INFO] Deleting C:\Users\safiy\Desktop\JAVA\SmartLogi\target
+[INFO] 
+[INFO] --- jacoco:0.8.10:prepare-agent (default) @ SmartLogi ---
+[INFO] argLine set to -javaagent:C:\\Users\\safiy\\.m2\\repository\\org\\jacoco\\org.jacoco.agent\\0.8.10\\org.jacoco.agent-0.8.10-runtime.jar=destfile=C:\\Users\\safiy\\Desktop\\JAVA\\SmartLogi\\target\\jacoco.exec
+[INFO] 
+[INFO] --- resources:3.3.1:resources (default-resources) @ SmartLogi ---
+[INFO] Copying 2 resources from src\main\resources to target\classes
+[INFO] Copying 22 resources from src\main\resources to target\classes
+[INFO] 
+[INFO] --- compiler:3.14.1:compile (default-compile) @ SmartLogi ---
+[INFO] Recompiling the module because of changed source code.
+[INFO] Compiling 82 source files with javac [debug parameters release 17] to target\classes
+[WARNING] /C:/Users/safiy/Desktop/JAVA/SmartLogi/src/main/java/com/houssam/SmartLogi/mapper/LivreurMapper.java:[12,16] Unmapped target property: "password".
+[WARNING] /C:/Users/safiy/Desktop/JAVA/SmartLogi/src/main/java/com/houssam/SmartLogi/mapper/LivreurMapper.java:[16,13] Unmapped target properties: "id, user".
+[WARNING] /C:/Users/safiy/Desktop/JAVA/SmartLogi/src/main/java/com/houssam/SmartLogi/mapper/ColisProduitMapper.java:[17,18] Unmapped target property: "id".
+[WARNING] /C:/Users/safiy/Desktop/JAVA/SmartLogi/src/main/java/com/houssam/SmartLogi/mapper/ClientExpediteurMapper.java:[12,25] Unmapped target property: "password".
+[WARNING] /C:/Users/safiy/Desktop/JAVA/SmartLogi/src/main/java/com/houssam/SmartLogi/mapper/ClientExpediteurMapper.java:[16,22] Unmapped target property: "id".
+[WARNING] /C:/Users/safiy/Desktop/JAVA/SmartLogi/src/main/java/com/houssam/SmartLogi/mapper/ColisMapper.java:[17,14] Unmapped target properties: "productIds, nouveauxProduits".
+[WARNING] /C:/Users/safiy/Desktop/JAVA/SmartLogi/src/main/java/com/houssam/SmartLogi/mapper/ColisMapper.java:[26,11] Unmapped target property: "createdAt".
+[WARNING] /C:/Users/safiy/Desktop/JAVA/SmartLogi/src/main/java/com/houssam/SmartLogi/mapper/DestinataireMapper.java:[10,18] Unmapped target properties: "id, colis".
+[WARNING] /C:/Users/safiy/Desktop/JAVA/SmartLogi/src/main/java/com/houssam/SmartLogi/mapper/ZoneMapper.java:[11,10] Unmapped target properties: "id, colis, livreurs".
+[WARNING] /C:/Users/safiy/Desktop/JAVA/SmartLogi/src/main/java/com/houssam/SmartLogi/mapper/ProduitMapper.java:[10,13] Unmapped target property: "colisProduits".
+[INFO] /C:/Users/safiy/Desktop/JAVA/SmartLogi/src/main/java/com/houssam/SmartLogi/model/ClientExpediteur.java: Some input files use or override a deprecated API.
+[INFO] /C:/Users/safiy/Desktop/JAVA/SmartLogi/src/main/java/com/houssam/SmartLogi/model/ClientExpediteur.java: Recompile with -Xlint:deprecation for details.
+[INFO] /C:/Users/safiy/Desktop/JAVA/SmartLogi/src/main/java/com/houssam/SmartLogi/controller/ProduitController.java: C:\Users\safiy\Desktop\JAVA\SmartLogi\src\main\java\com\houssam\SmartLogi\controller\ProduitController.java uses unchecked or unsafe operations.
+[INFO] /C:/Users/safiy/Desktop/JAVA/SmartLogi/src/main/java/com/houssam/SmartLogi/controller/ProduitController.java: Recompile with -Xlint:unchecked for details.
+[INFO] 
+[INFO] --- jacoco:0.8.10:prepare-agent (default) @ SmartLogi ---
+[INFO] argLine set to -javaagent:C:\\Users\\safiy\\.m2\\repository\\org\\jacoco\\org.jacoco.agent\\0.8.10\\org.jacoco.agent-0.8.10-runtime.jar=destfile=C:\\Users\\safiy\\Desktop\\JAVA\\SmartLogi\\target\\jacoco.exec
+[INFO] 
+[INFO] --- resources:3.3.1:resources (default-resources) @ SmartLogi ---
+[INFO] Copying 2 resources from src\main\resources to target\classes
+[INFO] Copying 22 resources from src\main\resources to target\classes
+[INFO] 
+[INFO] --- compiler:3.14.1:compile (default-compile) @ SmartLogi ---
+[INFO] Recompiling the module because of changed source code.
+[INFO] Compiling 82 source files with javac [debug parameters release 17] to target\classes
+[WARNING] /C:/Users/safiy/Desktop/JAVA/SmartLogi/src/main/java/com/houssam/SmartLogi/mapper/ProduitMapper.java:[10,13] Unmapped target property: "colisProduits".
+[WARNING] /C:/Users/safiy/Desktop/JAVA/SmartLogi/src/main/java/com/houssam/SmartLogi/mapper/ColisProduitMapper.java:[17,18] Unmapped target property: "id".
+[WARNING] /C:/Users/safiy/Desktop/JAVA/SmartLogi/src/main/java/com/houssam/SmartLogi/mapper/DestinataireMapper.java:[10,18] Unmapped target properties: "id, colis".
+[WARNING] /C:/Users/safiy/Desktop/JAVA/SmartLogi/src/main/java/com/houssam/SmartLogi/mapper/ClientExpediteurMapper.java:[12,25] Unmapped target property: "password".
+[WARNING] /C:/Users/safiy/Desktop/JAVA/SmartLogi/src/main/java/com/houssam/SmartLogi/mapper/ClientExpediteurMapper.java:[16,22] Unmapped target property: "id".
+[WARNING] /C:/Users/safiy/Desktop/JAVA/SmartLogi/src/main/java/com/houssam/SmartLogi/mapper/ZoneMapper.java:[11,10] Unmapped target properties: "id, colis, livreurs".
+[WARNING] /C:/Users/safiy/Desktop/JAVA/SmartLogi/src/main/java/com/houssam/SmartLogi/mapper/ColisMapper.java:[17,14] Unmapped target properties: "productIds, nouveauxProduits".
+[WARNING] /C:/Users/safiy/Desktop/JAVA/SmartLogi/src/main/java/com/houssam/SmartLogi/mapper/ColisMapper.java:[26,11] Unmapped target property: "createdAt".
+[WARNING] /C:/Users/safiy/Desktop/JAVA/SmartLogi/src/main/java/com/houssam/SmartLogi/mapper/LivreurMapper.java:[12,16] Unmapped target property: "password".
+[WARNING] /C:/Users/safiy/Desktop/JAVA/SmartLogi/src/main/java/com/houssam/SmartLogi/mapper/LivreurMapper.java:[16,13] Unmapped target properties: "id, user".
+[INFO] /C:/Users/safiy/Desktop/JAVA/SmartLogi/src/main/java/com/houssam/SmartLogi/model/ClientExpediteur.java: Some input files use or override a deprecated API.
+[INFO] /C:/Users/safiy/Desktop/JAVA/SmartLogi/src/main/java/com/houssam/SmartLogi/model/ClientExpediteur.java: Recompile with -Xlint:deprecation for details.
+[INFO] /C:/Users/safiy/Desktop/JAVA/SmartLogi/src/main/java/com/houssam/SmartLogi/controller/ProduitController.java: C:\Users\safiy\Desktop\JAVA\SmartLogi\src\main\java\com\houssam\SmartLogi\controller\ProduitController.java uses unchecked or unsafe operations.
+[INFO] /C:/Users/safiy/Desktop/JAVA/SmartLogi/src/main/java/com/houssam/SmartLogi/controller/ProduitController.java: Recompile with -Xlint:unchecked for details.
+[INFO] 
+[INFO] --- resources:3.3.1:testResources (default-testResources) @ SmartLogi ---
+[INFO] Copying 1 resource from src\test\resources to target\test-classes
+[INFO] 
+[INFO] --- compiler:3.14.1:testCompile (default-testCompile) @ SmartLogi ---
+[INFO] Recompiling the module because of changed dependency.
+[INFO] Compiling 13 source files with javac [debug parameters release 17] to target\test-classes
+[INFO] -------------------------------------------------------------
+[ERROR] COMPILATION ERROR : 
+[INFO] -------------------------------------------------------------
+[ERROR] /C:/Users/safiy/Desktop/JAVA/SmartLogi/src/test/java/com/houssam/SmartLogi/service/ClientExpediteurServiceTest.java:[54,12] cannot find symbol
+  symbol:   method setMotDePasse(java.lang.String)
+  location: variable dto of type com.houssam.SmartLogi.dto.ClientExpediteurDTO
+[ERROR] /C:/Users/safiy/Desktop/JAVA/SmartLogi/src/test/java/com/houssam/SmartLogi/service/ColisServiceTest.java:[56,36] cannot find symbol
+  symbol:   method isAdmin()
+  location: variable securityContextService of type com.houssam.SmartLogi.service.SecurityContextService
+[ERROR] /C:/Users/safiy/Desktop/JAVA/SmartLogi/src/test/java/com/houssam/SmartLogi/service/LivreurServiceTest.java:[64,19] cannot find symbol
+  symbol:   method setMotDePasse(java.lang.String)
+  location: variable livreurDTO of type com.houssam.SmartLogi.dto.LivreurDTO
+[INFO] 3 errors 
+[INFO] -------------------------------------------------------------
+[INFO] ------------------------------------------------------------------------
+[INFO] BUILD FAILURE
+[INFO] ------------------------------------------------------------------------
+[INFO] Total time:  21.465 s
+[INFO] Finished at: 2026-01-03T15:55:22+01:00
+[INFO] ------------------------------------------------------------------------
+[ERROR] Failed to execute goal org.apache.maven.plugins:maven-compiler-plugin:3.14.1:testCompile (default-testCompile) on project SmartLogi: Compilation failure: Compilation failure: 
+[ERROR] /C:/Users/safiy/Desktop/JAVA/SmartLogi/src/test/java/com/houssam/SmartLogi/service/ClientExpediteurServiceTest.java:[54,12] cannot find symbol
+[ERROR]   symbol:   method setMotDePasse(java.lang.String)
+[ERROR]   location: variable dto of type com.houssam.SmartLogi.dto.ClientExpediteurDTO
+[ERROR] /C:/Users/safiy/Desktop/JAVA/SmartLogi/src/test/java/com/houssam/SmartLogi/service/ColisServiceTest.java:[56,36] cannot find symbol
+[ERROR]   symbol:   method isAdmin()
+[ERROR]   location: variable securityContextService of type com.houssam.SmartLogi.service.SecurityContextService
+[ERROR] /C:/Users/safiy/Desktop/JAVA/SmartLogi/src/test/java/com/houssam/SmartLogi/service/LivreurServiceTest.java:[64,19] cannot find symbol
+[ERROR]   symbol:   method setMotDePasse(java.lang.String)
+[ERROR]   location: variable livreurDTO of type com.houssam.SmartLogi.dto.LivreurDTO
+[ERROR] -> [Help 1]
+[ERROR] 
+[ERROR] To see the full stack trace of the errors, re-run Maven with the -e switch.
+[ERROR] Re-run Maven using the -X switch to enable full debug logging.
+[ERROR] 
+[ERROR] For more information about the errors and possible solutions, please read the following articles:
+[ERROR] [Help 1] http://cwiki.apache.org/confluence/display/MAVEN/MojoFailureException
