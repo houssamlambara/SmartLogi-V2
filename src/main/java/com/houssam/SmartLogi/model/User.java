@@ -46,8 +46,7 @@ public class User {
     @Column(name = "provider_id")
     private String providerId;
 
-    @NotNull
     @ColumnDefault("true")
     @Column(name = "enabled", nullable = false)
-    private Boolean enabled;
+    private Boolean enabled = true;
 }
