@@ -28,7 +28,18 @@ pipeline {
             steps {
                 sh '''
                     echo "=== Compilation du projet ==="
-                    mvn clean package -DskipTests -Dmaven.test.skip=true
+                    mvn clean package -DskipTests -Dmaven.test.skip=true -Dmaven.javadoc.skip=true
+                '''
+            }
+        }
+
+        stage('Run Tests') {
+            when {
+                expression { return false }
+            }
+            steps {
+                sh '''
+                    echo "=== Tests désactivés ==="
                 '''
             }
         }

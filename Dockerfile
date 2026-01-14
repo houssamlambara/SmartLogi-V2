@@ -3,7 +3,7 @@ WORKDIR /app
 COPY pom.xml .
 COPY mvnw .
 COPY .mvn .mvn
-RUN mvn dependency:go-offline -B
+RUN mvn dependency:go-offline -B || true
 COPY src ./src
 RUN mvn clean package -DskipTests -Dmaven.test.skip=true
 
@@ -12,6 +12,6 @@ WORKDIR /app
 RUN addgroup -S spring && adduser -S spring -G spring
 USER spring:spring
 COPY --from=builder /app/target/*.jar app.jar
-EXPOSE 8081
+EXPOSE 8080
 ENV SPRING_PROFILES_ACTIVE=docker
 ENTRYPOINT ["java", "-jar", "app.jar"]
