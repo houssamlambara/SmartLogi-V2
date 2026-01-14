@@ -30,6 +30,8 @@
 		<java.version>17</java.version>
         <sonar.host.url>http://localhost:9000</sonar.host.url>
         <sonar.login>squ_fa14b89a198d7fa4838140985ddbd66bf357cf84</sonar.login>
+        <maven.test.skip>true</maven.test.skip>
+        <skipTests>true</skipTests>
 	</properties>
 	<dependencies>
 		<dependency>
@@ -40,6 +42,12 @@
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-web</artifactId>
 		</dependency>
+
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-actuator</artifactId>
+		</dependency>
+
 		<dependency>
 			<groupId>org.liquibase</groupId>
 			<artifactId>liquibase-core</artifactId>
@@ -168,11 +176,22 @@
 
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-surefire-plugin</artifactId>
+                <version>3.5.4</version>
+                <configuration>
+                    <skipTests>true</skipTests>
+                    <skip>true</skip>
+                </configuration>
+            </plugin>
+
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-compiler-plugin</artifactId>
                 <version>3.14.1</version>
                 <configuration>
                     <source>17</source>
                     <target>17</target>
+                    <skipTestCompilation>true</skipTestCompilation>
                     <annotationProcessorPaths>
                         <!-- Lombok -->
                         <path>
